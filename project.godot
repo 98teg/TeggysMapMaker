@@ -16,6 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Teggy's Map Maker"
+run/main_scene="res://MainWindow.tscn"
 config/icon="res://icon.png"
 
 [rendering]
