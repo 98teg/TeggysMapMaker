@@ -8,9 +8,32 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Reference",
+"class": "_BackgroundLayer",
+"language": "GDScript",
+"path": "res://BackgroundLayer.gd"
+}, {
+"base": "Reference",
+"class": "_Tile",
+"language": "GDScript",
+"path": "res://Tile.gd"
+}, {
+"base": "Reference",
+"class": "_TileMap",
+"language": "GDScript",
+"path": "res://Tilemap.gd"
+}, {
+"base": "Reference",
+"class": "_TileMapLayer",
+"language": "GDScript",
+"path": "res://TilemapLayer.gd"
+} ]
 _global_script_class_icons={
-
+"_BackgroundLayer": "",
+"_Tile": "",
+"_TileMap": "",
+"_TileMapLayer": ""
 }
 
 [application]
