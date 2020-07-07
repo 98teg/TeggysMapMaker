@@ -40,10 +40,7 @@ func needs_update():
     return _needs_update
 
 func get_image():
-    var image = Image.new()
-    image.copy_from(_tilemap.get_tilemap_image())
-    image.resize(20*24, 20*24, Image.INTERPOLATE_NEAREST)
-    return image
+    return _tilemap.get_tilemap_image()
     
 func has_been_updated():
     _needs_update = false
@@ -67,6 +64,26 @@ func input(event):
     elif event is InputEventMouseMotion:
         if _drawing:
             draw(event.position)
+            
+func mouse_button(button_index : int, is_pressed : bool, position : Vector2):
+    if button_index == BUTTON_LEFT:
+        _selected_tile = _pencil_tile
+        if is_pressed:
+            start_drawing(position)
+            draw(position)
+        else:
+            end_drawing()
+    elif button_index == BUTTON_RIGHT:
+        _selected_tile = 0
+        if is_pressed:
+            start_drawing(position)
+            draw(position)
+        else:
+            end_drawing()
+            
+func mouse_motion(position : Vector2):
+    if _drawing:
+        draw(position)
             
 func set_pencil_tile(tile_id : int):
     _pencil_tile = tile_id
@@ -137,10 +154,10 @@ func get_condition_id(condition : Array, connection_type : int) -> int:
             
 func start_drawing(pos : Vector2):
     _drawing = true
-    _previous_pos = (pos / 24).floor()
+    _previous_pos = (pos / _tilemap.get_tile_size()).floor()
 
 func draw(pos : Vector2):
-    var current_pos = (pos / 24).floor()
+    var current_pos = (pos / _tilemap.get_tile_size()).floor()
     
     var p0 = _previous_pos
     var p1 = current_pos

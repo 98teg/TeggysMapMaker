@@ -3,6 +3,20 @@
 [ext_resource path="res://Canvas.gd" type="Script" id=1]
 
 [node name="MainWindow" type="Control"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CanvasContainer" type="ScrollContainer" parent="."]
+margin_left = 65.8707
+margin_top = 30.0714
+margin_right = 721.871
+margin_bottom = 575.071
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Canvas" type="Control" parent="CanvasContainer"]
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -57,8 +71,29 @@ text = "Tile 2"
 __meta__ = {
 "_edit_use_anchors_": false
 }
-[connection signal="pressed" from="Button" to="." method="select_layer" binds= [ 0 ]]
-[connection signal="pressed" from="Button2" to="." method="select_layer" binds= [ 1 ]]
-[connection signal="pressed" from="Button5" to="." method="select_layer" binds= [ 2 ]]
-[connection signal="pressed" from="Button3" to="." method="set_pencil_tile" binds= [ 1 ]]
-[connection signal="pressed" from="Button4" to="." method="set_pencil_tile" binds= [ 2 ]]
+
+[node name="lupamas" type="Button" parent="."]
+margin_left = 880.094
+margin_top = 250.717
+margin_right = 988.094
+margin_bottom = 270.717
+text = "Lupa +"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lupamenos" type="Button" parent="."]
+margin_left = 860.907
+margin_top = 323.292
+margin_right = 991.907
+margin_bottom = 343.292
+text = "Lupa -"
+[connection signal="mouse_entered" from="CanvasContainer/Canvas" to="CanvasContainer/Canvas" method="_on_Canvas_focus_entered"]
+[connection signal="mouse_exited" from="CanvasContainer/Canvas" to="CanvasContainer/Canvas" method="_on_Canvas_focus_exited"]
+[connection signal="pressed" from="Button" to="CanvasContainer/Canvas" method="select_layer" binds= [ 0 ]]
+[connection signal="pressed" from="Button2" to="CanvasContainer/Canvas" method="select_layer" binds= [ 1 ]]
+[connection signal="pressed" from="Button5" to="CanvasContainer/Canvas" method="select_layer" binds= [ 2 ]]
+[connection signal="pressed" from="Button3" to="CanvasContainer/Canvas" method="set_pencil_tile" binds= [ 1 ]]
+[connection signal="pressed" from="Button4" to="CanvasContainer/Canvas" method="set_pencil_tile" binds= [ 2 ]]
+[connection signal="pressed" from="lupamas" to="CanvasContainer/Canvas" method="add_to_scale_factor" binds= [ 0.25 ]]
+[connection signal="pressed" from="lupamenos" to="CanvasContainer/Canvas" method="add_to_scale_factor" binds= [ -0.25 ]]

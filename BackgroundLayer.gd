@@ -16,7 +16,4 @@ func init(configuration : Dictionary):
     _background = GoostImage.tile(tile, Vector2(tile_size*witdh, tile_size*height))
 
 func get_image():
-    var image = Image.new()
-    image.copy_from(_background)
-    image.resize(20*24, 20*24, Image.INTERPOLATE_NEAREST)
-    return image
+    return _background
