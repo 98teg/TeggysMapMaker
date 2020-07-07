@@ -14,6 +14,8 @@ var _drawing = false
 var _selected_tile
 var _previous_pos
 
+var _pencil_tile = 1
+
 func init(configuration : Dictionary):
     _tilemap.init_tilemap(configuration.width, configuration.height, configuration.tile_size)
     
@@ -49,13 +51,14 @@ func has_been_updated():
 func input(event):
     if event is InputEventMouseButton:
         if event.get_button_index() == BUTTON_LEFT:
-            _selected_tile = 1
+            _selected_tile = _pencil_tile
             if event.is_pressed():
                 start_drawing(event.position)
                 draw(event.position)
             else:
                 end_drawing()
         elif event.get_button_index() == BUTTON_RIGHT:
+            _selected_tile = 0
             if event.is_pressed():
                 start_drawing(event.position)
                 draw(event.position)
@@ -64,6 +67,9 @@ func input(event):
     elif event is InputEventMouseMotion:
         if _drawing:
             draw(event.position)
+            
+func set_pencil_tile(tile_id : int):
+    _pencil_tile = tile_id
             
 func load_image(path : String):
     var image = Image.new()

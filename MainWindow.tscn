@@ -7,3 +7,58 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Button" type="Button" parent="."]
+margin_left = 794.432
+margin_top = 14.0
+margin_right = 1013.43
+margin_bottom = 34.0
+text = "Terreno"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button2" type="Button" parent="."]
+margin_left = 797.296
+margin_top = 61.2551
+margin_right = 1016.3
+margin_bottom = 81.2551
+text = "Caminos"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button5" type="Button" parent="."]
+margin_left = 793.0
+margin_top = 104.214
+margin_right = 1012.0
+margin_bottom = 124.214
+text = "Ciudades"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button3" type="Button" parent="."]
+margin_left = 800.16
+margin_top = 440.728
+margin_right = 1019.16
+margin_bottom = 460.728
+text = "Tile 1"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button4" type="Button" parent="."]
+margin_left = 805.888
+margin_top = 483.687
+margin_right = 1024.89
+margin_bottom = 503.687
+text = "Tile 2"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="Button" to="." method="select_layer" binds= [ 0 ]]
+[connection signal="pressed" from="Button2" to="." method="select_layer" binds= [ 1 ]]
+[connection signal="pressed" from="Button5" to="." method="select_layer" binds= [ 2 ]]
+[connection signal="pressed" from="Button3" to="." method="set_pencil_tile" binds= [ 1 ]]
+[connection signal="pressed" from="Button4" to="." method="set_pencil_tile" binds= [ 2 ]]
