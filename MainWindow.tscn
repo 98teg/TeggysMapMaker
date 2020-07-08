@@ -8,10 +8,10 @@ __meta__ = {
 }
 
 [node name="CanvasContainer" type="ScrollContainer" parent="."]
-margin_left = 65.8707
-margin_top = 30.0714
-margin_right = 721.871
-margin_bottom = 575.071
+margin_left = 335.973
+margin_top = 22.3172
+margin_right = 991.973
+margin_bottom = 567.317
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -23,71 +23,82 @@ __meta__ = {
 }
 
 [node name="Button" type="Button" parent="."]
-margin_left = 794.432
-margin_top = 14.0
-margin_right = 1013.43
-margin_bottom = 34.0
+margin_left = 42.2812
+margin_top = 105.757
+margin_right = 261.279
+margin_bottom = 125.757
 text = "Terreno"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Button2" type="Button" parent="."]
-margin_left = 797.296
-margin_top = 61.2551
-margin_right = 1016.3
-margin_bottom = 81.2551
+margin_left = 45.1453
+margin_top = 153.012
+margin_right = 264.149
+margin_bottom = 173.012
 text = "Caminos"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Button5" type="Button" parent="."]
-margin_left = 793.0
-margin_top = 104.214
-margin_right = 1012.0
-margin_bottom = 124.214
+margin_left = 40.8492
+margin_top = 195.971
+margin_right = 259.849
+margin_bottom = 215.971
 text = "Ciudades"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Button3" type="Button" parent="."]
-margin_left = 800.16
-margin_top = 440.728
-margin_right = 1019.16
-margin_bottom = 460.728
+margin_left = 46.7169
+margin_top = 452.359
+margin_right = 265.717
+margin_bottom = 472.359
 text = "Tile 1"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Button4" type="Button" parent="."]
-margin_left = 805.888
-margin_top = 483.687
-margin_right = 1024.89
-margin_bottom = 503.687
+margin_left = 52.4449
+margin_top = 495.318
+margin_right = 271.447
+margin_bottom = 515.318
 text = "Tile 2"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="lupamas" type="Button" parent="."]
-margin_left = 880.094
-margin_top = 250.717
-margin_right = 988.094
-margin_bottom = 270.717
+margin_left = 126.651
+margin_top = 262.348
+margin_right = 234.651
+margin_bottom = 282.348
 text = "Lupa +"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="lupamenos" type="Button" parent="."]
-margin_left = 860.907
-margin_top = 323.292
-margin_right = 991.907
-margin_bottom = 343.292
+margin_left = 107.464
+margin_top = 334.923
+margin_right = 238.464
+margin_bottom = 354.923
 text = "Lupa -"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Save" type="Button" parent="."]
+margin_right = 157.0
+margin_bottom = 20.0
+text = "Guardar"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="mouse_entered" from="CanvasContainer/Canvas" to="CanvasContainer/Canvas" method="_on_Canvas_focus_entered"]
 [connection signal="mouse_exited" from="CanvasContainer/Canvas" to="CanvasContainer/Canvas" method="_on_Canvas_focus_exited"]
 [connection signal="pressed" from="Button" to="CanvasContainer/Canvas" method="select_layer" binds= [ 0 ]]
@@ -97,3 +108,4 @@ text = "Lupa -"
 [connection signal="pressed" from="Button4" to="CanvasContainer/Canvas" method="set_pencil_tile" binds= [ 2 ]]
 [connection signal="pressed" from="lupamas" to="CanvasContainer/Canvas" method="add_to_scale_factor" binds= [ 0.25 ]]
 [connection signal="pressed" from="lupamenos" to="CanvasContainer/Canvas" method="add_to_scale_factor" binds= [ -0.25 ]]
+[connection signal="pressed" from="Save" to="CanvasContainer/Canvas" method="save"]
