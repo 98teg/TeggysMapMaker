@@ -6,3 +6,6 @@ Thumbs.db
 .import
 
 resources
+*.exe
+*.pck
+*.x86_64

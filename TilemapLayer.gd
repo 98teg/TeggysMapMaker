@@ -5,9 +5,9 @@ var _tilemap = _TileMap.new()
 var _needs_update = false
 
 enum Tools{
-    PENCIL,
-    ERASER,
-    WRENCH
+	PENCIL,
+	ERASER,
+	WRENCH
 }
 
 var _drawing = false
@@ -17,179 +17,179 @@ var _previous_pos
 var _pencil_tile = 1
 
 func init(configuration : Dictionary):
-    _tilemap.init_tilemap(configuration.width, configuration.height, configuration.tile_size)
-    
-    for tile in configuration.tileset:
-        var default_texture = load_image(tile.texture)
-        
-        if tile.has("variations"):
-            var connection_type = check_connection_type(tile.variations)
-            
-            _tilemap.create_tile(default_texture, connection_type)
-            
-            for variation in tile.variations:
-                var conditions = []
-                for condition in variation.conditions:
-                    conditions.append(get_condition_id(condition, connection_type))
+	_tilemap.init_tilemap(configuration.width, configuration.height, configuration.tile_size)
+	
+	for tile in configuration.tileset:
+		var default_texture = load_image(tile.texture)
+		
+		if tile.has("variations"):
+			var connection_type = check_connection_type(tile.variations)
+			
+			_tilemap.create_tile(default_texture, connection_type)
+			
+			for variation in tile.variations:
+				var conditions = []
+				for condition in variation.conditions:
+					conditions.append(get_condition_id(condition, connection_type))
 
-                _tilemap.add_variation_to_last_tile(load_image(variation.texture), conditions)
-        else:
-            _tilemap.create_tile(default_texture, _Tile.Connection_type.NONE)
+				_tilemap.add_variation_to_last_tile(load_image(variation.texture), conditions)
+		else:
+			_tilemap.create_tile(default_texture, _Tile.Connection_type.NONE)
 
 func needs_update():
-    return _needs_update
+	return _needs_update
 
 func get_image():
-    return _tilemap.get_tilemap_image()
-    
+	return _tilemap.get_tilemap_image()
+	
 func has_been_updated():
-    _needs_update = false
+	_needs_update = false
 
 func input(event):
-    if event is InputEventMouseButton:
-        if event.get_button_index() == BUTTON_LEFT:
-            _selected_tile = _pencil_tile
-            if event.is_pressed():
-                start_drawing(event.position)
-                draw(event.position)
-            else:
-                end_drawing()
-        elif event.get_button_index() == BUTTON_RIGHT:
-            _selected_tile = 0
-            if event.is_pressed():
-                start_drawing(event.position)
-                draw(event.position)
-            else:
-                end_drawing()
-    elif event is InputEventMouseMotion:
-        if _drawing:
-            draw(event.position)
-            
+	if event is InputEventMouseButton:
+		if event.get_button_index() == BUTTON_LEFT:
+			_selected_tile = _pencil_tile
+			if event.is_pressed():
+				start_drawing(event.position)
+				draw(event.position)
+			else:
+				end_drawing()
+		elif event.get_button_index() == BUTTON_RIGHT:
+			_selected_tile = 0
+			if event.is_pressed():
+				start_drawing(event.position)
+				draw(event.position)
+			else:
+				end_drawing()
+	elif event is InputEventMouseMotion:
+		if _drawing:
+			draw(event.position)
+			
 func mouse_button(button_index : int, is_pressed : bool, position : Vector2):
-    if button_index == BUTTON_LEFT:
-        _selected_tile = _pencil_tile
-        if is_pressed:
-            start_drawing(position)
-            draw(position)
-        else:
-            end_drawing()
-    elif button_index == BUTTON_RIGHT:
-        _selected_tile = 0
-        if is_pressed:
-            start_drawing(position)
-            draw(position)
-        else:
-            end_drawing()
-            
+	if button_index == BUTTON_LEFT:
+		_selected_tile = _pencil_tile
+		if is_pressed:
+			start_drawing(position)
+			draw(position)
+		else:
+			end_drawing()
+	elif button_index == BUTTON_RIGHT:
+		_selected_tile = 0
+		if is_pressed:
+			start_drawing(position)
+			draw(position)
+		else:
+			end_drawing()
+			
 func mouse_motion(position : Vector2):
-    if _drawing:
-        draw(position)
-            
+	if _drawing:
+		draw(position)
+			
 func set_pencil_tile(tile_id : int):
-    _pencil_tile = tile_id
-            
+	_pencil_tile = tile_id
+			
 func load_image(path : String):
-    var image = Image.new()
+	var image = Image.new()
 
-    image.load(path)
-    image.convert(Image.FORMAT_RGBA8)
+	image.load(path)
+	image.convert(Image.FORMAT_RGBA8)
 
-    var tile_size = _tilemap.get_tile_size()
-    image.resize(tile_size, tile_size, Image.INTERPOLATE_NEAREST)
+	var tile_size = _tilemap.get_tile_size()
+	image.resize(tile_size, tile_size, Image.INTERPOLATE_NEAREST)
 
-    image.lock()
+	image.lock()
 
-    return image
-            
+	return image
+			
 func check_connection_type(variations : Array):
-    var connection_type = _Tile.Connection_type.CROSS
-    
-    for variation in variations:
-        for condition in variation.conditions:
-            for tile in condition:
-                if (tile == "NorthEast" or tile == "NorthWest" or
-                    tile == "SouthEast" or tile == "SouthWest"):
-                    connection_type = _Tile.Connection_type.FULL
-                break
-        if connection_type == _Tile.Connection_type.FULL:
-            break
-    
-    return connection_type
-            
+	var connection_type = _Tile.Connection_type.CROSS
+	
+	for variation in variations:
+		for condition in variation.conditions:
+			for tile in condition:
+				if (tile == "NorthEast" or tile == "NorthWest" or
+					tile == "SouthEast" or tile == "SouthWest"):
+					connection_type = _Tile.Connection_type.FULL
+				break
+		if connection_type == _Tile.Connection_type.FULL:
+			break
+	
+	return connection_type
+			
 func get_condition_id(condition : Array, connection_type : int) -> int:
-    var condition_id = 0
-    
-    if connection_type == _Tile.Connection_type.CROSS:
-        for tile in condition:
-            match tile:
-                "North":
-                    condition_id += 1
-                "East":
-                    condition_id += 2
-                "South":
-                    condition_id += 4
-                "West":
-                    condition_id += 8
-    else:
-        for tile in condition:
-            match tile:
-                "North":
-                    condition_id += 1
-                "NorthEast":
-                    condition_id += 2
-                "East":
-                    condition_id += 4
-                "SouthEast":
-                    condition_id += 8
-                "South":
-                    condition_id += 16
-                "SouthWest":
-                    condition_id += 32
-                "West":
-                    condition_id += 64
-                "NorthWest":
-                    condition_id += 128
-                    
-    return condition_id
-            
+	var condition_id = 0
+	
+	if connection_type == _Tile.Connection_type.CROSS:
+		for tile in condition:
+			match tile:
+				"North":
+					condition_id += 1
+				"East":
+					condition_id += 2
+				"South":
+					condition_id += 4
+				"West":
+					condition_id += 8
+	else:
+		for tile in condition:
+			match tile:
+				"North":
+					condition_id += 1
+				"NorthEast":
+					condition_id += 2
+				"East":
+					condition_id += 4
+				"SouthEast":
+					condition_id += 8
+				"South":
+					condition_id += 16
+				"SouthWest":
+					condition_id += 32
+				"West":
+					condition_id += 64
+				"NorthWest":
+					condition_id += 128
+					
+	return condition_id
+			
 func start_drawing(pos : Vector2):
-    _drawing = true
-    _previous_pos = (pos / _tilemap.get_tile_size()).floor()
+	_drawing = true
+	_previous_pos = (pos / _tilemap.get_tile_size()).floor()
 
 func draw(pos : Vector2):
-    var current_pos = (pos / _tilemap.get_tile_size()).floor()
-    
-    var p0 = _previous_pos
-    var p1 = current_pos
-    
-    var dx = abs(p1.x - p0.x)
-    var sx = 1 if p0.x < p1.x else -1
-    var dy = -abs(p1.y - p0.y)
-    var sy = 1 if p0.y < p1.y else -1
-    var err = dx + dy
+	var current_pos = (pos / _tilemap.get_tile_size()).floor()
+	
+	var p0 = _previous_pos
+	var p1 = current_pos
+	
+	var dx = abs(p1.x - p0.x)
+	var sx = 1 if p0.x < p1.x else -1
+	var dy = -abs(p1.y - p0.y)
+	var sy = 1 if p0.y < p1.y else -1
+	var err = dx + dy
 
-    while true:
-        set_tile(p0.y, p0.x)
+	while true:
+		set_tile(p0.y, p0.x)
 
-        if p0.x == p1.x and p0.y == p1.y:
-            break
-            
-        var e2 = 2*err;
-        if e2 >= dy:
-            err += dy
-            p0.x += sx
-        if e2 <= dx:
-            err += dx
-            p0.y += sy
-    
-    _previous_pos = current_pos
-            
+		if p0.x == p1.x and p0.y == p1.y:
+			break
+			
+		var e2 = 2*err;
+		if e2 >= dy:
+			err += dy
+			p0.x += sx
+		if e2 <= dx:
+			err += dx
+			p0.y += sy
+	
+	_previous_pos = current_pos
+			
 func end_drawing():
-    _drawing = false
-    
+	_drawing = false
+	
 func set_tile(i : int, j : int):
-    _tilemap.set_tile(i, j, _selected_tile)
-    asks_for_update()
+	_tilemap.set_tile(i, j, _selected_tile)
+	asks_for_update()
 
 func asks_for_update():
-    _needs_update = true
+	_needs_update = true

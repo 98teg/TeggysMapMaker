@@ -9,9 +9,9 @@ __meta__ = {
 
 [node name="CanvasContainer" type="ScrollContainer" parent="."]
 margin_left = 335.973
-margin_top = 22.3172
+margin_top = 21.0573
 margin_right = 991.973
-margin_bottom = 567.317
+margin_bottom = 566.057
 __meta__ = {
 "_edit_use_anchors_": false
 }
