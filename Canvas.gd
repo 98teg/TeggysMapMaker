@@ -83,10 +83,12 @@ func _ready():
 		"tile_size": 8,
 		"tileset": [
 			{
-				"texture": "./resources/Kanto/Path.png"
+				"texture": "./resources/Kanto/Path.png",
+				"type": "path"
 			},
 			{
 				"texture": "./resources/Kanto/WaterPath.png",
+				"type": "path",
 				"variations": [
 					{
 						"conditions": [["East", "West"]],
@@ -193,6 +195,11 @@ func set_pencil_tile(tile_id : int):
 	var i = _selected_layer + 1
 	
 	_layers[i].set_pencil_tile(tile_id)
+	
+func set_tool(tool_id : int):
+	var i = _selected_layer + 1
+
+	_layers[i].set_tool(tool_id)
 
 func _on_Canvas_focus_entered():
 	_allow_action = true

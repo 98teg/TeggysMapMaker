@@ -1,7 +1,8 @@
 class_name _Tile
 
-var _images = []
-var _conditions_for_each_state = {}
+var _tile_type : String = ""
+var _images : Array = []
+var _conditions_for_each_state : Dictionary = {}
 
 enum Connection_type{
 	NONE,
@@ -11,12 +12,16 @@ enum Connection_type{
 
 var _connection_type
 
-func create_tile(image : Image, connection_type : int = Connection_type.NONE):
+func create_tile(image : Image, connection_type : int = Connection_type.NONE, tile_type : String = ""):
 	add_state(image)
 	_connection_type = connection_type
+	_tile_type = tile_type
 	
 func get_connection_type() -> int:
 	return _connection_type
+	
+func get_tile_type() -> String:
+	return _tile_type
 	
 func add_state(image : Image, conditions : Array = []):
 	_images.append(image)

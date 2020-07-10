@@ -47,10 +47,10 @@ func create_tilemap_image():
 func get_tile_size():
 	return _tile_size
 	
-func create_tile(image : Image, connection_type = _Tile.Connection_type.NONE):
+func create_tile(image : Image, connection_type = _Tile.Connection_type.NONE, tile_type = ""):
 	_tileset.append(_Tile.new())
 	
-	_tileset.back().create_tile(image, connection_type)
+	_tileset.back().create_tile(image, connection_type, tile_type)
 	
 func add_variation_to_last_tile(variation : Image, conditions : Array):
 	_tileset.back().add_state(variation, conditions)
@@ -104,7 +104,13 @@ func change_tile_state(i : int, j : int):
 	place_tile_image(i, j, get_tile(i, j).get_image(state))
 		
 func are_connected(tile_id_1 : int, tile_id_2 : int):
-	return tile_id_1 == tile_id_2 or tile_id_1 == -1 or tile_id_2 == -1
+	if tile_id_1 == tile_id_2 or tile_id_1 == -1 or tile_id_2 == -1:
+		return true
+	else:
+		var tile_type_1 = _tileset[tile_id_1].get_tile_type()
+		var tile_type_2 = _tileset[tile_id_2].get_tile_type()
+		
+		return tile_type_1 == tile_type_2 and tile_type_1 != ""
 
 func place_tile_image(i : int, j : int, tile_image : Image):
 	var rect = Rect2(Vector2.ZERO, Vector2(_tile_size, _tile_size))

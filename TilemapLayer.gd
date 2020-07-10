@@ -10,11 +10,14 @@ enum Tools{
 	WRENCH
 }
 
+var _tool = Tools.PENCIL
+
 var _drawing = false
 var _selected_tile
 var _previous_pos
 
 var _pencil_tile = 1
+var _has_moved = false
 
 func init(configuration : Dictionary):
 	_tilemap.init_tilemap(configuration.width, configuration.height, configuration.tile_size)
@@ -24,8 +27,11 @@ func init(configuration : Dictionary):
 		
 		if tile.has("variations"):
 			var connection_type = check_connection_type(tile.variations)
-			
-			_tilemap.create_tile(default_texture, connection_type)
+
+			if tile.has("type"):
+				_tilemap.create_tile(default_texture, connection_type, tile.type)
+			else:
+				_tilemap.create_tile(default_texture, connection_type)
 			
 			for variation in tile.variations:
 				var conditions = []
@@ -34,7 +40,10 @@ func init(configuration : Dictionary):
 
 				_tilemap.add_variation_to_last_tile(load_image(variation.texture), conditions)
 		else:
-			_tilemap.create_tile(default_texture, _Tile.Connection_type.NONE)
+			if tile.has("type"):
+				_tilemap.create_tile(default_texture, _Tile.Connection_type.NONE, tile.type)
+			else:
+				_tilemap.create_tile(default_texture, _Tile.Connection_type.NONE)
 
 func needs_update():
 	return _needs_update
@@ -44,49 +53,44 @@ func get_image():
 	
 func has_been_updated():
 	_needs_update = false
-
-func input(event):
-	if event is InputEventMouseButton:
-		if event.get_button_index() == BUTTON_LEFT:
-			_selected_tile = _pencil_tile
-			if event.is_pressed():
-				start_drawing(event.position)
-				draw(event.position)
-			else:
-				end_drawing()
-		elif event.get_button_index() == BUTTON_RIGHT:
-			_selected_tile = 0
-			if event.is_pressed():
-				start_drawing(event.position)
-				draw(event.position)
-			else:
-				end_drawing()
-	elif event is InputEventMouseMotion:
-		if _drawing:
-			draw(event.position)
 			
 func mouse_button(button_index : int, is_pressed : bool, position : Vector2):
-	if button_index == BUTTON_LEFT:
-		_selected_tile = _pencil_tile
-		if is_pressed:
-			start_drawing(position)
-			draw(position)
-		else:
-			end_drawing()
-	elif button_index == BUTTON_RIGHT:
-		_selected_tile = 0
-		if is_pressed:
-			start_drawing(position)
-			draw(position)
-		else:
-			end_drawing()
+	if _tool == Tools.PENCIL:
+		if button_index == BUTTON_LEFT:
+			_selected_tile = _pencil_tile
+			if is_pressed:
+				start_drawing(position)
+				draw(position)
+			else:
+				end_drawing()
+		elif button_index == BUTTON_RIGHT:
+			_selected_tile = 0
+			if is_pressed:
+				start_drawing(position)
+				draw(position)
+			else:
+				end_drawing()
+	else:
+		if button_index == BUTTON_LEFT:
+			if is_pressed:
+				_has_moved = false
+			else:
+				if _has_moved == false:
+					var current_pos = (position / _tilemap.get_tile_size()).floor()
+					
+					change_tile_state(current_pos.y, current_pos.x)
 			
 func mouse_motion(position : Vector2):
 	if _drawing:
 		draw(position)
+	
+	_has_moved = true
 			
 func set_pencil_tile(tile_id : int):
 	_pencil_tile = tile_id
+	
+func set_tool(tool_id : int):
+	_tool = tool_id
 			
 func load_image(path : String):
 	var image = Image.new()
@@ -189,6 +193,10 @@ func end_drawing():
 	
 func set_tile(i : int, j : int):
 	_tilemap.set_tile(i, j, _selected_tile)
+	asks_for_update()
+	
+func change_tile_state(i : int, j : int):
+	_tilemap.change_tile_state(i, j)
 	asks_for_update()
 
 func asks_for_update():

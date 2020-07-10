@@ -99,6 +99,23 @@ text = "Guardar"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Button6" type="Button" parent="."]
+margin_left = 11.3393
+margin_top = 39.0576
+margin_right = 91.3393
+margin_bottom = 59.0576
+text = "Lápiz"
+
+[node name="Button7" type="Button" parent="."]
+margin_left = 115.913
+margin_top = 39.0576
+margin_right = 209.913
+margin_bottom = 59.0576
+text = "Llave inglesa"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="mouse_entered" from="CanvasContainer/Canvas" to="CanvasContainer/Canvas" method="_on_Canvas_focus_entered"]
 [connection signal="mouse_exited" from="CanvasContainer/Canvas" to="CanvasContainer/Canvas" method="_on_Canvas_focus_exited"]
 [connection signal="pressed" from="Button" to="CanvasContainer/Canvas" method="select_layer" binds= [ 0 ]]
@@ -109,3 +126,5 @@ __meta__ = {
 [connection signal="pressed" from="lupamas" to="CanvasContainer/Canvas" method="add_to_scale_factor" binds= [ 0.25 ]]
 [connection signal="pressed" from="lupamenos" to="CanvasContainer/Canvas" method="add_to_scale_factor" binds= [ -0.25 ]]
 [connection signal="pressed" from="Save" to="CanvasContainer/Canvas" method="save"]
+[connection signal="pressed" from="Button6" to="CanvasContainer/Canvas" method="set_tool" binds= [ 0 ]]
+[connection signal="pressed" from="Button7" to="CanvasContainer/Canvas" method="set_tool" binds= [ 1 ]]
