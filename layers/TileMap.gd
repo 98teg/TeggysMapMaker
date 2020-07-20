@@ -1,8 +1,6 @@
-class_name _TileMapLayer
+extends Control
 
 var _tilemap = _TileMap.new()
-
-var _needs_update = false
 
 enum Tools{
 	PENCIL,
@@ -17,21 +15,26 @@ var _selected_tile
 var _previous_pos
 
 var _pencil_tile = 1
-var _has_moved = false
 
-func init(configuration : Dictionary):
-	_tilemap.init_tilemap(configuration.width, configuration.height, configuration.tile_size)
+var _tilemap_tex = ImageTexture.new()
+
+var _context
+
+func init(configuration : Dictionary, context : Dictionary):
+	_context = context
+	_tilemap.init(configuration.width, configuration.height, configuration.tile_size)
 	
 	for tile in configuration.tileset:
 		var default_texture = load_image(tile.texture)
+		var layer = tile.layer if tile.has("layer") else ""
 		
 		if tile.has("variations"):
 			var connection_type = check_connection_type(tile.variations)
 
-			if tile.has("type"):
-				_tilemap.create_tile(default_texture, connection_type, tile.type)
+			if tile.has("material"):
+				_tilemap.create_tile(default_texture, layer, connection_type, tile.material)
 			else:
-				_tilemap.create_tile(default_texture, connection_type)
+				_tilemap.create_tile(default_texture, layer, connection_type)
 			
 			for variation in tile.variations:
 				var conditions = []
@@ -40,20 +43,23 @@ func init(configuration : Dictionary):
 
 				_tilemap.add_variation_to_last_tile(load_image(variation.texture), conditions)
 		else:
-			if tile.has("type"):
-				_tilemap.create_tile(default_texture, _Tile.Connection_type.NONE, tile.type)
+			if tile.has("material"):
+				_tilemap.create_tile(default_texture, layer, _Tile.Connection_type.ISOLATED, tile.material)
 			else:
-				_tilemap.create_tile(default_texture, _Tile.Connection_type.NONE)
-
-func needs_update():
-	return _needs_update
+				_tilemap.create_tile(default_texture, layer, _Tile.Connection_type.ISOLATED)
+	
+	_tilemap_tex.create_from_image(_tilemap.get_image(), 3)
+	
+func resize(size : Vector2):
+	set_custom_minimum_size(size)
+	
+func _draw():
+	draw_set_transform(_context.pos, 0.0, _context.scale)
+	draw_texture(_tilemap_tex, Vector2.ZERO)
 
 func get_image():
-	return _tilemap.get_tilemap_image()
-	
-func has_been_updated():
-	_needs_update = false
-			
+	return _tilemap.get_image()
+
 func mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 	if _tool == Tools.PENCIL:
 		if button_index == BUTTON_LEFT:
@@ -64,7 +70,7 @@ func mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 			else:
 				end_drawing()
 		elif button_index == BUTTON_RIGHT:
-			_selected_tile = 0
+			_selected_tile = -1
 			if is_pressed:
 				start_drawing(position)
 				draw(position)
@@ -73,20 +79,17 @@ func mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 	else:
 		if button_index == BUTTON_LEFT:
 			if is_pressed:
-				_has_moved = false
-			else:
-				if _has_moved == false:
-					var current_pos = (position / _tilemap.get_tile_size()).floor()
+				var current_pos = (position / _tilemap.get_tile_size()).floor()
 					
-					change_tile_state(current_pos.y, current_pos.x)
+				change_tile_state(current_pos.y, current_pos.x)
+					
 			
 func mouse_motion(position : Vector2):
 	if _drawing:
 		draw(position)
-	
-	_has_moved = true
 			
 func set_pencil_tile(tile_id : int):
+	_tilemap.select_tile(tile_id)
 	_pencil_tile = tile_id
 	
 func set_tool(tool_id : int):
@@ -113,9 +116,9 @@ func check_connection_type(variations : Array):
 			for tile in condition:
 				if (tile == "NorthEast" or tile == "NorthWest" or
 					tile == "SouthEast" or tile == "SouthWest"):
-					connection_type = _Tile.Connection_type.FULL
+					connection_type = _Tile.Connection_type.CIRCLE
 				break
-		if connection_type == _Tile.Connection_type.FULL:
+		if connection_type == _Tile.Connection_type.CIRCLE:
 			break
 	
 	return connection_type
@@ -153,19 +156,22 @@ func get_condition_id(condition : Array, connection_type : int) -> int:
 					condition_id += 64
 				"NorthWest":
 					condition_id += 128
-					
+
 	return condition_id
-			
+
 func start_drawing(pos : Vector2):
 	_drawing = true
 	_previous_pos = (pos / _tilemap.get_tile_size()).floor()
+	
+func get_overlay():
+	pass
 
 func draw(pos : Vector2):
 	var current_pos = (pos / _tilemap.get_tile_size()).floor()
-	
+
 	var p0 = _previous_pos
 	var p1 = current_pos
-	
+
 	var dx = abs(p1.x - p0.x)
 	var sx = 1 if p0.x < p1.x else -1
 	var dy = -abs(p1.y - p0.y)
@@ -177,7 +183,7 @@ func draw(pos : Vector2):
 
 		if p0.x == p1.x and p0.y == p1.y:
 			break
-			
+
 		var e2 = 2*err;
 		if e2 >= dy:
 			err += dy
@@ -185,19 +191,23 @@ func draw(pos : Vector2):
 		if e2 <= dx:
 			err += dx
 			p0.y += sy
-	
+
 	_previous_pos = current_pos
-			
+
 func end_drawing():
 	_drawing = false
-	
+
 func set_tile(i : int, j : int):
-	_tilemap.set_tile(i, j, _selected_tile)
+	if _selected_tile == -1:
+		_tilemap.erase_tile(i, j)
+	else:
+		_tilemap.place_tile(i, j)
 	asks_for_update()
-	
+
 func change_tile_state(i : int, j : int):
 	_tilemap.change_tile_state(i, j)
 	asks_for_update()
 
 func asks_for_update():
-	_needs_update = true
+	_tilemap_tex.set_data(_tilemap.get_image())
+	update()

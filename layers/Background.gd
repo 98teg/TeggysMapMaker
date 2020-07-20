@@ -1,8 +1,11 @@
-class_name _BackgroundLayer
+extends Control
 
 var _background = Image.new()
+var _background_tex = ImageTexture.new()
 
-func init(configuration : Dictionary):
+var _context
+
+func init(configuration : Dictionary, context : Dictionary):
 	var witdh = configuration.width
 	var height = configuration.height
 	var tile_size = configuration.tile_size
@@ -14,6 +17,13 @@ func init(configuration : Dictionary):
 	tile.lock()
 	
 	_background = GoostImage.tile(tile, Vector2(tile_size*witdh, tile_size*height))
+	_background_tex.create_from_image(_background, 3)
+	
+	_context = context
+	
+func resize(size : Vector2):
+	set_custom_minimum_size(size)
 
-func get_image():
-	return _background
+func _draw():
+	draw_set_transform(_context.pos, 0.0, _context.scale)
+	draw_texture(_background_tex, Vector2.ZERO)

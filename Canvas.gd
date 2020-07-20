@@ -1,16 +1,14 @@
 extends Control
 
-var _layers = []
-var _textures = []
-
-var _selected_layer = 0
+var _selected_layer = 1
 
 var _dimensions
-var _pos
-var _scale
+var _base_scale = 1
 var _scale_factor = 1
 
-var _allow_action = false
+var _allow_action = true
+
+var _context = {}
 
 func _ready():
 	_dimensions = Vector2(160, 160)
@@ -22,14 +20,13 @@ func _ready():
 	var height_scale = height / _dimensions.y
 	
 	if width_scale < height_scale:
-		_scale = Vector2(width_scale, width_scale)
+		_base_scale = Vector2(width_scale, width_scale)
 	else:
-		_scale = Vector2(height_scale, height_scale)
+		_base_scale = Vector2(height_scale, height_scale)
+		
+	_context.scale = _base_scale
 
 	update_rect()
-	
-	_layers.append(_BackgroundLayer.new())
-	_textures.append(ImageTexture.new())
 	
 	var configuration = {
 		"width": 20,
@@ -37,11 +34,9 @@ func _ready():
 		"tile_size": 8,
 		"tile": "./resources/Kanto/Water.png"
 	}
-	_layers[0].init(configuration)
-	_textures[0].create_from_image(_layers[0].get_image(), 3)
-
-	_layers.append(_TileMapLayer.new())
-	_textures.append(ImageTexture.new())
+	var layer = preload("res://layers/Background.tscn").instance()
+	add_child(layer)
+	layer.init(configuration, _context)
 
 	configuration = {
 		"width": 20,
@@ -50,6 +45,7 @@ func _ready():
 		"tileset": [
 			{
 				"texture": "./resources/Kanto/Land.png",
+				"layer": "land",
 				"variations": [
 					{
 						"conditions": [["North", "East"]],
@@ -68,94 +64,70 @@ func _ready():
 						"texture": "./resources/Kanto/Land-SW.png"
 					}
 				]
-			}
-		]
-	}
-	_layers[1].init(configuration)
-	_textures[1].create_from_image(_layers[1].get_image(), 3)
-	
-	_layers.append(_TileMapLayer.new())
-	_textures.append(ImageTexture.new())
-	
-	configuration = {
-		"width": 20,
-		"height": 20,
-		"tile_size": 8,
-		"tileset": [
+			},
 			{
 				"texture": "./resources/Kanto/Path.png",
-				"type": "path"
+				"layer": "path",
+				"material": "path"
 			},
 			{
 				"texture": "./resources/Kanto/WaterPath.png",
-				"type": "path",
+				"layer": "path",
+				"material": "path",
 				"variations": [
 					{
-						"conditions": [["East", "West"]],
+						"conditions": [["East", "West"], ["East"], ["West"]],
 						"texture": "./resources/Kanto/WaterPath-H.png"
 					},
 					{
-						"conditions": [["North", "South"]],
+						"conditions": [["North", "South"], ["North"], ["South"]],
 						"texture": "./resources/Kanto/WaterPath-V.png"
 					}
 				]
-			}
-		]
-	}
-	_layers[2].init(configuration)
-	_textures[2].create_from_image(_layers[2].get_image(), 3)
-	
-	_layers.append(_TileMapLayer.new())
-	_textures.append(ImageTexture.new())
-	
-	configuration = {
-		"width": 20,
-		"height": 20,
-		"tile_size": 8,
-		"tileset": [
-			{
-				"texture": "./resources/Kanto/City.png"
 			},
 			{
-				"texture": "./resources/Kanto/Town.png"
+				"texture": "./resources/Kanto/City.png",
+				"layer": "location"
+			},
+			{
+				"texture": "./resources/Kanto/Town.png",
+				"layer": "location"
 			}
 		]
 	}
-	_layers[3].init(configuration)
-	_textures[3].create_from_image(_layers[3].get_image(), 3)
+	layer = preload("res://layers/TileMap.tscn").instance()
+	add_child(layer)
+	layer.init(configuration, _context)
+	
+	layer = preload("res://overlays/Grid.tscn").instance()
+	add_child(layer)
+	layer.init(configuration, _context)
 
 func _draw():
-	draw_set_transform(_pos, 0.0, get_scale())
-
-	for texture in _textures:
-		draw_texture(texture, Vector2.ZERO)
+	for child in get_children():
+		child.update()
 
 func _input(event):
 	if _allow_action:
-		var pos = ((get_local_mouse_position() - _pos) / get_scale()).floor()
-		var i = _selected_layer + 1
+		var pos = ((get_local_mouse_position() - _context.pos) / _context.scale).floor()
+		var i = _selected_layer
 		
 		if event is InputEventMouseButton:
-			_layers[i].mouse_button(event.get_button_index(), event.is_pressed(), pos)
+			get_child(1).mouse_button(event.get_button_index(), event.is_pressed(), pos)
 		elif event is InputEventMouseMotion:
-			_layers[i].mouse_motion(pos)
-			
-		if _layers[i].needs_update():
-			_textures[i].set_data(_layers[i].get_image())
-			update()
-			_layers[i].has_been_updated()
+			get_child(1).mouse_motion(pos)
 			
 func update_rect():
 	var width = get_parent().get_rect().size.x
 	var height = get_parent().get_rect().size.y
 
-	var x_offset = (width - (_dimensions.x * get_scale().x)) / 2
+	var x_offset = (width - (_dimensions.x * _context.scale.x)) / 2
 	var h_scrollbar = 0
 	if x_offset < 0:
 		h_scrollbar = -x_offset
 		x_offset = 0
 
-	var y_offset = (height - (_dimensions.y * get_scale().y)) / 2
+	var y_offset = (height - (_dimensions.y * _context.scale.y)) / 2
 	var v_scrollbar = 0
 	if y_offset < 0:
 		v_scrollbar = -y_offset
@@ -163,9 +135,9 @@ func update_rect():
 
 	y_offset = y_offset if y_offset > 0 else 0
 
-	_pos = Vector2(x_offset, y_offset)
+	_context.pos = Vector2(x_offset, y_offset)
 
-	set_custom_minimum_size(_dimensions * get_scale() + _pos * 2)
+	set_custom_minimum_size(_dimensions * _context.scale + _context.pos * 2)
 	
 	update()
 
@@ -175,44 +147,44 @@ func update_rect():
 	yield(get_parent().get_h_scrollbar(), "changed")
 	get_parent().scroll_horizontal = h_scrollbar
 
-func get_scale():
-	return _scale * _scale_factor
-	
 func add_to_scale_factor(delta : float):
 	if delta > 0:
 		if _scale_factor < 2.5:
 			_scale_factor += delta
-			update_rect()
 	else:
 		if _scale_factor > 0.25:
 			_scale_factor += delta
-			update_rect()
-		
-func select_layer(layer_id : int):
-	_selected_layer = layer_id
+
+	_context.scale = _base_scale * _scale_factor
+	update_rect()
 	
 func set_pencil_tile(tile_id : int):
-	var i = _selected_layer + 1
+	var i = _selected_layer
 	
-	_layers[i].set_pencil_tile(tile_id)
+	get_child(1).set_pencil_tile(tile_id)
 	
 func set_tool(tool_id : int):
-	var i = _selected_layer + 1
+	var i = _selected_layer
 
-	_layers[i].set_tool(tool_id)
+	get_child(1).set_tool(tool_id)
 
 func _on_Canvas_focus_entered():
 	_allow_action = true
 
 func _on_Canvas_focus_exited():
-	_allow_action = false
+	_allow_action = true
 
 func save():
 	var image = Image.new()
-	image.copy_from(_layers[0].get_image())
+	image.copy_from(get_child(0).get_image())
 	
-	for layer in _layers:
-		image.blend_rect(layer.get_image(), Rect2(Vector2.ZERO, layer.get_image().get_size()), Vector2.ZERO)
+	for child in get_children():
+		image.blend_rect(child.get_image(), Rect2(Vector2.ZERO, child.get_image().get_size()), Vector2.ZERO)
 		
 	image.resize(480, 480, Image.INTERPOLATE_NEAREST)
 	image.save_png("./salida_1234.png")
+
+
+func _on_Canvas_resized():
+	for child in get_children():
+		child.resize(_dimensions * _context.scale + _context.pos * 2)

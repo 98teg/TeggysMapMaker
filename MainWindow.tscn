@@ -22,71 +22,71 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button" type="Button" parent="."]
-margin_left = 42.2812
-margin_top = 105.757
-margin_right = 261.279
-margin_bottom = 125.757
-text = "Terreno"
+[node name="Tierra" type="Button" parent="."]
+margin_left = 45.457
+margin_top = 180.216
+margin_right = 264.457
+margin_bottom = 200.216
+text = "Tierra"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button2" type="Button" parent="."]
-margin_left = 45.1453
-margin_top = 153.012
-margin_right = 264.149
-margin_bottom = 173.012
-text = "Caminos"
+[node name="Camino" type="Button" parent="."]
+margin_left = 42.3655
+margin_top = 257.193
+margin_right = 261.368
+margin_bottom = 277.193
+text = "Camino"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button5" type="Button" parent="."]
-margin_left = 40.8492
-margin_top = 195.971
-margin_right = 259.849
-margin_bottom = 215.971
-text = "Ciudades"
+[node name="Camino acuático" type="Button" parent="."]
+margin_left = 38.5857
+margin_top = 344.128
+margin_right = 257.588
+margin_bottom = 364.128
+text = "Camino acuatico"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button3" type="Button" parent="."]
-margin_left = 46.7169
-margin_top = 452.359
-margin_right = 265.717
-margin_bottom = 472.359
-text = "Tile 1"
+[node name="Ciudad" type="Button" parent="."]
+margin_left = 39.8457
+margin_top = 434.842
+margin_right = 258.848
+margin_bottom = 454.842
+text = "Ciudad"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button4" type="Button" parent="."]
-margin_left = 52.4449
-margin_top = 495.318
-margin_right = 271.447
-margin_bottom = 515.318
-text = "Tile 2"
+[node name="Pueblo" type="Button" parent="."]
+margin_left = 48.6651
+margin_top = 511.697
+margin_right = 267.667
+margin_bottom = 531.697
+text = "Pueblo"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="lupamas" type="Button" parent="."]
-margin_left = 126.651
-margin_top = 262.348
-margin_right = 234.651
-margin_bottom = 282.348
+margin_left = 13.0
+margin_top = 73.0
+margin_right = 91.0
+margin_bottom = 93.0
 text = "Lupa +"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="lupamenos" type="Button" parent="."]
-margin_left = 107.464
-margin_top = 334.923
-margin_right = 238.464
-margin_bottom = 354.923
+margin_left = 114.0
+margin_top = 72.0
+margin_right = 206.0
+margin_bottom = 92.0
 text = "Lupa -"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -100,14 +100,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button6" type="Button" parent="."]
+[node name="Lapiz" type="Button" parent="."]
 margin_left = 11.3393
 margin_top = 39.0576
 margin_right = 91.3393
 margin_bottom = 59.0576
 text = "Lápiz"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Button7" type="Button" parent="."]
+[node name="llave" type="Button" parent="."]
 margin_left = 115.913
 margin_top = 39.0576
 margin_right = 209.913
@@ -118,13 +121,14 @@ __meta__ = {
 }
 [connection signal="mouse_entered" from="CanvasContainer/Canvas" to="CanvasContainer/Canvas" method="_on_Canvas_focus_entered"]
 [connection signal="mouse_exited" from="CanvasContainer/Canvas" to="CanvasContainer/Canvas" method="_on_Canvas_focus_exited"]
-[connection signal="pressed" from="Button" to="CanvasContainer/Canvas" method="select_layer" binds= [ 0 ]]
-[connection signal="pressed" from="Button2" to="CanvasContainer/Canvas" method="select_layer" binds= [ 1 ]]
-[connection signal="pressed" from="Button5" to="CanvasContainer/Canvas" method="select_layer" binds= [ 2 ]]
-[connection signal="pressed" from="Button3" to="CanvasContainer/Canvas" method="set_pencil_tile" binds= [ 1 ]]
-[connection signal="pressed" from="Button4" to="CanvasContainer/Canvas" method="set_pencil_tile" binds= [ 2 ]]
+[connection signal="resized" from="CanvasContainer/Canvas" to="CanvasContainer/Canvas" method="_on_Canvas_resized"]
+[connection signal="pressed" from="Tierra" to="CanvasContainer/Canvas" method="set_pencil_tile" binds= [ 0 ]]
+[connection signal="pressed" from="Camino" to="CanvasContainer/Canvas" method="set_pencil_tile" binds= [ 1 ]]
+[connection signal="pressed" from="Camino acuático" to="CanvasContainer/Canvas" method="set_pencil_tile" binds= [ 2 ]]
+[connection signal="pressed" from="Ciudad" to="CanvasContainer/Canvas" method="set_pencil_tile" binds= [ 3 ]]
+[connection signal="pressed" from="Pueblo" to="CanvasContainer/Canvas" method="set_pencil_tile" binds= [ 4 ]]
 [connection signal="pressed" from="lupamas" to="CanvasContainer/Canvas" method="add_to_scale_factor" binds= [ 0.25 ]]
 [connection signal="pressed" from="lupamenos" to="CanvasContainer/Canvas" method="add_to_scale_factor" binds= [ -0.25 ]]
 [connection signal="pressed" from="Save" to="CanvasContainer/Canvas" method="save"]
-[connection signal="pressed" from="Button6" to="CanvasContainer/Canvas" method="set_tool" binds= [ 0 ]]
-[connection signal="pressed" from="Button7" to="CanvasContainer/Canvas" method="set_tool" binds= [ 1 ]]
+[connection signal="pressed" from="Lapiz" to="CanvasContainer/Canvas" method="set_tool" binds= [ 0 ]]
+[connection signal="pressed" from="llave" to="CanvasContainer/Canvas" method="set_tool" binds= [ 1 ]]
