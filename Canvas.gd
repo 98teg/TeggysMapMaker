@@ -1,6 +1,7 @@
 extends Control
 
 var _selected_layer = 1
+var _n_layers = 2
 
 var _dimensions
 var _base_scale = 1
@@ -26,7 +27,7 @@ func _ready():
 		
 	_context.scale = _base_scale
 
-	update_rect()
+	_update_rect()
 	
 	var configuration = {
 		"width": 20,
@@ -99,25 +100,13 @@ func _ready():
 	add_child(layer)
 	layer.init(configuration, _context)
 	
-	layer = preload("res://overlays/Grid.tscn").instance()
-	add_child(layer)
-	layer.init(configuration, _context)
+	add_child(get_child(_selected_layer).get_overlay())
 
 func _draw():
-	for child in get_children():
-		child.update()
-
-func _input(event):
-	if _allow_action:
-		var pos = ((get_local_mouse_position() - _context.pos) / _context.scale).floor()
-		var i = _selected_layer
-		
-		if event is InputEventMouseButton:
-			get_child(1).mouse_button(event.get_button_index(), event.is_pressed(), pos)
-		elif event is InputEventMouseMotion:
-			get_child(1).mouse_motion(pos)
+	for i in range(_n_layers):
+		get_child(i).update()
 			
-func update_rect():
+func _update_rect():
 	var width = get_parent().get_rect().size.x
 	var height = get_parent().get_rect().size.y
 
@@ -147,7 +136,7 @@ func update_rect():
 	yield(get_parent().get_h_scrollbar(), "changed")
 	get_parent().scroll_horizontal = h_scrollbar
 
-func add_to_scale_factor(delta : float):
+func _add_to_scale_factor(delta : float):
 	if delta > 0:
 		if _scale_factor < 2.5:
 			_scale_factor += delta
@@ -156,35 +145,20 @@ func add_to_scale_factor(delta : float):
 			_scale_factor += delta
 
 	_context.scale = _base_scale * _scale_factor
-	update_rect()
+	_update_rect()
 	
-func set_pencil_tile(tile_id : int):
-	var i = _selected_layer
-	
+func _set_pencil_tile(tile_id : int):
 	get_child(1).set_pencil_tile(tile_id)
 	
-func set_tool(tool_id : int):
-	var i = _selected_layer
-
+func _set_tool(tool_id : int):
 	get_child(1).set_tool(tool_id)
 
-func _on_Canvas_focus_entered():
-	_allow_action = true
-
-func _on_Canvas_focus_exited():
-	_allow_action = true
-
-func save():
+func _save():
 	var image = Image.new()
 	image.copy_from(get_child(0).get_image())
 	
-	for child in get_children():
-		image.blend_rect(child.get_image(), Rect2(Vector2.ZERO, child.get_image().get_size()), Vector2.ZERO)
+	for i in range(_n_layers):
+		image.blend_rect(get_child(i).get_image(), Rect2(Vector2.ZERO, get_child(i).get_image().get_size()), Vector2.ZERO)
 		
 	image.resize(480, 480, Image.INTERPOLATE_NEAREST)
 	image.save_png("./salida_1234.png")
-
-
-func _on_Canvas_resized():
-	for child in get_children():
-		child.resize(_dimensions * _context.scale + _context.pos * 2)

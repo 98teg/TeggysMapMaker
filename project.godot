@@ -9,28 +9,22 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "Control",
-"class": "_GridOverlay",
-"language": "GDScript",
-"path": "res://overlays/Grid.gd"
-}, {
 "base": "Reference",
 "class": "_Tile",
 "language": "GDScript",
-"path": "res://layers/tilemap/Tile.gd"
+"path": "res://layers/scripts/auxiliary_classes/tilemap/Tile.gd"
 }, {
 "base": "Reference",
 "class": "_TileMap",
 "language": "GDScript",
-"path": "res://layers/tilemap/TileMap.gd"
+"path": "res://layers/scripts/auxiliary_classes/tilemap/TileMap.gd"
 }, {
 "base": "Reference",
 "class": "_TileMapLayer",
 "language": "GDScript",
-"path": "res://layers/tilemap/TileMapLayer.gd"
+"path": "res://layers/scripts/auxiliary_classes/tilemap/TileMapLayer.gd"
 } ]
 _global_script_class_icons={
-"_GridOverlay": "",
 "_Tile": "",
 "_TileMap": "",
 "_TileMapLayer": ""
