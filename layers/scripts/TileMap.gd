@@ -4,8 +4,8 @@ extends Control
 
 enum Tools{
 	PENCIL,
-	ERASER,
-	WRENCH
+	WRENCH,
+	ERASER
 }
 
 # Private variables
@@ -14,12 +14,12 @@ var _tilemap : _TileMap = _TileMap.new()
 var _tilemap_tex : ImageTexture = ImageTexture.new()
 var _canvas_context : Dictionary
 var _overlay : Control
+var _tool_box : Control
 
 var _tool = Tools.PENCIL
 var _drawing = false
-var _selected_tile
+var _placing_tiles : bool
 var _previous_pos
-var _pencil_tile = 1
 
 # Layer public functions
 
@@ -27,6 +27,7 @@ func init(configuration : Dictionary, canvas_context : Dictionary):
 	_set_tilemap(configuration)
 	_set_canvas_context(canvas_context)
 	_create_overlay(configuration, canvas_context)
+	_create_tool_box()
 	
 func get_image():
 	return _tilemap.get_image()
@@ -34,6 +35,21 @@ func get_image():
 func get_overlay():
 	return _overlay
 	
+func get_tool_box():
+	return _tool_box
+
+func select_tile(tile_id : int):
+	_tilemap.select_tile(tile_id)
+
+func select_tool(tool_id : int):
+	_tool = tool_id
+	
+func toggle_grid():
+	if _overlay.is_visible_in_tree():
+		_overlay.hide()
+	else:
+		_overlay.show()
+
 # Layer private functions
 
 func _set_tilemap(configuration : Dictionary):
@@ -46,6 +62,11 @@ func _set_canvas_context(canvas_context : Dictionary):
 func _create_overlay(configuration : Dictionary, canvas_context : Dictionary):
 	_overlay = preload("res://overlays/TileMap.tscn").instance()
 	_overlay.init(configuration, canvas_context)
+	_overlay.hide()
+	
+func _create_tool_box():
+	_tool_box = preload("res://toolboxes/TileMap.tscn").instance()
+	_tool_box.init(self, _tilemap.get_tileset())
 	
 func _draw():
 	draw_set_transform(_canvas_context.pos, 0.0, _canvas_context.scale)
@@ -57,50 +78,43 @@ func _gui_input(event):
 	var pos = ((get_local_mouse_position() - _canvas_context.pos) / _canvas_context.scale).floor()
 		
 	if event is InputEventMouseButton:
-		mouse_button(event.get_button_index(), event.is_pressed(), pos)
+		_mouse_button(event.get_button_index(), event.is_pressed(), pos)
 	elif event is InputEventMouseMotion:
-		mouse_motion(pos)
+		_mouse_motion(pos)
 
-func mouse_button(button_index : int, is_pressed : bool, position : Vector2):
+func _mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 	if _tool == Tools.PENCIL:
 		if button_index == BUTTON_LEFT:
-			_selected_tile = _pencil_tile
+			_placing_tiles = true
 			if is_pressed:
-				start_drawing(position)
-				draw(position)
+				_start_drawing(position)
+				_draw_line(position)
 			else:
-				end_drawing()
+				_end_drawing()
 		elif button_index == BUTTON_RIGHT:
-			_selected_tile = -1
+			_placing_tiles = false
 			if is_pressed:
-				start_drawing(position)
-				draw(position)
+				_start_drawing(position)
+				_draw_line(position)
 			else:
-				end_drawing()
+				_end_drawing()
 	else:
 		if button_index == BUTTON_LEFT:
 			if is_pressed:
 				var current_pos = (position / _tilemap.get_tile_size()).floor()
 					
-				change_tile_state(current_pos.y, current_pos.x)
+				_change_tile_state(current_pos.y, current_pos.x)
 					
 			
-func mouse_motion(position : Vector2):
+func _mouse_motion(position : Vector2):
 	if _drawing:
-		draw(position)
-			
-func set_pencil_tile(tile_id : int):
-	_tilemap.select_tile(tile_id)
-	_pencil_tile = tile_id
-	
-func set_tool(tool_id : int):
-	_tool = tool_id
+		_draw_line(position)
 
-func start_drawing(pos : Vector2):
+func _start_drawing(pos : Vector2):
 	_drawing = true
 	_previous_pos = (pos / _tilemap.get_tile_size()).floor()
 
-func draw(pos : Vector2):
+func _draw_line(pos : Vector2):
 	var current_pos = (pos / _tilemap.get_tile_size()).floor()
 
 	var p0 = _previous_pos
@@ -113,7 +127,7 @@ func draw(pos : Vector2):
 	var err = dx + dy
 
 	while true:
-		set_tile(p0.y, p0.x)
+		_set_tile(p0.y, p0.x)
 
 		if p0.x == p1.x and p0.y == p1.y:
 			break
@@ -128,20 +142,20 @@ func draw(pos : Vector2):
 
 	_previous_pos = current_pos
 
-func end_drawing():
+func _end_drawing():
 	_drawing = false
 
-func set_tile(i : int, j : int):
-	if _selected_tile == -1:
-		_tilemap.erase_tile(i, j)
-	else:
+func _set_tile(i : int, j : int):
+	if _placing_tiles:
 		_tilemap.place_tile(i, j)
-	asks_for_update()
+	else:
+		_tilemap.erase_tile(i, j)
+	_update_layer()
 
-func change_tile_state(i : int, j : int):
+func _change_tile_state(i : int, j : int):
 	_tilemap.change_tile_state(i, j)
-	asks_for_update()
+	_update_layer()
 
-func asks_for_update():
+func _update_layer():
 	_tilemap_tex.set_data(_tilemap.get_image())
 	update()

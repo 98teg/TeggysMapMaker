@@ -101,6 +101,8 @@ func _ready():
 	layer.init(configuration, _context)
 	
 	add_child(get_child(_selected_layer).get_overlay())
+	
+	get_node("../../ToolBox").add_child(get_child(_selected_layer).get_tool_box())
 
 func _draw():
 	for i in range(_n_layers):

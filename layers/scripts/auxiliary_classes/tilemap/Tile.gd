@@ -61,6 +61,9 @@ func init_special_tile(id : int, tile_size : int):
 	
 	_add_state(empty_tile_image)
 
+func get_id() -> int:
+	return _id
+
 func get_layer() -> int:
 	return _layer
 

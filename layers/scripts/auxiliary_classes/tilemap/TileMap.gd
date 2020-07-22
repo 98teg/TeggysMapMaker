@@ -36,6 +36,9 @@ func get_image() -> Image:
 func get_tile_size() -> int:
 	return _tile_size
 
+func get_tileset() -> Array:
+	return _tileset
+
 func select_tile(tile_id : int):
 	_selected_tile = tile_id
 

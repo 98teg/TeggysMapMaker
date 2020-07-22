@@ -7,7 +7,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CanvasContainer" type="ScrollContainer" parent="."]
+[node name="CanvasScroller" type="ScrollContainer" parent="."]
 margin_left = 335.973
 margin_top = 21.0573
 margin_right = 991.973
@@ -16,58 +16,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Canvas" type="Control" parent="CanvasContainer"]
+[node name="Canvas" type="Control" parent="CanvasScroller"]
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Tierra" type="Button" parent="."]
-margin_left = 45.457
-margin_top = 180.216
-margin_right = 264.457
-margin_bottom = 200.216
-text = "Tierra"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Camino" type="Button" parent="."]
-margin_left = 42.3655
-margin_top = 257.193
-margin_right = 261.368
-margin_bottom = 277.193
-text = "Camino"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Camino acuático" type="Button" parent="."]
-margin_left = 38.5857
-margin_top = 344.128
-margin_right = 257.588
-margin_bottom = 364.128
-text = "Camino acuatico"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Ciudad" type="Button" parent="."]
-margin_left = 39.8457
-margin_top = 434.842
-margin_right = 258.848
-margin_bottom = 454.842
-text = "Ciudad"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Pueblo" type="Button" parent="."]
-margin_left = 48.6651
-margin_top = 511.697
-margin_right = 267.667
-margin_bottom = 531.697
-text = "Pueblo"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -100,34 +50,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Lapiz" type="Button" parent="."]
-margin_left = 11.3393
-margin_top = 39.0576
-margin_right = 91.3393
-margin_bottom = 59.0576
-text = "Lápiz"
+[node name="ToolBox" type="Container" parent="."]
+margin_left = 13.0
+margin_top = 114.0
+margin_right = 328.0
+margin_bottom = 570.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="llave" type="Button" parent="."]
-margin_left = 115.913
-margin_top = 39.0576
-margin_right = 209.913
-margin_bottom = 59.0576
-text = "Llave inglesa"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-[connection signal="mouse_entered" from="CanvasContainer/Canvas" to="CanvasContainer/Canvas" method="_on_Canvas_focus_entered"]
-[connection signal="mouse_exited" from="CanvasContainer/Canvas" to="CanvasContainer/Canvas" method="_on_Canvas_focus_exited"]
-[connection signal="pressed" from="Tierra" to="CanvasContainer/Canvas" method="_set_pencil_tile" binds= [ 0 ]]
-[connection signal="pressed" from="Camino" to="CanvasContainer/Canvas" method="_set_pencil_tile" binds= [ 1 ]]
-[connection signal="pressed" from="Camino acuático" to="CanvasContainer/Canvas" method="_set_pencil_tile" binds= [ 2 ]]
-[connection signal="pressed" from="Ciudad" to="CanvasContainer/Canvas" method="_set_pencil_tile" binds= [ 3 ]]
-[connection signal="pressed" from="Pueblo" to="CanvasContainer/Canvas" method="_set_pencil_tile" binds= [ 4 ]]
-[connection signal="pressed" from="lupamas" to="CanvasContainer/Canvas" method="_add_to_scale_factor" binds= [ 0.25 ]]
-[connection signal="pressed" from="lupamenos" to="CanvasContainer/Canvas" method="_add_to_scale_factor" binds= [ -0.25 ]]
-[connection signal="pressed" from="Save" to="CanvasContainer/Canvas" method="_save"]
-[connection signal="pressed" from="Lapiz" to="CanvasContainer/Canvas" method="_set_tool" binds= [ 0 ]]
-[connection signal="pressed" from="llave" to="CanvasContainer/Canvas" method="_set_tool" binds= [ 1 ]]
+[connection signal="pressed" from="lupamas" to="CanvasScroller/Canvas" method="_add_to_scale_factor" binds= [ 0.25 ]]
+[connection signal="pressed" from="lupamenos" to="CanvasScroller/Canvas" method="_add_to_scale_factor" binds= [ -0.25 ]]
+[connection signal="pressed" from="Save" to="CanvasScroller/Canvas" method="_save"]
