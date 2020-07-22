@@ -36,6 +36,19 @@ config/name="Teggy's Map Maker"
 run/main_scene="res://MainWindow.tscn"
 config/icon="res://icon.png"
 
+[input]
+
+ui_zoom_plus={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":true,"meta":false,"command":true,"pressed":false,"scancode":43,"unicode":0,"echo":false,"script":null)
+ ]
+}
+ui_zoom_minus={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":true,"meta":false,"command":true,"pressed":false,"scancode":45,"unicode":0,"echo":false,"script":null)
+ ]
+}
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"

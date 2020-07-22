@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Canvas.gd" type="Script" id=1]
+[ext_resource path="res://toolboxes/MagnifyingGlass.tscn" type="PackedScene" id=2]
 
 [node name="MainWindow" type="Control"]
 __meta__ = {
@@ -12,32 +13,13 @@ margin_left = 335.973
 margin_top = 21.0573
 margin_right = 991.973
 margin_bottom = 566.057
+mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Canvas" type="Control" parent="CanvasScroller"]
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="lupamas" type="Button" parent="."]
-margin_left = 13.0
-margin_top = 73.0
-margin_right = 91.0
-margin_bottom = 93.0
-text = "Lupa +"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="lupamenos" type="Button" parent="."]
-margin_left = 114.0
-margin_top = 72.0
-margin_right = 206.0
-margin_bottom = 92.0
-text = "Lupa -"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -50,6 +32,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="MagnifyingGlass" parent="." instance=ExtResource( 2 )]
+margin_left = 10.5457
+margin_top = 59.1591
+margin_right = 331.546
+margin_bottom = 99.1591
+
 [node name="ToolBox" type="Container" parent="."]
 margin_left = 13.0
 margin_top = 114.0
@@ -58,6 +46,5 @@ margin_bottom = 570.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
-[connection signal="pressed" from="lupamas" to="CanvasScroller/Canvas" method="_add_to_scale_factor" binds= [ 0.25 ]]
-[connection signal="pressed" from="lupamenos" to="CanvasScroller/Canvas" method="_add_to_scale_factor" binds= [ -0.25 ]]
 [connection signal="pressed" from="Save" to="CanvasScroller/Canvas" method="_save"]
+[connection signal="magnifying_factor_updated" from="MagnifyingGlass" to="CanvasScroller/Canvas" method="_update_scale_factor"]

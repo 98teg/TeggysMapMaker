@@ -138,16 +138,17 @@ func _update_rect():
 	yield(get_parent().get_h_scrollbar(), "changed")
 	get_parent().scroll_horizontal = h_scrollbar
 
-func _add_to_scale_factor(delta : float):
-	if delta > 0:
-		if _scale_factor < 2.5:
-			_scale_factor += delta
-	else:
-		if _scale_factor > 0.25:
-			_scale_factor += delta
-
-	_context.scale = _base_scale * _scale_factor
+func _update_scale_factor(percentage : float):
+	_context.scale = _base_scale * (2.5 * percentage + 0.25)
 	_update_rect()
+	
+func _gui_input(event):
+	if event is InputEventMouseButton:
+		if event.is_pressed():
+			if event.button_index == BUTTON_WHEEL_UP:
+				get_node("../../MagnifyingGlass")._add_to_magnifying_factor(5)
+			elif event.button_index == BUTTON_WHEEL_DOWN:
+				get_node("../../MagnifyingGlass")._add_to_magnifying_factor(-5)
 	
 func _set_pencil_tile(tile_id : int):
 	get_child(1).set_pencil_tile(tile_id)

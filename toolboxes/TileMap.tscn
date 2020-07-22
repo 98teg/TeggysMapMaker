@@ -1,11 +1,15 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://toolboxes/icons/eraser.png" type="Texture" id=1]
-[ext_resource path="res://toolboxes/icons/edit.png" type="Texture" id=2]
-[ext_resource path="res://toolboxes/icons/fix.png" type="Texture" id=3]
+[ext_resource path="res://toolboxes/icons/pencil.png" type="Texture" id=2]
+[ext_resource path="res://toolboxes/icons/wrench.png" type="Texture" id=3]
 [ext_resource path="res://toolboxes/icons/grid.png" type="Texture" id=4]
 [ext_resource path="res://toolboxes/scripts/TileMap.gd" type="Script" id=5]
-[ext_resource path="res://toolboxes/icons/paint.png" type="Texture" id=6]
+[ext_resource path="res://toolboxes/icons/bucket_fill.png" type="Texture" id=6]
+
+
+
+
 
 [node name="ToolBox" type="VSplitContainer"]
 anchor_right = 1.0
