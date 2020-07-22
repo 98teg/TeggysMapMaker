@@ -36,6 +36,28 @@ func set_tile(i : int, j : int, value : int):
 			
 			_update_tile(i, j)
 			_update_tiles_around(i, j)
+			
+func fill(i : int, j : int, value : int, tile_to_replace : int = _Tile.Special_tile.UNSELECTED):
+	if(i >= 0 and i < _width and j >= 0 and j < _height):
+		if tile_to_replace == _Tile.Special_tile.UNSELECTED:
+			tile_to_replace = _get_tile_id(i, j)
+			
+			if tile_to_replace == value:
+				return
+
+		set_tile(i, j, value)
+
+		if _get_tile_id(i + 1, j) == tile_to_replace:
+			fill(i + 1, j, value, tile_to_replace)
+
+		if _get_tile_id(i, j + 1) == tile_to_replace:
+			fill(i, j + 1, value, tile_to_replace)
+
+		if _get_tile_id(i - 1, j) == tile_to_replace:
+			fill(i - 1, j, value, tile_to_replace)
+
+		if _get_tile_id(i, j - 1) == tile_to_replace:
+			fill(i, j - 1, value, tile_to_replace)
 
 func change_tile_state(i : int, j : int):
 	var state = (_map[i][j].state + 1) % _get_tile(i, j).get_n_states()

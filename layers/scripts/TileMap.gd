@@ -2,10 +2,11 @@ extends Control
 
 # Custom enums
 
-enum Tools{
+enum Tool{
 	PENCIL,
 	WRENCH,
-	ERASER
+	ERASER,
+	BUCKET_FILL
 }
 
 # Private variables
@@ -16,7 +17,7 @@ var _canvas_context : Dictionary
 var _overlay : Control
 var _tool_box : Control
 
-var _tool = Tools.PENCIL
+var _tool = Tool.PENCIL
 var _drawing = false
 var _placing_tiles : bool
 var _previous_pos
@@ -83,29 +84,45 @@ func _gui_input(event):
 		_mouse_motion(pos)
 
 func _mouse_button(button_index : int, is_pressed : bool, position : Vector2):
-	if _tool == Tools.PENCIL:
-		if button_index == BUTTON_LEFT:
-			_placing_tiles = true
-			if is_pressed:
-				_start_drawing(position)
-				_draw_line(position)
-			else:
-				_end_drawing()
-		elif button_index == BUTTON_RIGHT:
-			_placing_tiles = false
-			if is_pressed:
-				_start_drawing(position)
-				_draw_line(position)
-			else:
-				_end_drawing()
-	else:
-		if button_index == BUTTON_LEFT:
-			if is_pressed:
-				var current_pos = (position / _tilemap.get_tile_size()).floor()
-					
-				_change_tile_state(current_pos.y, current_pos.x)
-					
-			
+	match _tool:
+		Tool.PENCIL:
+			if button_index == BUTTON_LEFT:
+				_placing_tiles = true
+				if is_pressed:
+					_start_drawing(position)
+					_draw_line(position)
+				else:
+					_end_drawing()
+			elif button_index == BUTTON_RIGHT:
+				_placing_tiles = false
+				if is_pressed:
+					_start_drawing(position)
+					_draw_line(position)
+				else:
+					_end_drawing()
+
+		Tool.WRENCH:
+			if button_index == BUTTON_LEFT:
+				if is_pressed:
+					var current_pos = (position / _tilemap.get_tile_size()).floor()
+						
+					_change_tile_state(current_pos.y, current_pos.x)
+
+		Tool.ERASER:
+			if button_index == BUTTON_LEFT:
+				if is_pressed:
+					_start_drawing(position)
+					_draw_line(position)
+				else:
+					_end_drawing()
+
+		Tool.BUCKET_FILL:
+			if button_index == BUTTON_LEFT:
+				if is_pressed:
+					var current_pos = (position / _tilemap.get_tile_size()).floor()
+						
+					_fill(current_pos.y, current_pos.x)
+
 func _mouse_motion(position : Vector2):
 	if _drawing:
 		_draw_line(position)
@@ -146,14 +163,22 @@ func _end_drawing():
 	_drawing = false
 
 func _set_tile(i : int, j : int):
-	if _placing_tiles:
-		_tilemap.place_tile(i, j)
-	else:
-		_tilemap.erase_tile(i, j)
+	match _tool:
+		Tool.PENCIL:
+			if _placing_tiles:
+				_tilemap.place_tile(i, j)
+			else:
+				_tilemap.erase_tile(i, j)
+		Tool.ERASER:
+			_tilemap.erase_tile_in_every_layer(i, j)
 	_update_layer()
 
 func _change_tile_state(i : int, j : int):
 	_tilemap.change_tile_state(i, j)
+	_update_layer()
+	
+func _fill(i : int, j : int):
+	_tilemap.fill(i, j)
 	_update_layer()
 
 func _update_layer():

@@ -5,7 +5,8 @@ class_name _Tile
 # Special kinds of tiles
 enum Special_tile {
 	AIR = -1,
-	OUT_OF_BOUNDS = -2
+	OUT_OF_BOUNDS = -2,
+	UNSELECTED = -3
 }
 
 # Connection types

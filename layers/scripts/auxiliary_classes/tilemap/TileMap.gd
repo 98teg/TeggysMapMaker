@@ -45,15 +45,23 @@ func select_tile(tile_id : int):
 func place_tile(i : int, j : int):
 	var selected_layer = _tileset[_selected_tile].get_layer()
 	_layers[selected_layer].tilemap.set_tile(i, j, _selected_tile)
-
-func erase_tile(i : int, j : int):
-	var selected_layer = _tileset[_selected_tile].get_layer()
-	_layers[selected_layer].tilemap.set_tile(i, j, _Tile.Special_tile.AIR)
 	
 func change_tile_state(i : int, j : int):
 	var selected_layer = _tileset[_selected_tile].get_layer()
 	_layers[selected_layer].tilemap.change_tile_state(i, j)
-	
+
+func erase_tile(i : int, j : int):
+	var selected_layer = _tileset[_selected_tile].get_layer()
+	_layers[selected_layer].tilemap.set_tile(i, j, _Tile.Special_tile.AIR)
+
+func erase_tile_in_every_layer(i : int, j : int):
+	for layer in _layers:
+		layer.tilemap.set_tile(i, j, _Tile.Special_tile.AIR)
+
+func fill(i : int, j : int):
+	var selected_layer = _tileset[_selected_tile].get_layer()
+	_layers[selected_layer].tilemap.fill(i, j, _selected_tile)
+
 # Class private functions
 	
 func _create_image():

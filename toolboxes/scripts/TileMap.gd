@@ -20,8 +20,10 @@ func create_tool_box():
 	create_tile_items()
 
 func connect_tools():
-	get_node("Tools/LeftTools/Pencil").connect("pressed", _layer, "select_tool", [_layer.Tools.PENCIL])
-	get_node("Tools/LeftTools/Wrench").connect("pressed", _layer, "select_tool", [_layer.Tools.WRENCH])
+	get_node("Tools/LeftTools/Pencil").connect("pressed", _layer, "select_tool", [_layer.Tool.PENCIL])
+	get_node("Tools/LeftTools/Wrench").connect("pressed", _layer, "select_tool", [_layer.Tool.WRENCH])
+	get_node("Tools/LeftTools/Eraser").connect("pressed", _layer, "select_tool", [_layer.Tool.ERASER])
+	get_node("Tools/LeftTools/BucketFill").connect("pressed", _layer, "select_tool", [_layer.Tool.BUCKET_FILL])
 	
 	get_node("Tools/RightTools/Grid").connect("pressed", _layer, "toggle_grid")
 
