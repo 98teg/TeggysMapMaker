@@ -1,5 +1,9 @@
 extends Control
 
+# Custom signals
+
+signal register_action(data)
+
 # Custom enums
 
 enum Tool{
@@ -38,6 +42,11 @@ func get_overlay():
 	
 func get_tool_box():
 	return _tool_box
+
+func apply(data):
+	var current_tilemap = _tilemap.load_tilemap(data)
+	_update_layer()
+	return current_tilemap
 
 func select_tile(tile_id : int):
 	_tilemap.select_tile(tile_id)
@@ -160,6 +169,7 @@ func _draw_line(pos : Vector2):
 	_previous_pos = current_pos
 
 func _end_drawing():
+	_register_action()
 	_drawing = false
 
 func _set_tile(i : int, j : int):
@@ -175,11 +185,19 @@ func _set_tile(i : int, j : int):
 
 func _change_tile_state(i : int, j : int):
 	_tilemap.change_tile_state(i, j)
+	_register_action()
 	_update_layer()
 	
 func _fill(i : int, j : int):
 	_tilemap.fill(i, j)
+	_register_action()
 	_update_layer()
+
+func _register_action():
+	var tilemap_hist = _tilemap.retrieve_previous_tilemap()
+	
+	if tilemap_hist.size() > 0:
+		emit_signal("register_action", tilemap_hist)
 
 func _update_layer():
 	_tilemap_tex.set_data(_tilemap.get_image())

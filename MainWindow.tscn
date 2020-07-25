@@ -46,5 +46,24 @@ margin_bottom = 570.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Button" type="Button" parent="."]
+margin_left = 11.8921
+margin_top = 26.1626
+margin_right = 138.892
+margin_bottom = 46.1626
+text = "Undo"
+
+[node name="Button2" type="Button" parent="."]
+margin_left = 155.786
+margin_top = 24.9734
+margin_right = 289.786
+margin_bottom = 44.9734
+text = "Redo"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="pressed" from="Save" to="CanvasScroller/Canvas" method="_save"]
 [connection signal="magnifying_factor_updated" from="MagnifyingGlass" to="CanvasScroller/Canvas" method="_update_scale_factor"]
+[connection signal="pressed" from="Button" to="CanvasScroller/Canvas" method="_undo"]
+[connection signal="pressed" from="Button2" to="CanvasScroller/Canvas" method="_redo"]

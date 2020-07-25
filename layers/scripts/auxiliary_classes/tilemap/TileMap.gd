@@ -62,6 +62,22 @@ func fill(i : int, j : int):
 	var selected_layer = _tileset[_selected_tile].get_layer()
 	_layers[selected_layer].tilemap.fill(i, j, _selected_tile)
 
+func retrieve_previous_tilemap():
+	var tilemap = []
+	for i in range(_layers.size()):
+		if _layers[i].tilemap.has_been_modified():
+			tilemap.append({"layer": i, "tilemap": _layers[i].tilemap.retrieve_previous_map()})
+
+	return tilemap
+
+func load_tilemap(tilemap : Array):
+	var current_tilemap = []
+	for layer in tilemap:
+		current_tilemap.append({"layer": layer.layer, "tilemap": _layers[layer.layer].tilemap.get_map()})
+		_layers[layer.layer].tilemap.load_map(layer.tilemap)
+
+	return current_tilemap
+
 # Class private functions
 	
 func _create_image():

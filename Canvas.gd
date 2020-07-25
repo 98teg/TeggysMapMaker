@@ -10,6 +10,8 @@ var _scale_factor = 1
 var _allow_action = true
 
 var _context = {}
+var _previous_actions = []
+var _next_actions = []
 
 func _ready():
 	_dimensions = Vector2(160, 160)
@@ -99,6 +101,7 @@ func _ready():
 	layer = preload("res://layers/TileMap.tscn").instance()
 	add_child(layer)
 	layer.init(configuration, _context)
+	layer.connect("register_action", self, "_register_action", [1])
 	
 	add_child(get_child(_selected_layer).get_overlay())
 	
@@ -137,6 +140,25 @@ func _update_rect():
 
 	yield(get_parent().get_h_scrollbar(), "changed")
 	get_parent().scroll_horizontal = h_scrollbar
+
+func _register_action(data, layer : int):
+	_next_actions.clear()
+	_previous_actions.append({"layer": layer, "data": data})
+	
+	if _previous_actions.size() > 20:
+		_previous_actions.pop_front()
+
+func _undo():
+	if _previous_actions.size() > 0:
+		var action = _previous_actions.pop_back()
+		var data = get_child(action.layer).apply(action.data)
+		_next_actions.append({"layer": action.layer, "data": data})
+
+func _redo():
+	if _next_actions.size() > 0:
+		var action = _next_actions.pop_back()
+		var data = get_child(action.layer).apply(action.data)
+		_previous_actions.append({"layer": action.layer, "data": data})
 
 func _update_scale_factor(percentage : float):
 	_context.scale = _base_scale * (2.5 * percentage + 0.25)
