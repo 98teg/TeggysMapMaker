@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/grid.png-886be175a46cd294243aa35472997fa0.stex"
+path="res://.import/eraser.png-fa1838d55ad2b3cef372a54806877de4.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://toolboxes/icons/grid.png"
-dest_files=[ "res://.import/grid.png-886be175a46cd294243aa35472997fa0.stex" ]
+source_file="res://panels/icons/eraser.png"
+dest_files=[ "res://.import/eraser.png-fa1838d55ad2b3cef372a54806877de4.stex" ]
 
 [params]
 

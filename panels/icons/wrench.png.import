@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/pencil.png-a2458232a551baa7652fe27cddb97622.stex"
+path="res://.import/wrench.png-2e4b2a5c0e99abdd324fc1c64cba2f39.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://toolboxes/icons/pencil.png"
-dest_files=[ "res://.import/pencil.png-a2458232a551baa7652fe27cddb97622.stex" ]
+source_file="res://panels/icons/wrench.png"
+dest_files=[ "res://.import/wrench.png-2e4b2a5c0e99abdd324fc1c64cba2f39.stex" ]
 
 [params]
 

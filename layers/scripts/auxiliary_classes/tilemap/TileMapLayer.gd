@@ -89,9 +89,7 @@ func get_map():
 
 func load_map(map : Array):
 	_map = map
-	_previous_map = _map.duplicate(true)
-
-	_has_been_modified = false
+	_has_been_modified = true
 	
 	for i in range(_height):
 		for j in range(_width):

@@ -1,28 +1,21 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://Canvas.gd" type="Script" id=1]
-[ext_resource path="res://toolboxes/MagnifyingGlass.tscn" type="PackedScene" id=2]
+[ext_resource path="res://MainWindow.gd" type="Script" id=1]
+[ext_resource path="res://panels/MagnifyingGlass.tscn" type="PackedScene" id=2]
+[ext_resource path="res://panels/UndoRedo.tscn" type="PackedScene" id=3]
+[ext_resource path="res://panels/Canvas.tscn" type="PackedScene" id=4]
 
 [node name="MainWindow" type="Control"]
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CanvasScroller" type="ScrollContainer" parent="."]
-margin_left = 335.973
-margin_top = 21.0573
-margin_right = 991.973
-margin_bottom = 566.057
-mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Canvas" type="Control" parent="CanvasScroller"]
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Canvas" parent="." instance=ExtResource( 4 )]
+margin_left = 412.0
+margin_top = 24.0
+margin_right = 1012.0
+margin_bottom = 577.0
 
 [node name="Save" type="Button" parent="."]
 margin_right = 157.0
@@ -32,38 +25,23 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="UndoRedo" parent="." instance=ExtResource( 3 )]
+margin_left = 163.79
+margin_top = 0.629959
+margin_right = 259.79
+margin_bottom = 40.63
+
 [node name="MagnifyingGlass" parent="." instance=ExtResource( 2 )]
-margin_left = 10.5457
-margin_top = 59.1591
-margin_right = 331.546
-margin_bottom = 99.1591
+margin_left = 8.65584
+margin_top = 58.5291
+margin_right = 329.656
+margin_bottom = 98.5291
 
 [node name="ToolBox" type="Container" parent="."]
-margin_left = 13.0
-margin_top = 114.0
-margin_right = 328.0
-margin_bottom = 570.0
+margin_left = 11.6652
+margin_top = 112.665
+margin_right = 326.665
+margin_bottom = 568.665
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="Button" type="Button" parent="."]
-margin_left = 11.8921
-margin_top = 26.1626
-margin_right = 138.892
-margin_bottom = 46.1626
-text = "Undo"
-
-[node name="Button2" type="Button" parent="."]
-margin_left = 155.786
-margin_top = 24.9734
-margin_right = 289.786
-margin_bottom = 44.9734
-text = "Redo"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-[connection signal="pressed" from="Save" to="CanvasScroller/Canvas" method="_save"]
-[connection signal="magnifying_factor_updated" from="MagnifyingGlass" to="CanvasScroller/Canvas" method="_update_scale_factor"]
-[connection signal="pressed" from="Button" to="CanvasScroller/Canvas" method="_undo"]
-[connection signal="pressed" from="Button2" to="CanvasScroller/Canvas" method="_redo"]

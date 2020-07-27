@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/zoom_minus.png-a20b2ff36453a5da90858693a221c3b5.stex"
+path="res://.import/pencil.png-df66e560b3c989277f78921a9c0916a6.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://toolboxes/icons/zoom_minus.png"
-dest_files=[ "res://.import/zoom_minus.png-a20b2ff36453a5da90858693a221c3b5.stex" ]
+source_file="res://panels/icons/pencil.png"
+dest_files=[ "res://.import/pencil.png-df66e560b3c989277f78921a9c0916a6.stex" ]
 
 [params]
 

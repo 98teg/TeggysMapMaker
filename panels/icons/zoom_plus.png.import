@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/eraser.png-b230e1757945b3423c782232a4ecfad7.stex"
+path="res://.import/zoom_plus.png-b6db90b3681ccc9c3ab4781ae92a1676.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://toolboxes/icons/eraser.png"
-dest_files=[ "res://.import/eraser.png-b230e1757945b3423c782232a4ecfad7.stex" ]
+source_file="res://panels/icons/zoom_plus.png"
+dest_files=[ "res://.import/zoom_plus.png-b6db90b3681ccc9c3ab4781ae92a1676.stex" ]
 
 [params]
 

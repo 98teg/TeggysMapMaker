@@ -8,7 +8,17 @@ signal magnifying_factor_updated(value)
 
 var _magnifying_factor : int = 30
 
-# Toolbox private functions
+# Panel public functions
+
+func process_mouse_wheel(event):
+	if event is InputEventMouseButton:
+		if event.is_pressed():
+			if event.button_index == BUTTON_WHEEL_UP:
+				_add_to_magnifying_factor(5)
+			elif event.button_index == BUTTON_WHEEL_DOWN:
+				_add_to_magnifying_factor(-5)
+
+# Panel private functions
 
 func _input(event):
 	if event.is_action_pressed("ui_zoom_plus"):

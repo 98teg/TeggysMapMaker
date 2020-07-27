@@ -17,7 +17,6 @@ enum Tool{
 
 var _tilemap : _TileMap = _TileMap.new()
 var _tilemap_tex : ImageTexture = ImageTexture.new()
-var _canvas_context : Dictionary
 var _overlay : Control
 var _tool_box : Control
 
@@ -28,10 +27,9 @@ var _previous_pos
 
 # Layer public functions
 
-func init(configuration : Dictionary, canvas_context : Dictionary):
+func init(configuration : Dictionary):
 	_set_tilemap(configuration)
-	_set_canvas_context(canvas_context)
-	_create_overlay(configuration, canvas_context)
+	_create_overlay(configuration)
 	_create_tool_box()
 	
 func get_image():
@@ -43,10 +41,10 @@ func get_overlay():
 func get_tool_box():
 	return _tool_box
 
-func apply(data):
-	var current_tilemap = _tilemap.load_tilemap(data)
+func apply_action(data):
+	_tilemap.load_tilemap(data)
+	_register_action()
 	_update_layer()
-	return current_tilemap
 
 func select_tile(tile_id : int):
 	_tilemap.select_tile(tile_id)
@@ -65,27 +63,23 @@ func toggle_grid():
 func _set_tilemap(configuration : Dictionary):
 	_tilemap.init(configuration)
 	_tilemap_tex.create_from_image(_tilemap.get_image(), 3)
-
-func _set_canvas_context(canvas_context : Dictionary):
-	_canvas_context = canvas_context
 	
-func _create_overlay(configuration : Dictionary, canvas_context : Dictionary):
+func _create_overlay(configuration : Dictionary):
 	_overlay = preload("res://overlays/TileMap.tscn").instance()
-	_overlay.init(configuration, canvas_context)
+	_overlay.init(configuration)
 	_overlay.hide()
 	
 func _create_tool_box():
-	_tool_box = preload("res://toolboxes/TileMap.tscn").instance()
+	_tool_box = preload("res://panels/TileMap.tscn").instance()
 	_tool_box.init(self, _tilemap.get_tileset())
 	
 func _draw():
-	draw_set_transform(_canvas_context.pos, 0.0, _canvas_context.scale)
 	draw_texture(_tilemap_tex, Vector2.ZERO)
 	
 	_overlay.update()
-	
+
 func _gui_input(event):
-	var pos = ((get_local_mouse_position() - _canvas_context.pos) / _canvas_context.scale).floor()
+	var pos = get_local_mouse_position()
 		
 	if event is InputEventMouseButton:
 		_mouse_button(event.get_button_index(), event.is_pressed(), pos)

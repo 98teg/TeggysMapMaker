@@ -2,12 +2,12 @@ extends Control
 
 # Overlay public functions
 
-func init(configuration : Dictionary, canvas_context : Dictionary):
+func init(configuration : Dictionary):
 	var layer
 	
 	layer = preload("res://overlays/Grid.tscn").instance()
 	add_child(layer)
-	layer.init(configuration, canvas_context)
+	layer.init(configuration)
 
 # Overlay private functions
 

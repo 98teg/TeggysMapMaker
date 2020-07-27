@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/wrench.png-f87ee1829979b812bc3c6bdd574470c0.stex"
+path="res://.import/zoom_minus.png-6b49b536f10e3063f58554b6aacc19f0.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://toolboxes/icons/wrench.png"
-dest_files=[ "res://.import/wrench.png-f87ee1829979b812bc3c6bdd574470c0.stex" ]
+source_file="res://panels/icons/zoom_minus.png"
+dest_files=[ "res://.import/zoom_minus.png-6b49b536f10e3063f58554b6aacc19f0.stex" ]
 
 [params]
 

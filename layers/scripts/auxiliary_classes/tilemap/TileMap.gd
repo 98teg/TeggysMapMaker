@@ -71,12 +71,8 @@ func retrieve_previous_tilemap():
 	return tilemap
 
 func load_tilemap(tilemap : Array):
-	var current_tilemap = []
 	for layer in tilemap:
-		current_tilemap.append({"layer": layer.layer, "tilemap": _layers[layer.layer].tilemap.get_map()})
 		_layers[layer.layer].tilemap.load_map(layer.tilemap)
-
-	return current_tilemap
 
 # Class private functions
 	

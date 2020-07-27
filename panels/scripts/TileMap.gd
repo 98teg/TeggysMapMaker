@@ -5,7 +5,7 @@ extends Control
 var _layer : Control
 var _tileset : Array
 
-# Toolbox public functions
+# Panel public functions
 
 func init(layer : Control, tileset : Array):
 	_layer = layer
@@ -13,7 +13,7 @@ func init(layer : Control, tileset : Array):
 	
 	create_tool_box()
 
-# Toolbox private functions
+# Panel private functions
 
 func create_tool_box():
 	connect_tools()
@@ -31,7 +31,7 @@ func create_tile_items():
 	var tile_item
 	
 	for tile in _tileset:
-		tile_item = preload("res://toolboxes/elements/tile_item.tscn").instance()
+		tile_item = preload("res://panels/elements/TileItem.tscn").instance()
 		tile_item.set_image(tile.get_image())
 		
 		tile_item.connect("pressed", _layer, "select_tile", [tile.get_id()])

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/bucket_fill.png-aaddb0c4627c891194e71890bd769e26.stex"
+path="res://.import/undo.png-d3e6b58a181d1ade050cfe51c7f23b47.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://toolboxes/icons/bucket_fill.png"
-dest_files=[ "res://.import/bucket_fill.png-aaddb0c4627c891194e71890bd769e26.stex" ]
+source_file="res://panels/icons/undo.png"
+dest_files=[ "res://.import/undo.png-d3e6b58a181d1ade050cfe51c7f23b47.stex" ]
 
 [params]
 
