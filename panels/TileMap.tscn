@@ -8,7 +8,6 @@
 [ext_resource path="res://panels/icons/bucket_fill.png" type="Texture" id=6]
 
 [node name="ToolBox" type="VSplitContainer"]
-anchor_right = 1.0
 anchor_bottom = 1.0
 dragger_visibility = 1
 script = ExtResource( 1 )
@@ -17,8 +16,9 @@ __meta__ = {
 }
 
 [node name="Tools" type="HSplitContainer" parent="."]
-margin_right = 1024.0
+margin_right = 320.0
 margin_bottom = 40.0
+rect_min_size = Vector2( 318, 0 )
 dragger_visibility = 1
 
 [node name="LeftTools" type="HBoxContainer" parent="Tools"]
@@ -53,20 +53,27 @@ icon = ExtResource( 6 )
 
 [node name="RightTools" type="HBoxContainer" parent="Tools"]
 margin_left = 200.0
-margin_right = 1024.0
+margin_right = 320.0
 margin_bottom = 40.0
 alignment = 2
 
 [node name="Grid" type="ToolButton" parent="Tools/RightTools"]
-margin_left = 780.0
-margin_right = 824.0
+margin_left = 61.0
+margin_right = 105.0
 margin_bottom = 40.0
 icon = ExtResource( 3 )
 
+[node name="Panel" type="Control" parent="Tools/RightTools"]
+margin_left = 109.0
+margin_right = 120.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 11, 0 )
+
 [node name="TilesScroller" type="ScrollContainer" parent="."]
 margin_top = 52.0
-margin_right = 1024.0
+margin_right = 320.0
 margin_bottom = 600.0
+rect_min_size = Vector2( 320, 0 )
 scroll_horizontal_enabled = false
 
 [node name="TilesGrid" type="GridContainer" parent="TilesScroller"]
