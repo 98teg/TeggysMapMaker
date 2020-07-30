@@ -13,6 +13,9 @@ func init(configuration : Dictionary):
 
 	_set_overlay()
 
+func get_size():
+	return _get_layer(_selected_layer).get_image().get_size()
+
 func get_current_tool_box():
 	return _get_layer(_selected_layer).get_tool_box()
 

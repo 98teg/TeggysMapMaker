@@ -6,7 +6,7 @@ signal magnifying_factor_updated(value)
 
 # Private variables
 
-var _magnifying_factor : int = 30
+var _magnifying_factor : int = 20
 
 # Panel public functions
 
@@ -14,9 +14,9 @@ func process_mouse_wheel(event):
 	if event is InputEventMouseButton:
 		if event.is_pressed():
 			if event.button_index == BUTTON_WHEEL_UP:
-				_add_to_magnifying_factor(5)
+				_add_to_magnifying_factor(2)
 			elif event.button_index == BUTTON_WHEEL_DOWN:
-				_add_to_magnifying_factor(-5)
+				_add_to_magnifying_factor(-2)
 
 # Panel private functions
 
