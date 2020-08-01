@@ -1,4 +1,4 @@
-extends Node
+extends Control
 
 # Private variable
 
@@ -12,6 +12,12 @@ func init(configuration : Dictionary):
 		_add_layer(layer)
 
 	_set_overlay()
+
+func transform(offset : Vector2, scale : Vector2):
+	set_custom_minimum_size(scale * get_size() + (offset * 2))
+	get_node("Layers").set_canvas_transform(Transform2D().scaled(scale).translated(offset / scale))
+	get_child(1).transform(offset, scale)
+	get_child(1).update()
 
 func get_size():
 	return _get_layer(_selected_layer).get_image().get_size()
@@ -37,16 +43,16 @@ func _add_layer(layer : Dictionary):
 		"tilemap":
 			new_layer = preload("res://layers/TileMap.tscn").instance()
 
-	get_child(0).add_child(new_layer)
+	get_node("Layers").add_child(new_layer)
 	new_layer.init(layer.configuration)
 
 	_number_of_layers = _number_of_layers + 1
 
 func _get_layer(layer_id : int):
-	return get_child(0).get_child(layer_id)
+	return get_node("Layers").get_child(layer_id)
 
 func _set_overlay():
-	get_child(0).add_child(_get_layer(_selected_layer).get_overlay())
+	add_child(_get_layer(_selected_layer).get_overlay())
 
 func _apply_action(data, layer : int):
 	_get_layer(layer).apply_action(data)

@@ -48,15 +48,13 @@ func apply_action(data):
 
 func select_tile(tile_id : int):
 	_tilemap.select_tile(tile_id)
+	_overlay.set_image(_tilemap.get_selected_tile_image())
 
 func select_tool(tool_id : int):
 	_tool = tool_id
 	
 func toggle_grid():
-	if _overlay.is_visible_in_tree():
-		_overlay.hide()
-	else:
-		_overlay.show()
+	_overlay.toggle_grid()
 
 # Layer private functions
 
@@ -67,7 +65,7 @@ func _set_tilemap(configuration : Dictionary):
 func _create_overlay(configuration : Dictionary):
 	_overlay = preload("res://overlays/TileMap.tscn").instance()
 	_overlay.init(configuration)
-	_overlay.hide()
+	_overlay.set_image(_tilemap.get_selected_tile_image())
 	
 func _create_tool_box():
 	_tool_box = preload("res://panels/TileMap.tscn").instance()
@@ -80,7 +78,7 @@ func _draw():
 
 func _gui_input(event):
 	var pos = get_local_mouse_position()
-		
+
 	if event is InputEventMouseButton:
 		_mouse_button(event.get_button_index(), event.is_pressed(), pos)
 	elif event is InputEventMouseMotion:
@@ -129,6 +127,8 @@ func _mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 func _mouse_motion(position : Vector2):
 	if _drawing:
 		_draw_line(position)
+	else:
+		_overlay.set_pos(position)
 
 func _start_drawing(pos : Vector2):
 	_drawing = true

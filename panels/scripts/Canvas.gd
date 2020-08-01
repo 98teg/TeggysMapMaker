@@ -69,8 +69,7 @@ func _update_canvas(scale : Vector2):
 	scrollbar = scrollbar * scrolled
 	_current_scrollbar = scrollbar
 
-	get_node("CanvasLayers").set_custom_minimum_size(size_scaled + (offset * 2))
-	get_node("CanvasLayers/Viewport").set_canvas_transform(Transform2D().scaled(scale).translated(offset / scale))
+	get_node("CanvasLayers").transform(offset, scale)
 
 	if scrollbar.x != 0:
 		yield(get_h_scrollbar(), "changed")
