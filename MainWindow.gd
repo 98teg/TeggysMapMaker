@@ -79,11 +79,11 @@ func _ready():
 	
 	get_node("Canvas").init(configuration)
 
-	get_node("ControlPanel/ToolBox").add_child(get_node("Canvas/CanvasLayers").get_current_tool_box())
+	get_node("ControlPanel/ToolBox").add_child(get_node("Canvas").get_current_tool_box())
 	get_node("ControlPanel/MagnifyingGlass").connect("magnifying_factor_updated", get_node("Canvas"), "_update_scale_factor")
-	get_node("Canvas/CanvasLayers").connect("gui_input", get_node("ControlPanel/MagnifyingGlass"), "process_mouse_wheel")
+	get_node("Canvas").connect("gui_input", get_node("ControlPanel/MagnifyingGlass"), "process_mouse_wheel")
 	
-	get_node("Canvas/CanvasLayers").connect_with_undo_redo(get_node("ControlPanel/TopBar/UndoRedo"))
+	get_node("Canvas").connect_with_undo_redo(get_node("ControlPanel/TopBar/UndoRedo"))
 
 
 #func _gui_input(event):

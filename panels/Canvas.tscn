@@ -1,10 +1,6 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://panels/Canvas.gd" type="Script" id=1]
-[ext_resource path="res://panels/CanvasLayers.tscn" type="PackedScene" id=2]
-
-
-
 
 [node name="Canvas" type="ScrollContainer"]
 mouse_filter = 2
@@ -13,9 +9,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CanvasLayers" parent="." instance=ExtResource( 2 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 12.0
-margin_bottom = 12.0
+[node name="CanvasViewport" type="ViewportContainer" parent="."]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="Layers" type="Viewport" parent="CanvasViewport"]
+handle_input_locally = false
+render_target_update_mode = 3
+gui_disable_input = true
 [connection signal="resized" from="." to="." method="_update_rect"]
