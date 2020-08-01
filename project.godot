@@ -12,17 +12,17 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "_Tile",
 "language": "GDScript",
-"path": "res://layers/scripts/auxiliary_classes/tilemap/Tile.gd"
+"path": "res://classes/Tile.gd"
 }, {
 "base": "Reference",
 "class": "_TileMap",
 "language": "GDScript",
-"path": "res://layers/scripts/auxiliary_classes/tilemap/TileMap.gd"
+"path": "res://classes/TileMap.gd"
 }, {
 "base": "Reference",
 "class": "_TileMapLayer",
 "language": "GDScript",
-"path": "res://layers/scripts/auxiliary_classes/tilemap/TileMapLayer.gd"
+"path": "res://classes/TileMapLayer.gd"
 } ]
 _global_script_class_icons={
 "_Tile": "",

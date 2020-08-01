@@ -39,9 +39,9 @@ func _add_layer(layer : Dictionary):
 	var new_layer
 	match layer.type:
 		"background":
-			new_layer = preload("res://layers/Background.tscn").instance()
+			new_layer = preload("res://panels/layers/Background.tscn").instance()
 		"tilemap":
-			new_layer = preload("res://layers/TileMap.tscn").instance()
+			new_layer = preload("res://panels/layers/TileMapCanvasLayer.tscn").instance()
 
 	get_node("Layers").add_child(new_layer)
 	new_layer.init(layer.configuration)

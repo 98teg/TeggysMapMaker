@@ -30,7 +30,7 @@ func _set_background(tile_path : String, w : int, h : int, s : int):
 	_background_tex.create_from_image(_background, 3)
 
 func _create_overlay():
-	_overlay = preload("res://overlays/Empty.tscn").instance()
+	_overlay = preload("res://panels/layers/overlays/Empty.tscn").instance()
 
 func _draw():
 	draw_texture(_background_tex, Vector2.ZERO)

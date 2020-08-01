@@ -31,7 +31,7 @@ func create_tile_items():
 	var tile_item
 	
 	for tile in _tileset:
-		tile_item = preload("res://panels/elements/TileItem.tscn").instance()
+		tile_item = preload("res://panels/layers/elements/TileItem.tscn").instance()
 		tile_item.set_image(tile.get_image())
 		
 		tile_item.connect("pressed", _layer, "select_tile", [tile.get_id()])

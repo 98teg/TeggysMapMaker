@@ -15,10 +15,10 @@ func init(configuration : Dictionary):
 
 	var layer
 
-	layer = preload("res://overlays/Image.tscn").instance()
+	layer = preload("res://panels/layers/overlays/Image.tscn").instance()
 	add_child(layer)
 
-	layer = preload("res://overlays/Grid.tscn").instance()
+	layer = preload("res://panels/layers/overlays/Grid.tscn").instance()
 	add_child(layer)
 	layer.init(_width, _height, _tile_size)
 	get_node("Grid").hide()

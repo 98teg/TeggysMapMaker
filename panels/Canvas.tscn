@@ -1,7 +1,10 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://panels/scripts/Canvas.gd" type="Script" id=1]
-[ext_resource path="res://panels/elements/CanvasLayers.tscn" type="PackedScene" id=2]
+[ext_resource path="res://panels/Canvas.gd" type="Script" id=1]
+[ext_resource path="res://panels/CanvasLayers.tscn" type="PackedScene" id=2]
+
+
+
 
 [node name="Canvas" type="ScrollContainer"]
 mouse_filter = 2

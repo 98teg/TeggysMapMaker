@@ -63,12 +63,12 @@ func _set_tilemap(configuration : Dictionary):
 	_tilemap_tex.create_from_image(_tilemap.get_image(), 3)
 	
 func _create_overlay(configuration : Dictionary):
-	_overlay = preload("res://overlays/TileMap.tscn").instance()
+	_overlay = preload("res://panels/layers/TileMapOverlay.tscn").instance()
 	_overlay.init(configuration)
 	_overlay.set_image(_tilemap.get_selected_tile_image())
 	
 func _create_tool_box():
-	_tool_box = preload("res://panels/TileMap.tscn").instance()
+	_tool_box = preload("res://panels/layers/TileMapToolBox.tscn").instance()
 	_tool_box.init(self, _tilemap.get_tileset())
 	
 func _draw():
