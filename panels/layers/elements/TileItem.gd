@@ -36,6 +36,10 @@ func init(configuration : Dictionary) -> void:
 	for extra_tool in configuration.extra_tools:
 		_add_extra_tool(extra_tool)
 
+# Selects this tile
+func select() -> void:
+	_tile_item_pressed()
+
 #####################
 # Private functions #
 #####################

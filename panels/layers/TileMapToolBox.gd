@@ -40,6 +40,8 @@ func init(configuration : Dictionary) -> void:
 	for tile in configuration.tileset:
 		_add_tile_item(tile)
 
+	_get_tile_item(0).select()
+
 	_init_tools()
 
 #####################
@@ -59,6 +61,10 @@ func _add_tile_item(configuration : Dictionary) -> void:
 	
 	get_node("TilesScroller/TilesGrid").add_child(tile_item)
 	tile_item.connect("tile_item_selected", self, "_select_tile")
+
+# Returns a tile item
+func _get_tile_item(idx : int) -> Node:
+	return get_node("TilesScroller/TilesGrid").get_child(idx)
 
 # It is called when the tile item emits the tile_item_selected signal
 func _select_tile(tile_id : int, extra_tools : Array) -> void:

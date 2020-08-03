@@ -39,7 +39,7 @@ func apply_action(data):
 
 func select_tile(tile_id : int):
 	_tilemap.select_tile(tile_id)
-	_overlay.set_image(_tilemap.get_selected_tile_image())
+	_overlay.set_tile(_tilemap.get_selected_tile_image())
 
 func select_tool(tool_id : int):
 	_tool = tool_id
@@ -55,14 +55,16 @@ func _set_tilemap(configuration : Dictionary):
 	
 func _create_overlay(configuration : Dictionary):
 	_overlay = preload("res://panels/layers/TileMapOverlay.tscn").instance()
+	configuration.grid_visibility = false
 	_overlay.init(configuration)
-	_overlay.set_image(_tilemap.get_selected_tile_image())
+	_overlay.set_tile(_tilemap.get_selected_tile_image())
 	
 func _create_tool_box():
 	_tool_box = preload("res://panels/layers/TileMapToolBox.tscn").instance()
-	_tool_box.init(_create_tool_box_configuration())
 	_tool_box.connect("tool_selected", self, "select_tool")
 	_tool_box.connect("tile_selected", self, "select_tile")
+	_tool_box.connect("grid_visibility_changed", _overlay, "set_grid_visibility")
+	_tool_box.init(_create_tool_box_configuration())
 
 func _create_tool_box_configuration():
 	var configuration = {"tileset": []}
@@ -135,8 +137,9 @@ func _mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 func _mouse_motion(position : Vector2):
 	if _drawing:
 		_draw_line(position)
-	else:
-		_overlay.set_pos(position)
+
+	var pos = (position / _tilemap.get_tile_size()).floor()
+	_overlay.highlight(pos.x, pos.y)
 
 func _start_drawing(pos : Vector2):
 	_drawing = true

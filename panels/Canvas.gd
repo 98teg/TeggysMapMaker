@@ -25,7 +25,7 @@ func init(configuration : Dictionary):
 func transform(offset : Vector2, scale : Vector2):
 	get_node("CanvasViewport").set_custom_minimum_size(scale * get_size() + (offset * 2))
 	get_node("CanvasViewport/Layers").set_canvas_transform(Transform2D().scaled(scale).translated(offset / scale))
-	get_node("CanvasViewport").get_child(1).transform(offset, scale)
+	get_node("CanvasViewport").get_child(1).set_transform(offset, scale)
 	get_node("CanvasViewport").get_child(1).update()
 
 func get_size():
