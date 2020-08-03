@@ -4,15 +4,6 @@ extends Control
 
 signal register_action(data)
 
-# Custom enums
-
-enum Tool{
-	PENCIL,
-	WRENCH,
-	ERASER,
-	BUCKET_FILL
-}
-
 # Private variables
 
 var _tilemap : _TileMap = _TileMap.new()
@@ -20,7 +11,7 @@ var _tilemap_tex : ImageTexture = ImageTexture.new()
 var _overlay : Control
 var _tool_box : Control
 
-var _tool = Tool.PENCIL
+var _tool = _TileMap.Tool.PENCIL
 var _drawing = false
 var _placing_tiles : bool
 var _previous_pos
@@ -69,8 +60,25 @@ func _create_overlay(configuration : Dictionary):
 	
 func _create_tool_box():
 	_tool_box = preload("res://panels/layers/TileMapToolBox.tscn").instance()
-	_tool_box.init(self, _tilemap.get_tileset())
+	_tool_box.init(_create_tool_box_configuration())
+	_tool_box.connect("tool_selected", self, "select_tool")
+	_tool_box.connect("tile_selected", self, "select_tile")
+
+func _create_tool_box_configuration():
+	var configuration = {"tileset": []}
 	
+	for tile in _tilemap.get_tileset():
+		var tile_configuration = {}
+
+		tile_configuration.id = tile.get_id()
+		tile_configuration.name = ""
+		tile_configuration.icon = tile.get_image()
+		tile_configuration.extra_tools = [_TileMap.Tool.WRENCH, _TileMap.Tool.BUCKET_FILL]
+
+		configuration.tileset.append(tile_configuration)
+
+	return configuration
+
 func _draw():
 	draw_texture(_tilemap_tex, Vector2.ZERO)
 	
@@ -86,7 +94,7 @@ func _gui_input(event):
 
 func _mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 	match _tool:
-		Tool.PENCIL:
+		_TileMap.Tool.PENCIL:
 			if button_index == BUTTON_LEFT:
 				_placing_tiles = true
 				if is_pressed:
@@ -102,14 +110,14 @@ func _mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 				else:
 					_end_drawing()
 
-		Tool.WRENCH:
+		_TileMap.Tool.WRENCH:
 			if button_index == BUTTON_LEFT:
 				if is_pressed:
 					var current_pos = (position / _tilemap.get_tile_size()).floor()
 						
 					_change_tile_state(current_pos.y, current_pos.x)
 
-		Tool.ERASER:
+		_TileMap.Tool.ERASER:
 			if button_index == BUTTON_LEFT:
 				if is_pressed:
 					_start_drawing(position)
@@ -117,7 +125,7 @@ func _mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 				else:
 					_end_drawing()
 
-		Tool.BUCKET_FILL:
+		_TileMap.Tool.BUCKET_FILL:
 			if button_index == BUTTON_LEFT:
 				if is_pressed:
 					var current_pos = (position / _tilemap.get_tile_size()).floor()
@@ -168,12 +176,12 @@ func _end_drawing():
 
 func _set_tile(i : int, j : int):
 	match _tool:
-		Tool.PENCIL:
+		_TileMap.Tool.PENCIL:
 			if _placing_tiles:
 				_tilemap.place_tile(i, j)
 			else:
 				_tilemap.erase_tile(i, j)
-		Tool.ERASER:
+		_TileMap.Tool.ERASER:
 			_tilemap.erase_tile_in_every_layer(i, j)
 	_update_layer()
 

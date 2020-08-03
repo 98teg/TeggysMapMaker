@@ -2,9 +2,7 @@
 
 [ext_resource path="res://panels/layers/elements/TileItem.gd" type="Script" id=1]
 
-
-
-[node name="Control" type="Button"]
+[node name="TileItem" type="ToolButton"]
 anchor_right = 0.072
 anchor_bottom = 1.0
 margin_right = 0.271996
@@ -15,12 +13,4 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="TextureRect" type="TextureRect" parent="."]
-margin_left = 5.0
-margin_top = 5.0
-margin_right = 69.0
-margin_bottom = 69.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[connection signal="pressed" from="." to="." method="_tile_item_pressed"]

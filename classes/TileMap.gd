@@ -1,5 +1,14 @@
 class_name _TileMap
 
+# Custom enums
+
+enum Tool{
+	PENCIL,
+	WRENCH,
+	ERASER,
+	BUCKET_FILL
+}
+
 # Private variables
 
 var _width : int = 0
