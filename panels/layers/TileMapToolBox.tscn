@@ -1,8 +1,27 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://panels/layers/elements/ToolItem.tscn" type="PackedScene" id=3]
 [ext_resource path="res://panels/layers/TileMapToolBox.gd" type="Script" id=5]
 [ext_resource path="res://panels/layers/elements/ToggleItem.tscn" type="PackedScene" id=6]
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0.945098, 0.764706, 0.0509804, 1 )
+
+[sub_resource type="Theme" id=1]
+Button/colors/font_color = Color( 0.88, 0.88, 0.88, 1 )
+Button/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
+Button/colors/font_color_hover = Color( 0.94, 0.94, 0.94, 1 )
+Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
+Button/constants/hseparation = 2
+Button/fonts/font = null
+Button/styles/disabled = SubResource( 2 )
+Button/styles/focus = null
+Button/styles/hover = SubResource( 2 )
+Button/styles/normal = SubResource( 2 )
+Button/styles/pressed = SubResource( 6 )
 
 [node name="ToolBox" type="VSplitContainer"]
 anchor_bottom = 1.0
@@ -16,6 +35,7 @@ __meta__ = {
 margin_right = 320.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 318, 0 )
+theme = SubResource( 1 )
 
 [node name="LeftTools" type="HBoxContainer" parent="Tools"]
 margin_right = 44.0

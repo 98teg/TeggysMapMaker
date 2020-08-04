@@ -36,10 +36,10 @@ func set_grid_visibility(visibility : bool) -> void:
 		get_node("Grid").hide()
 
 # Sets a position on the grid to highlight
-func highlight(i : int, j : int) -> void:
-	if i >= 0 and i < _width and j >= 0 and j < _height:
-		get_node("Highlight/Image").set_pos(Vector2(i * _tile_size, j * _tile_size))
-		get_node("Highlight/Square").set_pos(Vector2(i * _tile_size, j * _tile_size))
+func highlight(x : int, y : int) -> void:
+	if x >= 0 and x < _width and y >= 0 and y < _height:
+		get_node("Highlight/Image").set_pos(Vector2(x * _tile_size, y * _tile_size))
+		get_node("Highlight/Square").set_pos(Vector2(x * _tile_size, y * _tile_size))
 		get_node("Highlight").show()
 	else:
 		get_node("Highlight").hide()

@@ -1,4 +1,4 @@
-extends ToolButton
+extends Button
 
 ##################
 # Custom signals #
@@ -13,8 +13,6 @@ signal toggle_item_updated(is_toggled)
 
 # Toggle name
 var _name : String = ""
-# Toggle id
-var _toggled : bool = false
 
 ####################
 # Public functions #
@@ -26,8 +24,13 @@ var _toggled : bool = false
 # + icon: Toggle icon (Image)
 func init(configuration : Dictionary) -> void:
 	_set_name(configuration.name)
-	_set_toggled(configuration.toggled)
+	set_pressed(configuration.toggled)
 	_set_icon(configuration.icon)
+
+# Selects this toggle
+func select() -> void:
+	set_pressed(true)
+	_toggle_item_pressed()
 
 #####################
 # Private functions #
@@ -38,17 +41,12 @@ func _set_name(name : String) -> void:
 	_name = name
 	set_tooltip(_name)
 
-# Sets toggle toggled
-func _set_toggled(toggled : bool) -> void:
-	_toggled = toggled
-
 # Sets toggle icon and updates the texture
 func _set_icon(icon : Image) -> void:
 	var icon_tex = ImageTexture.new()
 	icon_tex.create_from_image(icon)
-	set_button_icon(icon_tex)
+	get_node("Icon").set_texture(icon_tex)
 
 # It is called when the toggle item is pressed
 func _toggle_item_pressed() -> void:
-	_toggled = not _toggled
-	emit_signal("toggle_item_updated", _toggled)
+	emit_signal("toggle_item_updated", is_pressed())

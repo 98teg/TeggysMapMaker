@@ -35,7 +35,7 @@ func get_image() -> Image:
 	return _image
 
 func set_tile(i : int, j : int, value : int):
-	if(i >= 0 and i < _width and j >= 0 and j < _height):
+	if(i >= 0 and i < _height and j >= 0 and j < _width):
 		if _get_tile_id(i, j) != value:
 			_map[i][j] = {"id": value, "state": 0}
 			
@@ -45,7 +45,7 @@ func set_tile(i : int, j : int, value : int):
 			_has_been_modified = true
 			
 func fill(i : int, j : int, value : int, tile_to_replace : int = _Tile.Special_tile.UNSELECTED):
-	if(i >= 0 and i < _width and j >= 0 and j < _height):
+	if(i >= 0 and i < _height and j >= 0 and j < _width):
 		if tile_to_replace == _Tile.Special_tile.UNSELECTED:
 			tile_to_replace = _get_tile_id(i, j)
 			
@@ -67,7 +67,7 @@ func fill(i : int, j : int, value : int, tile_to_replace : int = _Tile.Special_t
 			fill(i, j - 1, value, tile_to_replace)
 
 func change_tile_state(i : int, j : int):
-	if(i >= 0 and i < _width and j >= 0 and j < _height):
+	if(i >= 0 and i < _height and j >= 0 and j < _width):
 		if _get_tile(i, j).get_n_states() > 1:
 			var state = (_map[i][j].state + 1) % _get_tile(i, j).get_n_states()
 			_map[i][j].state = state
@@ -101,11 +101,11 @@ func load_map(map : Array):
 
 func _create_map():
 	_map = []
-	for x in range(_width):
+	for i in range(_height):
 		_map.append([])
-		for y in range(_height):
-			_map[x].append([])
-			_map[x][y] = {"id": _Tile.Special_tile.AIR, "state": 0}
+		for j in range(_width):
+			_map[i].append([])
+			_map[i][j] = {"id": _Tile.Special_tile.AIR, "state": 0}
 
 	_previous_map = _map.duplicate(true)
 
@@ -182,7 +182,7 @@ func _place_tile_image(i : int, j : int, tile_image : Image):
 	_image.blit_rect(tile_image, rect, pos)
 
 func _get_tile_id(i : int, j : int) -> int:
-	if(i >= 0 and i < _width and j >= 0 and j < _height):
+	if(i >= 0 and i < _height and j >= 0 and j < _width):
 		return _map[i][j].id
 	
 	return _Tile.Special_tile.OUT_OF_BOUNDS

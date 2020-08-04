@@ -1,16 +1,47 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://panels/layers/elements/TileItem.gd" type="Script" id=1]
 
-[node name="TileItem" type="ToolButton"]
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.929412, 0.898039, 0.552941, 1 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="Theme" id=1]
+Button/colors/font_color = Color( 0.88, 0.88, 0.88, 1 )
+Button/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
+Button/colors/font_color_hover = Color( 0.94, 0.94, 0.94, 1 )
+Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
+Button/constants/hseparation = 2
+Button/fonts/font = null
+Button/styles/disabled = SubResource( 2 )
+Button/styles/focus = SubResource( 3 )
+Button/styles/hover = SubResource( 4 )
+Button/styles/normal = SubResource( 5 )
+Button/styles/pressed = SubResource( 3 )
+
+[node name="TileItem" type="Button"]
 anchor_right = 0.072
 anchor_bottom = 1.0
 margin_right = 0.271996
 margin_bottom = -526.0
 rect_min_size = Vector2( 74, 74 )
-expand_icon = true
+theme = SubResource( 1 )
+toggle_mode = true
+action_mode = 0
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+
+[node name="Icon" type="TextureRect" parent="."]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 66.0
+margin_bottom = 66.0
+expand = true
 [connection signal="pressed" from="." to="." method="_tile_item_pressed"]

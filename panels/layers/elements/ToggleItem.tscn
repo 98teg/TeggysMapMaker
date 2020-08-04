@@ -2,14 +2,21 @@
 
 [ext_resource path="res://panels/layers/elements/ToggleItem.gd" type="Script" id=1]
 
-[node name="ToggleItem" type="ToolButton"]
+[node name="ToggleItem" type="Button"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -980.0
 margin_bottom = -560.0
 rect_min_size = Vector2( 44, 40 )
+toggle_mode = true
+action_mode = 0
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+
+[node name="Icon" type="TextureRect" parent="."]
+margin_left = 4.0
+margin_top = 2.0
+margin_right = 40.0
+margin_bottom = 38.0
+rect_min_size = Vector2( 36, 36 )
+expand = true
 [connection signal="pressed" from="." to="." method="_toggle_item_pressed"]

@@ -1,4 +1,4 @@
-extends ToolButton
+extends Button
 
 ##################
 # Custom signals #
@@ -33,7 +33,12 @@ func init(configuration : Dictionary) -> void:
 
 # Selects this tool
 func select() -> void:
+	set_pressed(true)
 	_tool_item_pressed()
+
+# Adds this tool item to a button group
+func add_to_button_group(group : ButtonGroup) -> void:
+	set_button_group(group)
 
 #####################
 # Private functions #
@@ -52,7 +57,7 @@ func _set_name(name : String) -> void:
 func _set_icon(icon : Image) -> void:
 	var icon_tex = ImageTexture.new()
 	icon_tex.create_from_image(icon)
-	set_button_icon(icon_tex)
+	get_node("Icon").set_texture(icon_tex)
 
 # It is called when the tool item is pressed
 func _tool_item_pressed() -> void:

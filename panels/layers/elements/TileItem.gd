@@ -38,7 +38,12 @@ func init(configuration : Dictionary) -> void:
 
 # Selects this tile
 func select() -> void:
+	set_pressed(true)
 	_tile_item_pressed()
+
+# Adds this tile item to a button group
+func add_to_button_group(group : ButtonGroup) -> void:
+	set_button_group(group)
 
 #####################
 # Private functions #
@@ -57,7 +62,7 @@ func _set_name(name : String) -> void:
 func _set_icon(icon : Image) -> void:
 	var icon_tex = ImageTexture.new()
 	icon_tex.create_from_image(icon, 3)
-	set_button_icon(icon_tex)
+	get_node("Icon").set_texture(icon_tex)
 
 # Adds a tile extra tool
 func _add_extra_tool(extra_tool : int) -> void:
