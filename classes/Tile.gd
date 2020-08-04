@@ -1,3 +1,5 @@
+extends Node
+
 class_name _Tile
 
 # Custom enums
@@ -130,7 +132,8 @@ func _add_state(image : Image, conditions : Array = []):
 func _get_image(path : String):
 	var image = Image.new()
 
-	image.load(path)
+	var dir = get_node("/root/StyleDirectory")
+	image.load(dir.get_current_dir() + "/" + path)
 	image.convert(Image.FORMAT_RGBA8)
 	image.resize(_tile_size, _tile_size, Image.INTERPOLATE_NEAREST)
 	image.lock()

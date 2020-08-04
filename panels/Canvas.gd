@@ -31,6 +31,16 @@ func transform(offset : Vector2, scale : Vector2):
 func get_size():
 	return _get_layer(_selected_layer).get_image().get_size()
 
+func get_image():
+	var image = Image.new()
+	image.copy_from(get_node("CanvasViewport/Layers").get_child(0).get_image())
+
+	for layer in get_node("CanvasViewport/Layers").get_children():
+		image.blend_rect(layer.get_image(), Rect2(Vector2.ZERO, layer.get_image().get_size()), Vector2.ZERO)
+
+	image.resize(480, 480, Image.INTERPOLATE_NEAREST)
+	image.save_png("./salida_1234.png")
+
 func get_current_tool_box():
 	return _get_layer(_selected_layer).get_tool_box()
 

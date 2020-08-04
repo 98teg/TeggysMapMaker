@@ -1,3 +1,5 @@
+extends Node
+
 class_name _TileMapLayer
 
 # Private variables

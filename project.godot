@@ -9,17 +9,17 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "Reference",
+"base": "Node",
 "class": "_Tile",
 "language": "GDScript",
 "path": "res://classes/Tile.gd"
 }, {
-"base": "Reference",
+"base": "Node",
 "class": "_TileMap",
 "language": "GDScript",
 "path": "res://classes/TileMap.gd"
 }, {
-"base": "Reference",
+"base": "Node",
 "class": "_TileMapLayer",
 "language": "GDScript",
 "path": "res://classes/TileMapLayer.gd"
@@ -35,6 +35,10 @@ _global_script_class_icons={
 config/name="Teggy's Map Maker"
 run/main_scene="res://MainWindow.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+StyleDirectory="*res://StyleDirectory.gd"
 
 [input]
 

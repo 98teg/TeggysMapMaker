@@ -1,3 +1,5 @@
+extends Node
+
 class_name _TileMap
 
 # Private variables
@@ -90,7 +92,9 @@ func _create_image():
 
 func _create_background(path : String):
 	var tile = Image.new()
-	tile.load(path)
+	
+	var dir = get_node("/root/StyleDirectory")
+	tile.load(dir.get_current_dir() + "/" + path)
 	tile.convert(Image.FORMAT_RGBA8)
 	tile.resize(_tile_size, _tile_size, Image.INTERPOLATE_NEAREST)
 	
@@ -104,13 +108,15 @@ func _add_tile(configuration : Dictionary):
 	configuration.id = _tileset.size()
 	configuration.layer = _get_layer_id(layer)
 	configuration.tile_size = _tile_size
-	
-	var tile = _Tile.new()
+
+	var tile = preload("res://classes/Tile.tscn").instance()
+	add_child(tile)
 	tile.init(configuration)
 	_tileset.append(tile)
 
 func _add_layer(name : String):
-	var tilemaplayer = _TileMapLayer.new()
+	var tilemaplayer = preload("res://classes/TileMapLayer.tscn").instance()
+	add_child(tilemaplayer)
 	tilemaplayer.init(_width, _height, _tile_size, _tileset)
 
 	_layers.append({"name": name, "tilemap": tilemaplayer})

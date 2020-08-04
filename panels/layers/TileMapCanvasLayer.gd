@@ -6,7 +6,7 @@ signal register_action(data)
 
 # Private variables
 
-var _tilemap : _TileMap = _TileMap.new()
+var _tilemap : _TileMap = preload("res://classes/TileMap.tscn").instance()
 var _tilemap_tex : ImageTexture = ImageTexture.new()
 var _overlay : Control
 var _tool_box : Control
@@ -50,6 +50,7 @@ func toggle_grid():
 # Layer private functions
 
 func _set_tilemap(configuration : Dictionary):
+	add_child(_tilemap)
 	_tilemap.init(configuration)
 	_tilemap_tex.create_from_image(_tilemap.get_image(), 3)
 	
