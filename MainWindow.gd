@@ -6,20 +6,12 @@ func _ready():
 	var configuration = {
 		"layers": [
 			{
-				"type": "background",
-				"configuration": {
-					"width": 20,
-					"height": 20,
-					"tile_size": 8,
-					"tile": "./resources/Kanto/Water.png",
-				}
-			},
-			{
 				"type": "tilemap",
 				"configuration": {
 					"width": 20,
 					"height": 20,
 					"tile_size": 8,
+					"background_tile": "./resources/Kanto/Water.png",
 					"tileset": [
 						{
 							"texture": "./resources/Kanto/Land.png",

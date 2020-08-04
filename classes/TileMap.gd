@@ -14,6 +14,7 @@ enum Tool{
 var _width : int = 0
 var _height : int = 0
 var _tile_size : int = 0
+var _background : Image = Image.new()
 var _layers : Array = []
 var _tileset : Array = []
 var _selected_tile : int = 0
@@ -27,6 +28,8 @@ func init(configuration : Dictionary):
 	
 	_tile_size = configuration.tile_size
 	
+	_create_background(configuration.background_tile)
+	
 	for tile in configuration.tileset:
 		_add_tile(tile)
 
@@ -36,7 +39,7 @@ func get_image() -> Image:
 	var rect = Rect2(Vector2.ZERO, Vector2(_tile_size * _width, _tile_size * _height))
 	var pos = Vector2.ZERO
 
-	_image.fill(Color.transparent)
+	_image.copy_from(_background)
 	for layer in _layers:
 		_image.blend_rect(layer.tilemap.get_image(), rect, pos)
 
@@ -93,6 +96,14 @@ func _create_image():
 	var h = _tile_size * _height
 
 	_image.create(w, h, false, Image.FORMAT_RGBA8)
+
+func _create_background(path : String):
+	var tile = Image.new()
+	tile.load(path)
+	tile.convert(Image.FORMAT_RGBA8)
+	tile.resize(_tile_size, _tile_size, Image.INTERPOLATE_NEAREST)
+	
+	_background = GoostImage.tile(tile, Vector2(_tile_size * _width, _tile_size * _height))
 
 func _add_tile(configuration : Dictionary):
 	var layer = configuration.layer if configuration.has("layer") else ""

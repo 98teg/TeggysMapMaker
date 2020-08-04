@@ -8,7 +8,7 @@ var _scale_factor : float = 1.0
 var _default_scrollbar : Vector2 = Vector2.ZERO
 var _current_scrollbar : Vector2 = Vector2.ZERO
 var _number_of_layers : int = 0
-var _selected_layer : int = 1
+var _selected_layer : int = 0
 
 # Panel public functions
 func init(configuration : Dictionary):
@@ -35,7 +35,7 @@ func get_current_tool_box():
 	return _get_layer(_selected_layer).get_tool_box()
 
 func connect_with_undo_redo(undo_redo : Control):
-	_get_layer(1).connect("register_action", undo_redo, "_register_action", [1])
+	_get_layer(0).connect("register_action", undo_redo, "_register_action", [0])
 
 	undo_redo.connect("apply_action", self, "_apply_action")
 
@@ -47,8 +47,6 @@ func _gui_input(event):
 func _add_layer(layer : Dictionary):
 	var new_layer
 	match layer.type:
-		"background":
-			new_layer = preload("res://panels/layers/Background.tscn").instance()
 		"tilemap":
 			new_layer = preload("res://panels/layers/TileMapCanvasLayer.tscn").instance()
 
