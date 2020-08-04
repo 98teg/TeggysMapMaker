@@ -33,9 +33,10 @@ func init(configuration : Dictionary) -> void:
 # Private functions #
 #####################
 
-# Sets toggle name
+# Sets toggle name and updates the tooltip
 func _set_name(name : String) -> void:
 	_name = name
+	set_tooltip(_name)
 
 # Sets toggle toggled
 func _set_toggled(toggled : bool) -> void:

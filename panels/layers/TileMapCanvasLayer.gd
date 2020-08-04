@@ -11,7 +11,7 @@ var _tilemap_tex : ImageTexture = ImageTexture.new()
 var _overlay : Control
 var _tool_box : Control
 
-var _tool = _TileMap.Tool.PENCIL
+var _tool = _Tile.Tool.PENCIL
 var _drawing = false
 var _placing_tiles : bool
 var _previous_pos
@@ -73,9 +73,9 @@ func _create_tool_box_configuration():
 		var tile_configuration = {}
 
 		tile_configuration.id = tile.get_id()
-		tile_configuration.name = ""
+		tile_configuration.name = tile.get_name()
 		tile_configuration.icon = tile.get_image()
-		tile_configuration.extra_tools = [_TileMap.Tool.WRENCH, _TileMap.Tool.BUCKET_FILL]
+		tile_configuration.extra_tools = tile.get_extra_tools()
 
 		configuration.tileset.append(tile_configuration)
 
@@ -96,7 +96,7 @@ func _gui_input(event):
 
 func _mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 	match _tool:
-		_TileMap.Tool.PENCIL:
+		_Tile.Tool.PENCIL:
 			if button_index == BUTTON_LEFT:
 				_placing_tiles = true
 				if is_pressed:
@@ -112,14 +112,14 @@ func _mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 				else:
 					_end_drawing()
 
-		_TileMap.Tool.WRENCH:
+		_Tile.Tool.WRENCH:
 			if button_index == BUTTON_LEFT:
 				if is_pressed:
 					var current_pos = (position / _tilemap.get_tile_size()).floor()
 						
 					_change_tile_state(current_pos.y, current_pos.x)
 
-		_TileMap.Tool.ERASER:
+		_Tile.Tool.ERASER:
 			if button_index == BUTTON_LEFT:
 				if is_pressed:
 					_start_drawing(position)
@@ -127,7 +127,7 @@ func _mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 				else:
 					_end_drawing()
 
-		_TileMap.Tool.BUCKET_FILL:
+		_Tile.Tool.BUCKET_FILL:
 			if button_index == BUTTON_LEFT:
 				if is_pressed:
 					var current_pos = (position / _tilemap.get_tile_size()).floor()
@@ -179,12 +179,12 @@ func _end_drawing():
 
 func _set_tile(i : int, j : int):
 	match _tool:
-		_TileMap.Tool.PENCIL:
+		_Tile.Tool.PENCIL:
 			if _placing_tiles:
 				_tilemap.place_tile(i, j)
 			else:
 				_tilemap.erase_tile(i, j)
-		_TileMap.Tool.ERASER:
+		_Tile.Tool.ERASER:
 			_tilemap.erase_tile_in_every_layer(i, j)
 	_update_layer()
 

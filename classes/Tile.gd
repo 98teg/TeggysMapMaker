@@ -16,10 +16,19 @@ enum Connection_type {
 	CIRCLE
 }
 
+enum Tool{
+	PENCIL,
+	WRENCH,
+	ERASER,
+	BUCKET_FILL
+}
+
 # Private variables
 
 var _id : int = 0
+var _name : String = ""
 var _layer : int = 0
+var _extra_tools : Array = []
 var _tile_size : int = 0
 var _images : Array = []
 var _conditions_for_each_state : Dictionary = {}
@@ -31,8 +40,17 @@ var _can_connect_to_borders : bool = true
 
 func init(configuration : Dictionary):
 	_id = configuration.id
+	_name = configuration.name
 	_layer = configuration.layer
 	_tile_size = configuration.tile_size
+	
+	if configuration.has("extra_tools"):
+		for extra_tool in configuration.extra_tools:
+			match extra_tool:
+				"Wrench":
+					_extra_tools.append(Tool.WRENCH)
+				"BucketFill":
+					_extra_tools.append(Tool.BUCKET_FILL)
 
 	_add_state(_get_image(configuration.texture))
 
@@ -65,8 +83,14 @@ func init_special_tile(id : int, tile_size : int):
 func get_id() -> int:
 	return _id
 
+func get_name() -> String:
+	return _name
+
 func get_layer() -> int:
 	return _layer
+
+func get_extra_tools() -> Array:
+	return _extra_tools
 
 func get_state(condition : int) -> int:
 	if _conditions_for_each_state.has(condition):

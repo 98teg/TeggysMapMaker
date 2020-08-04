@@ -24,6 +24,7 @@ margin_bottom = 40.0
 [node name="Save" type="Button" parent="ControlPanel/TopBar"]
 margin_right = 62.0
 margin_bottom = 40.0
+hint_tooltip = "Save"
 text = "Guardar"
 __meta__ = {
 "_edit_use_anchors_": false

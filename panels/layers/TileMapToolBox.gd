@@ -78,12 +78,12 @@ func _update_extra_tools(extra_tools):
 
 	for extra_tool in extra_tools:
 		match extra_tool:
-			_TileMap.Tool.WRENCH:
+			_Tile.Tool.WRENCH:
 				wrench_flag = true
 				if _wrench_flag == false:
 					_wrench_flag = true
 					get_node("Tools/LeftTools").add_child(_wrench_item)
-			_TileMap.Tool.BUCKET_FILL:
+			_Tile.Tool.BUCKET_FILL:
 				bucket_fill_flag = true
 				if _bucket_fill_flag == false:
 					_bucket_fill_flag = true
@@ -96,6 +96,8 @@ func _update_extra_tools(extra_tools):
 	if bucket_fill_flag == false and _bucket_fill_flag:
 		_bucket_fill_flag = false
 		get_node("Tools/LeftTools").remove_child(_bucket_fill_item)
+
+	get_node("Tools/LeftTools/Pencil").select()
 
 # Init tools
 func _init_tools():
@@ -110,13 +112,13 @@ func _init_default_tools_items():
 
 # Init pencil item
 func _init_pencil_item():
-	var conf = {"id": _TileMap.Tool.PENCIL, "name": "Pencil", "icon": _get_image("pencil")}
+	var conf = {"id": _Tile.Tool.PENCIL, "name": "Pencil", "icon": _get_image("pencil")}
 	get_node("Tools/LeftTools/Pencil").init(conf)
 	get_node("Tools/LeftTools/Pencil").connect("tool_item_selected", self, "_select_tool")
 
 # Init eraser item
 func _init_eraser_item():
-	var conf = {"id": _TileMap.Tool.ERASER, "name": "Eraser", "icon": _get_image("eraser")}
+	var conf = {"id": _Tile.Tool.ERASER, "name": "Eraser", "icon": _get_image("eraser")}
 	get_node("Tools/RightTools/Eraser").init(conf)
 	get_node("Tools/RightTools/Eraser").connect("tool_item_selected", self, "_select_tool")
 
@@ -133,13 +135,13 @@ func _init_extra_tools_items():
 
 # Init wrench item
 func _init_wrench_item():
-	var conf = {"id": _TileMap.Tool.WRENCH, "name": "Wrench", "icon": _get_image("wrench")}
+	var conf = {"id": _Tile.Tool.WRENCH, "name": "Wrench", "icon": _get_image("wrench")}
 	_wrench_item.init(conf)
 	_wrench_item.connect("tool_item_selected", self, "_select_tool")
 
 # Init bucket fill item
 func _init_bucket_fill_item():
-	var conf = {"id": _TileMap.Tool.BUCKET_FILL, "name": "Bucket fill", "icon": _get_image("bucket_fill")}
+	var conf = {"id": _Tile.Tool.BUCKET_FILL, "name": "Bucket fill", "icon": _get_image("bucket_fill")}
 	_bucket_fill_item.init(conf)
 	_bucket_fill_item.connect("tool_item_selected", self, "_select_tool")
 

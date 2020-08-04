@@ -26,7 +26,6 @@ func init(configuration : Dictionary) -> void:
 	else:
 		hide()
 
-	print(configuration.size)
 	_size = configuration.size
 
 # Sets the position

@@ -20,6 +20,7 @@ margin_bottom = 600.0
 margin_top = 280.0
 margin_right = 44.0
 margin_bottom = 320.0
+hint_tooltip = "Zoom -"
 size_flags_vertical = 0
 icon = ExtResource( 1 )
 
@@ -36,7 +37,7 @@ margin_right = 928.0
 margin_bottom = 308.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
-value = 30.0
+value = 20.0
 
 [node name="PlusContainer" type="CenterContainer" parent="."]
 margin_left = 980.0
@@ -47,6 +48,7 @@ margin_bottom = 600.0
 margin_top = 280.0
 margin_right = 44.0
 margin_bottom = 320.0
+hint_tooltip = "Zoom +"
 size_flags_vertical = 0
 icon = ExtResource( 2 )
 [connection signal="pressed" from="MinusContainer/Minus" to="." method="_add_to_magnifying_factor" binds= [ -10 ]]

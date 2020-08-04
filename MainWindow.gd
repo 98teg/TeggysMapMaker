@@ -14,8 +14,10 @@ func _ready():
 					"background_tile": "./resources/Kanto/Water.png",
 					"tileset": [
 						{
+							"name": "Land",
 							"texture": "./resources/Kanto/Land.png",
 							"layer": "land",
+							"extra_tools": ["Wrench", "BucketFill"],
 							"variations": [
 								{
 									"conditions": [["North", "East"]],
@@ -36,11 +38,13 @@ func _ready():
 							]
 						},
 						{
+							"name": "Path",
 							"texture": "./resources/Kanto/Path.png",
 							"layer": "path",
 							"material": "path"
 						},
 						{
+							"name": "Water path",
 							"texture": "./resources/Kanto/WaterPath.png",
 							"layer": "path",
 							"material": "path",
@@ -56,10 +60,12 @@ func _ready():
 							]
 						},
 						{
+							"name": "City",
 							"texture": "./resources/Kanto/City.png",
 							"layer": "location"
 						},
 						{
+							"name": "Town",
 							"texture": "./resources/Kanto/Town.png",
 							"layer": "location"
 						}

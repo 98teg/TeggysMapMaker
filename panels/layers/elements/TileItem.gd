@@ -48,9 +48,10 @@ func select() -> void:
 func _set_id(id : int) -> void:
 	_id = id
 
-# Sets tile name
+# Sets tile name and updates the tooltip
 func _set_name(name : String) -> void:
 	_name = name
+	set_tooltip(_name)
 
 # Sets tile icon and updates the texture
 func _set_icon(icon : Image) -> void:

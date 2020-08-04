@@ -31,6 +31,10 @@ func init(configuration : Dictionary) -> void:
 	
 	update()
 
+# Selects this tool
+func select() -> void:
+	_tool_item_pressed()
+
 #####################
 # Private functions #
 #####################
@@ -39,9 +43,10 @@ func init(configuration : Dictionary) -> void:
 func _set_id(id : int) -> void:
 	_id = id
 
-# Sets tool name
+# Sets tool name and updates the tooltip
 func _set_name(name : String) -> void:
 	_name = name
+	set_tooltip(_name)
 
 # Sets tool icon and updates the texture
 func _set_icon(icon : Image) -> void:
