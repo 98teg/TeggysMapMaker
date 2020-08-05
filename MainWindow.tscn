@@ -60,4 +60,15 @@ margin_left = 320.0
 margin_right = 1024.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
+
+[node name="SaveImageDialog" type="FileDialog" parent="."]
+margin_left = 709.0
+margin_right = 1024.0
+margin_bottom = 600.0
+window_title = "Guardar un Archivo"
+access = 2
+filters = PoolStringArray( "*.png ; PNG Images" )
+current_dir = "/home/tomas/Escritorio/Teggy's Map Maker"
+current_path = "/home/tomas/Escritorio/Teggy's Map Maker/"
 [connection signal="pressed" from="ControlPanel/TopBar/Save" to="." method="_save"]
+[connection signal="file_selected" from="SaveImageDialog" to="." method="_save_ok"]
