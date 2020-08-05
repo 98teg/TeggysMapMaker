@@ -21,20 +21,32 @@ margin_bottom = 600.0
 margin_right = 316.0
 margin_bottom = 40.0
 
-[node name="Save" type="Button" parent="ControlPanel/TopBar"]
-margin_right = 62.0
+[node name="New" type="Button" parent="ControlPanel/TopBar"]
+margin_right = 40.0
+margin_bottom = 40.0
+text = "New"
+
+[node name="Export" type="Button" parent="ControlPanel/TopBar"]
+margin_left = 44.0
+margin_right = 96.0
 margin_bottom = 40.0
 hint_tooltip = "Save"
-text = "Guardar"
+text = "Export"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="About" type="Button" parent="ControlPanel/TopBar"]
+margin_left = 100.0
+margin_right = 150.0
+margin_bottom = 40.0
+text = "About"
+
 [node name="UndoRedo" parent="ControlPanel/TopBar" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 66.0
-margin_right = 162.0
+margin_left = 154.0
+margin_right = 250.0
 margin_bottom = 40.0
 
 [node name="MagnifyingGlass" parent="ControlPanel" instance=ExtResource( 2 )]
@@ -84,7 +96,22 @@ access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
 current_dir = "/home/tomas/Escritorio/Teggy's Map Maker"
 current_path = "/home/tomas/Escritorio/Teggy's Map Maker/"
+
+[node name="AboutDialog" type="AcceptDialog" parent="."]
+margin_right = 48.0
+margin_bottom = 40.0
+window_title = "Info"
+dialog_text = "Credits:
+- Desing and implementation: Tomás Espejo Gómez
+Icons:
+- Icons from flaticon by authors:
+  - Google
+  - Freepik
+  - Becris
+Build using the Godot Game Engine"
 [connection signal="resized" from="." to="." method="_resized"]
-[connection signal="pressed" from="ControlPanel/TopBar/Save" to="." method="_save"]
+[connection signal="pressed" from="ControlPanel/TopBar/New" to="." method="_new"]
+[connection signal="pressed" from="ControlPanel/TopBar/Export" to="." method="_save"]
+[connection signal="pressed" from="ControlPanel/TopBar/About" to="." method="_about"]
 [connection signal="file_selected" from="SelectStyleDialog" to="." method="_style_selected"]
 [connection signal="file_selected" from="SaveImageDialog" to="." method="_save_ok"]

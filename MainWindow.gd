@@ -1,7 +1,12 @@
 extends Control
 
+var initated : bool = false
+
 func _ready():
 	OS.set_window_maximized(true)
+
+func _new():
+	get_tree().reload_current_scene()
 
 func _resized():
 	get_node("SelectStyleDialog").get_close_button().disabled = true
@@ -9,6 +14,9 @@ func _resized():
 	get_node("SelectStyleDialog").popup_centered()
 
 func _style_selected(path : String):
+	get_node("SelectStyleDialog").get_close_button().disabled = false
+	get_node("SelectStyleDialog").get_cancel().disabled = false
+
 	var file = File.new()
 	var dir = get_node("/root/StyleDirectory")
 	dir.open(path.get_base_dir())
@@ -28,3 +36,7 @@ func _save():
 
 func _save_ok(path : String):
 	get_node("Canvas").get_image().save_png(path)
+
+
+func _about():
+	get_node("AboutDialog").popup_centered()
