@@ -61,14 +61,30 @@ margin_right = 1024.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
 
+[node name="SelectStyleDialog" type="FileDialog" parent="."]
+margin_left = 624.0
+margin_right = 1024.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 400, 500 )
+popup_exclusive = true
+window_title = "Abrir un Archivo"
+mode = 0
+access = 2
+filters = PoolStringArray( "*.json ; Style JSON" )
+current_dir = "/home/tomas/Escritorio/Teggy's Map Maker"
+current_path = "/home/tomas/Escritorio/Teggy's Map Maker/"
+
 [node name="SaveImageDialog" type="FileDialog" parent="."]
 margin_left = 709.0
 margin_right = 1024.0
 margin_bottom = 600.0
+rect_min_size = Vector2( 400, 500 )
 window_title = "Guardar un Archivo"
 access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
 current_dir = "/home/tomas/Escritorio/Teggy's Map Maker"
 current_path = "/home/tomas/Escritorio/Teggy's Map Maker/"
+[connection signal="resized" from="." to="." method="_resized"]
 [connection signal="pressed" from="ControlPanel/TopBar/Save" to="." method="_save"]
+[connection signal="file_selected" from="SelectStyleDialog" to="." method="_style_selected"]
 [connection signal="file_selected" from="SaveImageDialog" to="." method="_save_ok"]

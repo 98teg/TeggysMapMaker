@@ -3,10 +3,16 @@ extends Control
 func _ready():
 	OS.set_window_maximized(true)
 
+func _resized():
+	get_node("SelectStyleDialog").get_close_button().disabled = true
+	get_node("SelectStyleDialog").get_cancel().disabled = true
+	get_node("SelectStyleDialog").popup_centered()
+
+func _style_selected(path : String):
 	var file = File.new()
 	var dir = get_node("/root/StyleDirectory")
-	dir.open("./resources/Kanto/")
-	file.open(dir.get_current_dir() + "/" + "Kanto.json", File.READ)
+	dir.open(path.get_base_dir())
+	file.open(path, File.READ)
 	var configuration = JSON.parse(file.get_as_text()).get_result()
 	
 	get_node("Canvas").init(configuration)
@@ -19,7 +25,6 @@ func _ready():
 
 func _save():
 	get_node("SaveImageDialog").popup_centered()
-	
 
 func _save_ok(path : String):
 	get_node("Canvas").get_image().save_png(path)

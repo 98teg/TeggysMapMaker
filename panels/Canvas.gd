@@ -21,6 +21,9 @@ func init(configuration : Dictionary):
 	get_v_scrollbar().connect("scrolling", self, "_v_scrollbar_scrolling")
 	
 	get_node("CanvasViewport").connect("gui_input", self, "_gui_input")
+	self.connect("resized", self, "_update_rect")
+
+	_update_rect()
 
 func transform(offset : Vector2, scale : Vector2):
 	get_node("CanvasViewport").set_custom_minimum_size(scale * get_size() + (offset * 2))
