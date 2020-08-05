@@ -18,3 +18,5 @@ stretch = true
 handle_input_locally = false
 render_target_update_mode = 3
 gui_disable_input = true
+[connection signal="mouse_entered" from="CanvasViewport" to="." method="_on_CanvasViewport_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasViewport" to="." method="_on_CanvasViewport_mouse_exited"]

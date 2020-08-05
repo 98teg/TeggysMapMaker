@@ -140,3 +140,10 @@ func _update_canvas(scale : Vector2):
 func _update_scale_factor(percentage : float):
 	_scale_factor = 3.75 * percentage + 0.25
 	_update_rect()
+
+
+func _on_CanvasViewport_mouse_entered():
+	_get_layer(_selected_layer)._mouse_entered()
+
+func _on_CanvasViewport_mouse_exited():
+	_get_layer(_selected_layer)._mouse_exited()

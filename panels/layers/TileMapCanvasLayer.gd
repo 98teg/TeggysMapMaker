@@ -208,3 +208,22 @@ func _register_action():
 func _update_layer():
 	_tilemap_tex.set_data(_tilemap.get_image())
 	update()
+
+
+func _mouse_entered():
+	print("hey")
+	match _tool:
+		_Tile.Tool.PENCIL:
+			Input.set_custom_mouse_cursor(load("res://resources/icons/pencil.png"))
+
+		_Tile.Tool.WRENCH:
+			Input.set_custom_mouse_cursor(load("res://resources/icons/wrench.png"))
+
+		_Tile.Tool.ERASER:
+			Input.set_custom_mouse_cursor(load("res://resources/icons/eraser.png"))
+
+		_Tile.Tool.BUCKET_FILL:
+			Input.set_custom_mouse_cursor(load("res://resources/icons/bucket_fill.png"))
+
+func _mouse_exited():
+	Input.set_custom_mouse_cursor(null)
