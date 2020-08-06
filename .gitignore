@@ -5,7 +5,9 @@ Thumbs.db
 *~
 .import
 
+*.json
 resources
 *.exe
 *.pck
 *.x86_64
+

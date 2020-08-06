@@ -211,7 +211,6 @@ func _update_layer():
 
 
 func _mouse_entered():
-	print("hey")
 	match _tool:
 		_Tile.Tool.PENCIL:
 			Input.set_custom_mouse_cursor(load("res://resources/icons/pencil.png"))

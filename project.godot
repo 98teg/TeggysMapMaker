@@ -9,6 +9,21 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Reference",
+"class": "_BaseParser",
+"language": "GDScript",
+"path": "res://classes/parser/BaseParser.gd"
+}, {
+"base": "Reference",
+"class": "_MainParser",
+"language": "GDScript",
+"path": "res://classes/parser/MainParser.gd"
+}, {
+"base": "Reference",
+"class": "_StyleDataParser",
+"language": "GDScript",
+"path": "res://classes/parser/StyleDataParser.gd"
+}, {
 "base": "Node",
 "class": "_Tile",
 "language": "GDScript",
@@ -25,6 +40,9 @@ _global_script_classes=[ {
 "path": "res://classes/TileMapLayer.gd"
 } ]
 _global_script_class_icons={
+"_BaseParser": "",
+"_MainParser": "",
+"_StyleDataParser": "",
 "_Tile": "",
 "_TileMap": "",
 "_TileMapLayer": ""
