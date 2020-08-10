@@ -1,0 +1,103 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://panels/UndoRedo.tscn" type="PackedScene" id=1]
+[ext_resource path="res://views/WorkSpace.gd" type="Script" id=2]
+[ext_resource path="res://panels/MagnifyingGlass.tscn" type="PackedScene" id=3]
+[ext_resource path="res://panels/Canvas.tscn" type="PackedScene" id=4]
+
+[node name="WorkSpace" type="HBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ControlPanel" type="VBoxContainer" parent="."]
+margin_right = 316.0
+margin_bottom = 600.0
+
+[node name="TopBar" type="HBoxContainer" parent="ControlPanel"]
+margin_right = 316.0
+margin_bottom = 40.0
+
+[node name="New" type="Button" parent="ControlPanel/TopBar"]
+margin_right = 40.0
+margin_bottom = 40.0
+text = "New"
+
+[node name="Export" type="Button" parent="ControlPanel/TopBar"]
+margin_left = 44.0
+margin_right = 96.0
+margin_bottom = 40.0
+hint_tooltip = "Save"
+text = "Export"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="About" type="Button" parent="ControlPanel/TopBar"]
+margin_left = 100.0
+margin_right = 150.0
+margin_bottom = 40.0
+text = "About"
+
+[node name="UndoRedo" parent="ControlPanel/TopBar" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 154.0
+margin_right = 250.0
+margin_bottom = 40.0
+
+[node name="MagnifyingGlass" parent="ControlPanel" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 44.0
+margin_right = 316.0
+margin_bottom = 84.0
+
+[node name="ToolBox" type="Container" parent="ControlPanel"]
+margin_top = 88.0
+margin_right = 316.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 316, 0 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Canvas" parent="." instance=ExtResource( 4 )]
+margin_left = 320.0
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SaveImageDialog" type="FileDialog" parent="."]
+margin_left = 709.0
+margin_right = 1024.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 400, 500 )
+window_title = "Guardar un Archivo"
+access = 2
+filters = PoolStringArray( "*.png ; PNG Images" )
+current_dir = "/home/tomas/Escritorio/Teggy's Map Maker"
+current_path = "/home/tomas/Escritorio/Teggy's Map Maker/"
+
+[node name="AboutDialog" type="AcceptDialog" parent="."]
+margin_right = 48.0
+margin_bottom = 40.0
+window_title = "Info"
+dialog_text = "Credits:
+- Desing and implementation: Tomás Espejo Gómez
+Icons:
+- Icons from flaticon by authors:
+  - Google
+  - Freepik
+  - Becris
+Build using the Godot Game Engine"
+[connection signal="pressed" from="ControlPanel/TopBar/New" to="." method="_new"]
+[connection signal="pressed" from="ControlPanel/TopBar/Export" to="." method="_save"]
+[connection signal="pressed" from="ControlPanel/TopBar/About" to="." method="_about"]
+[connection signal="file_selected" from="SaveImageDialog" to="." method="_save_ok"]

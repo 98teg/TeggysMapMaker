@@ -24,20 +24,25 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://classes/parser/StyleDataParser.gd"
 }, {
-"base": "Node",
+"base": "Reference",
 "class": "_Tile",
 "language": "GDScript",
-"path": "res://classes/Tile.gd"
+"path": "res://classes/tilemap/Tile.gd"
 }, {
-"base": "Node",
+"base": "Reference",
 "class": "_TileMap",
 "language": "GDScript",
-"path": "res://classes/TileMap.gd"
+"path": "res://classes/tilemap/TileMap.gd"
 }, {
-"base": "Node",
+"base": "Reference",
 "class": "_TileMapLayer",
 "language": "GDScript",
-"path": "res://classes/TileMapLayer.gd"
+"path": "res://classes/tilemap/TileMapLayer.gd"
+}, {
+"base": "Reference",
+"class": "_TileMapParser",
+"language": "GDScript",
+"path": "res://classes/parser/TileMapParser.gd"
 } ]
 _global_script_class_icons={
 "_BaseParser": "",
@@ -45,7 +50,8 @@ _global_script_class_icons={
 "_StyleDataParser": "",
 "_Tile": "",
 "_TileMap": "",
-"_TileMapLayer": ""
+"_TileMapLayer": "",
+"_TileMapParser": ""
 }
 
 [application]
@@ -53,10 +59,6 @@ _global_script_class_icons={
 config/name="Teggy's Map Maker"
 run/main_scene="res://MainWindow.tscn"
 config/icon="res://icon.png"
-
-[autoload]
-
-StyleDirectory="*res://StyleDirectory.gd"
 
 [input]
 

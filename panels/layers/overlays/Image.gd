@@ -17,14 +17,9 @@ var _pos : Vector2 = Vector2.ZERO
 # + visibility: visibility of the image (bool)
 # + image: Image (Image)
 # + pos: Position to show the image (Vector2)
-func init(configuration : Dictionary) -> void:
-	if configuration.visibility:
-		show()
-	else:
-		hide()
-
-	set_image(configuration.image)
-	set_pos(configuration.pos)
+func init(image : Image, pos : Vector2) -> void:
+	set_image(image)
+	set_pos(pos)
 
 # Sets the image
 func set_image(image : Image) -> void:

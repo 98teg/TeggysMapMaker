@@ -50,4 +50,13 @@ func _parse_json(configuration : String) -> Dictionary:
 	return parsed_configuration
 
 func _parse_style(configuration : Dictionary) -> void:
-	_base_parser._configuration.StyleData = _StyleDataParser.parse(_base_parser, configuration)
+	var style_data_parser = _StyleDataParser.new()
+	_base_parser._configuration.StyleData = style_data_parser.parse(_base_parser, configuration)
+
+	var layer = {}
+	layer.Type = "TileMap"
+	var tyle_map_parser = _TileMapParser.new()
+	layer.Configuration = tyle_map_parser.parse(_base_parser, configuration)
+
+	_base_parser._configuration.Layers = []
+	_base_parser._configuration.Layers.append(layer)

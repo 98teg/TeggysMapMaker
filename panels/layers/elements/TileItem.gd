@@ -29,11 +29,11 @@ var _extra_tools : Array = []
 # + extra_tools: Tile extra tools available (Array)
 #    - Each element is a member of the enum _TileMap.Tool
 func init(configuration : Dictionary) -> void:
-	_set_id(configuration.id)
-	_set_name(configuration.name)
-	_set_icon(configuration.icon)
+	_set_id(configuration.ID)
+	_set_name(configuration.Name)
+	_set_icon(configuration.Image)
 
-	for extra_tool in configuration.extra_tools:
+	for extra_tool in configuration.ExtraTools:
 		_add_extra_tool(extra_tool)
 
 # Selects this tile

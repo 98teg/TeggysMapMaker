@@ -10,10 +10,14 @@ var _current_scrollbar : Vector2 = Vector2.ZERO
 var _number_of_layers : int = 0
 var _selected_layer : int = 0
 
+func _process(_delta):
+	if _has_initiate == false:
+		_update_rect()
+
 # Panel public functions
-func init(configuration : Dictionary):
-	for layer in configuration.layers:
-		_add_layer(layer)
+func init(canvas_conf : Dictionary, style_conf : Dictionary):
+	for layer_conf in style_conf.Layers:
+		_add_layer(canvas_conf, layer_conf)
 
 	_set_overlay()
 
@@ -23,13 +27,10 @@ func init(configuration : Dictionary):
 	get_node("CanvasViewport").connect("gui_input", self, "_gui_input")
 	self.connect("resized", self, "_update_rect")
 
-	_update_rect()
-
 func transform(offset : Vector2, scale : Vector2):
 	get_node("CanvasViewport").set_custom_minimum_size(scale * get_size() + (offset * 2))
 	get_node("CanvasViewport/Layers").set_canvas_transform(Transform2D().scaled(scale).translated(offset / scale))
 	get_node("CanvasViewport").get_child(1).set_transform(offset, scale)
-	get_node("CanvasViewport").get_child(1).update()
 
 func get_size():
 	return _get_layer(_selected_layer).get_image().get_size()
@@ -56,14 +57,14 @@ func _gui_input(event):
 	emit_signal("gui_input", event)
 	_get_layer(_selected_layer)._gui_input(event)
 
-func _add_layer(layer : Dictionary):
+func _add_layer(canvas_conf : Dictionary, layer_conf : Dictionary):
 	var new_layer
-	match layer.type:
-		"tilemap":
+	match layer_conf.Type:
+		"TileMap":
 			new_layer = preload("res://panels/layers/TileMapCanvasLayer.tscn").instance()
 
 	get_node("CanvasViewport/Layers").add_child(new_layer)
-	new_layer.init(layer.configuration)
+	new_layer.init(canvas_conf, layer_conf.Configuration)
 
 	_number_of_layers = _number_of_layers + 1
 
@@ -140,7 +141,6 @@ func _update_canvas(scale : Vector2):
 func _update_scale_factor(percentage : float):
 	_scale_factor = 3.75 * percentage + 0.25
 	_update_rect()
-
 
 func _on_CanvasViewport_mouse_entered():
 	_get_layer(_selected_layer)._mouse_entered()

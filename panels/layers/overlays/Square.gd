@@ -20,13 +20,8 @@ var _scale : Vector2 = Vector2.ONE
 # Configuration dictionary description
 # + visibility: visibility of the square (bool)
 # + size: size of the square (int)
-func init(configuration : Dictionary) -> void:
-	if configuration.visibility:
-		show()
-	else:
-		hide()
-
-	_size = configuration.size
+func init(size : int) -> void:
+	_size = size
 
 # Sets the position
 func set_pos(pos : Vector2) -> void:
@@ -45,7 +40,7 @@ func set_transform(offset : Vector2, scale : Vector2) -> void:
 # Draws the square
 func _draw() -> void:
 	var color = Color(0.25, 0.25, 0.25)
-	var width = 4
+	var width = 2
 
 	draw_rect(Rect2(_transform(_pos), Vector2(_size, _size) * _scale), color, false, width, true)
 

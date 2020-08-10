@@ -6,22 +6,23 @@ signal register_action(data)
 
 # Private variables
 
-var _tilemap : _TileMap = preload("res://classes/TileMap.tscn").instance()
+var _tile_size : int = 0
+var _tilemap : _TileMap = _TileMap.new()
 var _tilemap_tex : ImageTexture = ImageTexture.new()
 var _overlay : Control
 var _tool_box : Control
-
-var _tool = _Tile.Tool.PENCIL
+var _tool = _TileMap.Tool.PENCIL
 var _drawing = false
 var _placing_tiles : bool
 var _previous_pos
 
 # Layer public functions
 
-func init(configuration : Dictionary):
-	_set_tilemap(configuration)
-	_create_overlay(configuration)
-	_create_tool_box()
+func init(canvas_conf : Dictionary, layer_conf : Dictionary):
+	_tile_size = layer_conf.TileSize
+	_create_tilemap(canvas_conf, layer_conf)
+	_create_overlay(canvas_conf, layer_conf)
+	_create_tool_box(layer_conf)
 	
 func get_image():
 	return _tilemap.get_image()
@@ -37,50 +38,33 @@ func apply_action(data):
 	_register_action()
 	_update_layer()
 
-func select_tile(tile_id : int):
-	_tilemap.select_tile(tile_id)
-	_overlay.set_tile(_tilemap.get_selected_tile_image())
-
-func select_tool(tool_id : int):
-	_tool = tool_id
-	
-func toggle_grid():
-	_overlay.toggle_grid()
-
 # Layer private functions
 
-func _set_tilemap(configuration : Dictionary):
-	add_child(_tilemap)
-	_tilemap.init(configuration)
+func _create_tilemap(canvas_conf : Dictionary, layer_conf : Dictionary):
+	_tilemap.init(canvas_conf, layer_conf)
 	_tilemap_tex.create_from_image(_tilemap.get_image(), 3)
 	
-func _create_overlay(configuration : Dictionary):
+func _create_overlay(canvas_conf : Dictionary, layer_conf : Dictionary):
 	_overlay = preload("res://panels/layers/TileMapOverlay.tscn").instance()
-	configuration.grid_visibility = false
-	_overlay.init(configuration)
-	_overlay.set_tile(_tilemap.get_selected_tile_image())
+
+	_overlay.init(canvas_conf, layer_conf)
 	
-func _create_tool_box():
+func _create_tool_box(layer_conf : Dictionary):
 	_tool_box = preload("res://panels/layers/TileMapToolBox.tscn").instance()
-	_tool_box.connect("tool_selected", self, "select_tool")
-	_tool_box.connect("tile_selected", self, "select_tile")
-	_tool_box.connect("grid_visibility_changed", _overlay, "set_grid_visibility")
-	_tool_box.init(_create_tool_box_configuration())
+	if _tool_box.connect("tile_selected", self, "_select_tile") != OK:
+		print("Error connecting ToolBox's 'tile_selected' signal")
+	if _tool_box.connect("tool_selected", self, "_select_tool") != OK:
+		print("Error connecting ToolBox's 'tool_selected' signal")
+	if _tool_box.connect("grid_visibility_changed", _overlay, "set_grid_visibility") != OK:
+		print("Error connecting ToolBox's 'grid_visibility_changed' signal")
 
-func _create_tool_box_configuration():
-	var configuration = {"tileset": []}
-	
-	for tile in _tilemap.get_tileset():
-		var tile_configuration = {}
+	_tool_box.init(layer_conf)
 
-		tile_configuration.id = tile.get_id()
-		tile_configuration.name = tile.get_name()
-		tile_configuration.icon = tile.get_image()
-		tile_configuration.extra_tools = tile.get_extra_tools()
+func _select_tile(tile_id : int):
+	_tilemap.select_tile(tile_id)
 
-		configuration.tileset.append(tile_configuration)
-
-	return configuration
+func _select_tool(tool_id : int):
+	_tool = tool_id
 
 func _draw():
 	draw_texture(_tilemap_tex, Vector2.ZERO)
@@ -88,16 +72,16 @@ func _draw():
 	_overlay.update()
 
 func _gui_input(event):
-	var pos = get_local_mouse_position()
+	var position = (get_local_mouse_position() / _tile_size).floor()
 
 	if event is InputEventMouseButton:
-		_mouse_button(event.get_button_index(), event.is_pressed(), pos)
+		_mouse_button(event.get_button_index(), event.is_pressed(), position)
 	elif event is InputEventMouseMotion:
-		_mouse_motion(pos)
+		_mouse_motion(position)
 
 func _mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 	match _tool:
-		_Tile.Tool.PENCIL:
+		_TileMap.Tool.PENCIL:
 			if button_index == BUTTON_LEFT:
 				_placing_tiles = true
 				if is_pressed:
@@ -113,14 +97,12 @@ func _mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 				else:
 					_end_drawing()
 
-		_Tile.Tool.WRENCH:
+		_TileMap.Tool.WRENCH:
 			if button_index == BUTTON_LEFT:
 				if is_pressed:
-					var current_pos = (position / _tilemap.get_tile_size()).floor()
-						
-					_change_tile_state(current_pos.y, current_pos.x)
+					_change_tile_state(int(position.y), int(position.x))
 
-		_Tile.Tool.ERASER:
+		_TileMap.Tool.ERASER:
 			if button_index == BUTTON_LEFT:
 				if is_pressed:
 					_start_drawing(position)
@@ -128,29 +110,24 @@ func _mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 				else:
 					_end_drawing()
 
-		_Tile.Tool.BUCKET_FILL:
+		_TileMap.Tool.BUCKET_FILL:
 			if button_index == BUTTON_LEFT:
 				if is_pressed:
-					var current_pos = (position / _tilemap.get_tile_size()).floor()
-						
-					_fill(current_pos.y, current_pos.x)
+					_fill(int(position.y), int(position.x))
 
 func _mouse_motion(position : Vector2):
 	if _drawing:
 		_draw_line(position)
 
-	var pos = (position / _tilemap.get_tile_size()).floor()
-	_overlay.highlight(pos.x, pos.y)
+	_overlay.highlight(position.x, position.y)
 
-func _start_drawing(pos : Vector2):
+func _start_drawing(position : Vector2):
 	_drawing = true
-	_previous_pos = (pos / _tilemap.get_tile_size()).floor()
+	_previous_pos = position
 
-func _draw_line(pos : Vector2):
-	var current_pos = (pos / _tilemap.get_tile_size()).floor()
-
+func _draw_line(position : Vector2):
 	var p0 = _previous_pos
-	var p1 = current_pos
+	var p1 = position
 
 	var dx = abs(p1.x - p0.x)
 	var sx = 1 if p0.x < p1.x else -1
@@ -172,7 +149,9 @@ func _draw_line(pos : Vector2):
 			err += dx
 			p0.y += sy
 
-	_previous_pos = current_pos
+	_previous_pos = position
+
+	_update_layer()
 
 func _end_drawing():
 	_register_action()
@@ -180,14 +159,13 @@ func _end_drawing():
 
 func _set_tile(i : int, j : int):
 	match _tool:
-		_Tile.Tool.PENCIL:
+		_TileMap.Tool.PENCIL:
 			if _placing_tiles:
 				_tilemap.place_tile(i, j)
 			else:
 				_tilemap.erase_tile(i, j)
-		_Tile.Tool.ERASER:
+		_TileMap.Tool.ERASER:
 			_tilemap.erase_tile_in_every_layer(i, j)
-	_update_layer()
 
 func _change_tile_state(i : int, j : int):
 	_tilemap.change_tile_state(i, j)
@@ -209,20 +187,28 @@ func _update_layer():
 	_tilemap_tex.set_data(_tilemap.get_image())
 	update()
 
-
 func _mouse_entered():
 	match _tool:
-		_Tile.Tool.PENCIL:
-			Input.set_custom_mouse_cursor(load("res://resources/icons/pencil.png"))
+		_TileMap.Tool.PENCIL:
+			var image = load("res://resources/icons/pencil.png")
+			var hotspot = Vector2(0, image.get_size().y)
+			Input.set_custom_mouse_cursor(image, 0, hotspot)
 
-		_Tile.Tool.WRENCH:
-			Input.set_custom_mouse_cursor(load("res://resources/icons/wrench.png"))
+		_TileMap.Tool.WRENCH:
+			var image = load("res://resources/icons/wrench.png")
+			var hotspot = Vector2(image.get_size().x, 0)
+			Input.set_custom_mouse_cursor(image, 0, hotspot)
 
-		_Tile.Tool.ERASER:
-			Input.set_custom_mouse_cursor(load("res://resources/icons/eraser.png"))
+		_TileMap.Tool.ERASER:
+			var image = load("res://resources/icons/eraser.png")
+			var hotspot = Vector2(0, image.get_size().y)
+			Input.set_custom_mouse_cursor(image, 0, hotspot)
 
-		_Tile.Tool.BUCKET_FILL:
-			Input.set_custom_mouse_cursor(load("res://resources/icons/bucket_fill.png"))
+		_TileMap.Tool.BUCKET_FILL:
+			var image = load("res://resources/icons/bucket_fill.png")
+			var hotspot = Vector2(0, image.get_size().y)
+			Input.set_custom_mouse_cursor(image, 0, hotspot)
 
 func _mouse_exited():
+	_overlay.highlight(-1, -1)
 	Input.set_custom_mouse_cursor(null)

@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://panels/layers/TileMapOverlay.gd" type="Script" id=1]
 [ext_resource path="res://panels/layers/overlays/Grid.tscn" type="PackedScene" id=2]
-[ext_resource path="res://panels/layers/overlays/Image.tscn" type="PackedScene" id=3]
 [ext_resource path="res://panels/layers/overlays/Square.tscn" type="PackedScene" id=4]
 
 [node name="TileMapOverlay" type="Control"]
@@ -15,24 +14,12 @@ __meta__ = {
 }
 
 [node name="Grid" parent="." instance=ExtResource( 2 )]
+visible = false
 margin_right = 0.0
 margin_bottom = 0.0
 
-[node name="Highlight" type="Control" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_right = 40.0
-margin_bottom = 40.0
-mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Image" parent="Highlight" instance=ExtResource( 3 )]
-margin_right = -40.0
-margin_bottom = -40.0
-
-[node name="Square" parent="Highlight" instance=ExtResource( 4 )]
+[node name="Square" parent="." instance=ExtResource( 4 )]
+visible = false
 material = null
 margin_right = -40.0
 margin_bottom = -40.0

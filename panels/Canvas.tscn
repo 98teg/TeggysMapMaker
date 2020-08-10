@@ -10,11 +10,14 @@ __meta__ = {
 }
 
 [node name="CanvasViewport" type="ViewportContainer" parent="."]
+margin_right = 12.0
+margin_bottom = 12.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 stretch = true
 
 [node name="Layers" type="Viewport" parent="CanvasViewport"]
+size = Vector2( 12, 12 )
 handle_input_locally = false
 render_target_update_mode = 3
 gui_disable_input = true

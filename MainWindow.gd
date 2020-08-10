@@ -1,53 +1,51 @@
 extends Control
 
-var initated : bool = false
+enum StyleState{
+	NONE,
+	SELECTED,
+	SELECT_ANOTHER_ONE
+}
+
+var _work_space = preload("res://views/WorkSpace.tscn")
+var _style_state = StyleState.NONE
 
 func _ready():
 	OS.set_window_maximized(true)
 
-func _new():
-	get_tree().reload_current_scene()
+func _popup_loadstyle():
+	if _style_state == StyleState.NONE:
+		get_node("LoadStylePopup").popup_centered()
+		get_node("LoadStylePopup").get_close_button().disabled = true
+		_loadstyle_resized()
+	elif _style_state == StyleState.SELECT_ANOTHER_ONE:
+		get_node("LoadStylePopup").popup_centered()
+		get_node("LoadStylePopup").get_close_button().disabled = false
+		_loadstyle_resized()
+	else:
+		pass
 
 func _resized():
-	get_node("SelectStyleDialog").get_close_button().disabled = true
-	get_node("SelectStyleDialog").get_cancel().disabled = true
-	get_node("SelectStyleDialog").popup_centered()
+	_popup_loadstyle()
 
-func _style_selected(path : String):
-	var configuration_parser = _MainParser.new() 
-	configuration_parser.parse(path)
+func _loadstyle_resized():
+	var height = get_node("LoadStylePopup/LoadStyle").get_size().y + 20
+	get_node("LoadStylePopup").set_size(Vector2(450, height))
 
-	print(configuration_parser.get_configuration())
-	
-	for error in configuration_parser.get_errors():
-		print("Error: " + error)
+func _style_selected(canvas_conf : Dictionary, style_conf : Dictionary):
+	_style_state = StyleState.SELECTED
+	get_node("LoadStylePopup").hide()
 
-	for warning in configuration_parser.get_warnings():
-		print("Warning: " + warning)
-	get_tree().quit()
-#	get_node("SelectStyleDialog").get_close_button().disabled = false
-#	get_node("SelectStyleDialog").get_cancel().disabled = false
-#
-#	var file = File.new()
-#	var dir = get_node("/root/StyleDirectory")
-#	dir.open(path.get_base_dir())
-#	file.open(path, File.READ)
-#	var configuration = JSON.parse(file.get_as_text()).get_result()
-#
-#	get_node("Canvas").init(configuration)
-#
-#	get_node("ControlPanel/ToolBox").add_child(get_node("Canvas").get_current_tool_box())
-#	get_node("ControlPanel/MagnifyingGlass").connect("magnifying_factor_updated", get_node("Canvas"), "_update_scale_factor")
-#	get_node("Canvas").connect("gui_input", get_node("ControlPanel/MagnifyingGlass"), "process_mouse_wheel")
-#
-#	get_node("Canvas").connect_with_undo_redo(get_node("ControlPanel/TopBar/UndoRedo"))
+	if _style_state == StyleState.SELECT_ANOTHER_ONE:
+		get_node("WorkSpace").queue_free()
 
-func _save():
-	get_node("SaveImageDialog").popup_centered()
+	var work_space = _work_space.instance()
+	work_space.connect("new", self, "_new")
+	add_child(work_space)
+	work_space.init(canvas_conf, style_conf)
 
-func _save_ok(path : String):
-	get_node("Canvas").get_image().save_png(path)
+	update()
 
+func _new():
+	_style_state = StyleState.SELECT_ANOTHER_ONE
 
-func _about():
-	get_node("AboutDialog").popup_centered()
+	_popup_loadstyle()

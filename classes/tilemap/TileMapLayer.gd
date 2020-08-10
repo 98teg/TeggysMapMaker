@@ -1,5 +1,3 @@
-extends Node
-
 class_name _TileMapLayer
 
 # Private variables
@@ -10,15 +8,16 @@ var _tile_size : int = 0
 var _map : Array = []
 var _image : Image = Image.new()
 var _tileset : Array = []
+var _special_tileset : Dictionary = {}
 var _air : _Tile = _Tile.new()
 var _out_of_bounds : _Tile = _Tile.new()
-var _previous_map : Array = []
+var _previous_tilemaplayer : Array = []
 var _has_been_modified : bool = false
 var _count = 0
 
 # Class public functions
 
-func init(width : int, height : int, tile_size : int, tileset : Array):
+func init(width : int, height : int, tile_size : int, tileset : Array, special_tileset : Dictionary):
 	_width = width
 	_height = height
 
@@ -28,49 +27,74 @@ func init(width : int, height : int, tile_size : int, tileset : Array):
 	_create_image()
 
 	_tileset = tileset
-
-	_create_special_tiles()
+	_special_tileset = special_tileset
 
 func get_image() -> Image:
 	return _image
 
-func set_tile(i : int, j : int, value : int):
+func set_tile(i : int, j : int, tile : _Tile):
+	var id = tile.get_id()
 	if(i >= 0 and i < _height and j >= 0 and j < _width):
-		if _get_tile_id(i, j) != value:
-			_map[i][j] = {"id": value, "state": 0}
+		if _get_tile_id(i, j) != id:
+			_map[i][j] = {"ID": id, "State": 0}
 			
 			_update_tile(i, j)
 			_update_tiles_around(i, j)
 			
 			_has_been_modified = true
 			
-func fill(i : int, j : int, value : int, tile_to_replace : int = _Tile.Special_tile.UNSELECTED):
+func fill(i : int, j : int, tile : _Tile):
 	if(i >= 0 and i < _height and j >= 0 and j < _width):
-		if tile_to_replace == _Tile.Special_tile.UNSELECTED:
-			tile_to_replace = _get_tile_id(i, j)
+		var tile_to_replace_id = _get_tile_id(i, j)
 			
-			if tile_to_replace == value:
-				return
+		if tile_to_replace_id == tile.get_id():
+			return
 
-		set_tile(i, j, value)
+		var process_now = []
+		process_now.append(Vector2(i, j))
 
-		if _get_tile_id(i + 1, j) == tile_to_replace:
-			fill(i + 1, j, value, tile_to_replace)
+		var process_next = []
 
-		if _get_tile_id(i, j + 1) == tile_to_replace:
-			fill(i, j + 1, value, tile_to_replace)
+		var marked = []
+		for i in range(_height):
+			marked.append([])
+			for j in range(_width):
+				marked[i].append([])
+				marked[i][j] = false
 
-		if _get_tile_id(i - 1, j) == tile_to_replace:
-			fill(i - 1, j, value, tile_to_replace)
+		while process_now.size() != 0:
+			process_next = []
 
-		if _get_tile_id(i, j - 1) == tile_to_replace:
-			fill(i, j - 1, value, tile_to_replace)
+			for pos in process_now:
+				set_tile(pos.x, pos.y, tile)
+
+				if _get_tile_id(pos.x + 1, pos.y) == tile_to_replace_id:
+					if marked[pos.x + 1][pos.y] == false:
+						process_next.append(Vector2(pos.x + 1, pos.y))
+						marked[pos.x + 1][pos.y] = true
+
+				if _get_tile_id(pos.x, pos.y + 1) == tile_to_replace_id:
+					if marked[pos.x][pos.y + 1] == false:
+						process_next.append(Vector2(pos.x, pos.y + 1))
+						marked[pos.x][pos.y + 1] = true
+
+				if _get_tile_id(pos.x - 1, pos.y) == tile_to_replace_id:
+					if marked[pos.x - 1][pos.y] == false:
+						process_next.append(Vector2(pos.x - 1, pos.y))
+						marked[pos.x - 1][pos.y] = true
+
+				if _get_tile_id(pos.x, pos.y - 1) == tile_to_replace_id:
+					if marked[pos.x][pos.y - 1] == false:
+						process_next.append(Vector2(pos.x, pos.y - 1))
+						marked[pos.x][pos.y - 1] = true
+
+			process_now = process_next
 
 func change_tile_state(i : int, j : int):
 	if(i >= 0 and i < _height and j >= 0 and j < _width):
 		if _get_tile(i, j).get_n_states() > 1:
-			var state = (_map[i][j].state + 1) % _get_tile(i, j).get_n_states()
-			_map[i][j].state = state
+			var state = (_get_tile_state(i, j) + 1) % _get_tile(i, j).get_n_states()
+			_map[i][j].State = state
 			_place_tile_image(i, j, _get_tile(i, j).get_image(state))
 			
 			_has_been_modified = true
@@ -78,24 +102,21 @@ func change_tile_state(i : int, j : int):
 func has_been_modified():
 	return _has_been_modified
 
-func retrieve_previous_map():
-	var previous_map = _previous_map
-	_previous_map = _map.duplicate(true)
+func retrieve_previous_tilemaplayer():
+	var previous_tilemaplayer = _previous_tilemaplayer
+	_previous_tilemaplayer = _map.duplicate(true)
 
 	_has_been_modified = false
 
-	return previous_map
+	return previous_tilemaplayer
 
-func get_map():
-	return _map
-
-func load_map(map : Array):
+func load_tilemaplayer(map : Array):
 	_map = map
 	_has_been_modified = true
 	
 	for i in range(_height):
 		for j in range(_width):
-			_place_tile_image(i, j, _get_tile(i, j).get_image(_map[i][j].state))
+			_place_tile_image(i, j, _get_tile(i, j).get_image(_get_tile_state(i, j)))
 
 # Class private functions
 
@@ -105,9 +126,9 @@ func _create_map():
 		_map.append([])
 		for j in range(_width):
 			_map[i].append([])
-			_map[i][j] = {"id": _Tile.Special_tile.AIR, "state": 0}
+			_map[i][j] = {"ID": _Tile.Special_tile.AIR, "State": 0}
 
-	_previous_map = _map.duplicate(true)
+	_previous_tilemaplayer = _map.duplicate(true)
 
 func _create_image():
 	_image = Image.new()
@@ -116,10 +137,6 @@ func _create_image():
 	var h = _tile_size * _height
 
 	_image.create(w, h, false, Image.FORMAT_RGBA8)
-	
-func _create_special_tiles():
-	_air.init_special_tile(_Tile.Special_tile.AIR, _tile_size)
-	_out_of_bounds.init_special_tile(_Tile.Special_tile.OUT_OF_BOUNDS, _tile_size)
 
 func _update_tiles_around(i : int, j : int):
 	_update_tile(i - 1, j    )
@@ -183,17 +200,20 @@ func _place_tile_image(i : int, j : int, tile_image : Image):
 
 func _get_tile_id(i : int, j : int) -> int:
 	if(i >= 0 and i < _height and j >= 0 and j < _width):
-		return _map[i][j].id
-	
+		return _map[i][j].ID
+
 	return _Tile.Special_tile.OUT_OF_BOUNDS
+
+func _get_tile_state(i : int, j : int) -> int:
+	if(i >= 0 and i < _height and j >= 0 and j < _width):
+		return _map[i][j].State
+
+	return 0
 
 func _get_tile(i : int, j : int) -> _Tile:
 	var tile_id = _get_tile_id(i, j)
 	
-	match tile_id:
-		_Tile.Special_tile.AIR:
-			return _air
-		_Tile.Special_tile.OUT_OF_BOUNDS:
-			return _out_of_bounds
-
-	return _tileset[tile_id]
+	if tile_id >= 0:
+		return _tileset[tile_id]
+	else:
+		return _special_tileset[tile_id]
