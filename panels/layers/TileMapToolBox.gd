@@ -44,7 +44,8 @@ func init(configuration : Dictionary) -> void:
 
 	_init_tools()
 
-	_get_tile_item(0).select()
+	if get_node("TilesScroller/TilesGrid").get_child_count() > 0:
+		_get_tile_item(0).select()
 
 #####################
 # Private functions #
@@ -81,12 +82,12 @@ func _update_extra_tools(extra_tools):
 
 	for extra_tool in extra_tools:
 		match extra_tool:
-			_TileMap.Tool.WRENCH:
+			Tilemap.Tool.WRENCH:
 				wrench_flag = true
 				if _wrench_flag == false:
 					_wrench_flag = true
 					get_node("Tools/LeftTools").add_child(_wrench_item)
-			_TileMap.Tool.BUCKET_FILL:
+			Tilemap.Tool.BUCKET_FILL:
 				bucket_fill_flag = true
 				if _bucket_fill_flag == false:
 					_bucket_fill_flag = true
@@ -116,14 +117,14 @@ func _init_default_tools_items(tool_item_group : ButtonGroup):
 
 # Init pencil item
 func _init_pencil_item(tool_item_group : ButtonGroup):
-	var conf = {"id": _TileMap.Tool.PENCIL, "name": "Pencil", "icon": _get_image("pencil")}
+	var conf = {"id": Tilemap.Tool.PENCIL, "name": "Pencil", "icon": _get_image("pencil")}
 	get_node("Tools/LeftTools/Pencil").init(conf)
 	get_node("Tools/LeftTools/Pencil").add_to_button_group(tool_item_group)
 	get_node("Tools/LeftTools/Pencil").connect("tool_item_selected", self, "_select_tool")
 
 # Init eraser item
 func _init_eraser_item(tool_item_group : ButtonGroup):
-	var conf = {"id": _TileMap.Tool.ERASER, "name": "Eraser", "icon": _get_image("eraser")}
+	var conf = {"id": Tilemap.Tool.ERASER, "name": "Eraser", "icon": _get_image("eraser")}
 	get_node("Tools/RightTools/Eraser").init(conf)
 	get_node("Tools/RightTools/Eraser").add_to_button_group(tool_item_group)
 	get_node("Tools/RightTools/Eraser").connect("tool_item_selected", self, "_select_tool")
@@ -141,23 +142,21 @@ func _init_extra_tools_items(tool_item_group : ButtonGroup):
 
 # Init wrench item
 func _init_wrench_item(tool_item_group : ButtonGroup):
-	var conf = {"id": _TileMap.Tool.WRENCH, "name": "Wrench", "icon": _get_image("wrench")}
+	var conf = {"id": Tilemap.Tool.WRENCH, "name": "Wrench", "icon": _get_image("wrench")}
 	_wrench_item.init(conf)
 	_wrench_item.add_to_button_group(tool_item_group)
 	_wrench_item.connect("tool_item_selected", self, "_select_tool")
 
 # Init bucket fill item
 func _init_bucket_fill_item(tool_item_group : ButtonGroup):
-	var conf = {"id": _TileMap.Tool.BUCKET_FILL, "name": "Bucket fill", "icon": _get_image("bucket_fill")}
+	var conf = {"id": Tilemap.Tool.BUCKET_FILL, "name": "Bucket fill", "icon": _get_image("bucket_fill")}
 	_bucket_fill_item.init(conf)
 	_bucket_fill_item.add_to_button_group(tool_item_group)
 	_bucket_fill_item.connect("tool_item_selected", self, "_select_tool")
 
 # Returns the image from the resources folder
 func _get_image(name : String) -> Image:
-	var image = Image.new()
-	image.load("./resources/icons/" + name + ".png")
-	return image
+	return load("res://resources/icons/" + name + ".png").get_data()
 
 # It is called when the tool item emits the tool_item_selected signal
 func _select_tool(tool_id : int) -> void:

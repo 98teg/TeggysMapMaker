@@ -1,12 +1,12 @@
-class_name _TileMapParser
+class_name TilemapParser
 
-var _base_parser : _BaseParser
+var _base_parser : BaseParser
 var _tile_size : int = 0
 var _n_tiles : int = 0
 var _layers : Dictionary = {}
 var _connected_groups : Dictionary = {"": 0}
 var _correct_variations : bool = true
-var _connection_type : int = _Tile.Connection_type.ISOLATED
+var _connection_type : int = Tile.Connection_type.ISOLATED
 const _max_TileSize : int = 64
 const _max_TileSetSize : int = 100
 const _max_Tile_Name_length : int = 100
@@ -16,7 +16,7 @@ const _max_Tile_ExtraToolsSize : int = 2
 const _max_Tile_VariationsSize : int = 256
 const _max_Tile_VariationsConditionsSize : int = 8
 
-func parse(base_parser : _BaseParser, configuration : Dictionary) -> Dictionary:
+func parse(base_parser : BaseParser, configuration : Dictionary) -> Dictionary:
 	_base_parser = base_parser
 	var tilemap_conf = _base_parser._check_obligatory_object(configuration, "Configuration")
 
@@ -134,20 +134,20 @@ func _check_tile(tile_conf : Dictionary, context : String) -> Dictionary:
 						else:
 							_base_parser._two_elements_are_equal("Wrench", context)
 
-						extra_tools[i] = _TileMap.Tool.WRENCH
+						extra_tools[i] = Tilemap.Tool.WRENCH
 					"BukectFill":
 						if extra_tools_flags[1] == false:
 							extra_tools_flags[1] = true
 						else:
 							_base_parser._two_elements_are_equal("BukectFill", context)
 
-						extra_tools[i] = _TileMap.Tool.BUCKET_FILL
+						extra_tools[i] = Tilemap.Tool.BUCKET_FILL
 					_:
-						extra_tools[i] = _TileMap.Tool.PENCIL
+						extra_tools[i] = Tilemap.Tool.PENCIL
 
 						_base_parser._no_registered_extra_tool(extra_tools_context)
 			else:
-				extra_tools[i] = _TileMap.Tool.PENCIL
+				extra_tools[i] = Tilemap.Tool.PENCIL
 
 				if extra_tools.size() == 1:
 					_base_parser._incorrect_type("ExtraTool", "String", context)
@@ -161,7 +161,7 @@ func _check_tile(tile_conf : Dictionary, context : String) -> Dictionary:
 	variations = _base_parser._check_array(tile_conf, "Variation", "Variations", _max_Tile_VariationsSize, context)
 
 	if variations.size() != 0:
-		_connection_type = _Tile.Connection_type.CROSS
+		_connection_type = Tile.Connection_type.CROSS
 		_correct_variations = true
 
 		for i in range(variations.size()):
@@ -181,10 +181,10 @@ func _check_tile(tile_conf : Dictionary, context : String) -> Dictionary:
 				else:
 					_base_parser._incorrect_type("Variation", "Dictionary", variation_context)
 	else:
-		_connection_type = _Tile.Connection_type.ISOLATED
+		_connection_type = Tile.Connection_type.ISOLATED
 		_correct_variations = false
 	
-	if _connection_type != _Tile.Connection_type.ISOLATED:
+	if _connection_type != Tile.Connection_type.ISOLATED:
 		_transform_variations(variations)
 
 	tile.ConnectionType = _connection_type
@@ -239,7 +239,7 @@ func _check_connection(connection_array : Array, context : String) -> Array:
 				"NorthEast":
 					if bitmask[1] == false:
 						bitmask[1] = true
-						_connection_type = _Tile.Connection_type.CIRCLE
+						_connection_type = Tile.Connection_type.CIRCLE
 					else:
 						_correct_variations = false
 						_base_parser._two_elements_are_equal("NorthEast", context)
@@ -252,7 +252,7 @@ func _check_connection(connection_array : Array, context : String) -> Array:
 				"SouthEast":
 					if bitmask[3] == false:
 						bitmask[3] = true
-						_connection_type = _Tile.Connection_type.CIRCLE
+						_connection_type = Tile.Connection_type.CIRCLE
 					else:
 						_correct_variations = false
 						_base_parser._two_elements_are_equal("SouthEast", context)
@@ -265,7 +265,7 @@ func _check_connection(connection_array : Array, context : String) -> Array:
 				"SouthWest":
 					if bitmask[5] == false:
 						bitmask[5] = true
-						_connection_type = _Tile.Connection_type.CIRCLE
+						_connection_type = Tile.Connection_type.CIRCLE
 					else:
 						_correct_variations = false
 						_base_parser._two_elements_are_equal("SouthWest", context)
@@ -278,7 +278,7 @@ func _check_connection(connection_array : Array, context : String) -> Array:
 				"NorthWest":
 					if bitmask[7] == false:
 						bitmask[7] = true
-						_connection_type = _Tile.Connection_type.CIRCLE
+						_connection_type = Tile.Connection_type.CIRCLE
 					else:
 						_correct_variations = false
 						_base_parser._two_elements_are_equal("NorthWest", context)
@@ -299,7 +299,7 @@ func _transform_variations(variations : Array) -> void:
 			if _correct_variations:
 				var acc = 0
 	
-				if _connection_type == _Tile.Connection_type.CROSS:
+				if _connection_type == Tile.Connection_type.CROSS:
 					if connection[0]:
 						acc += 1
 					if connection[2]:

@@ -10,48 +10,48 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Reference",
-"class": "_BaseParser",
+"class": "BaseParser",
 "language": "GDScript",
 "path": "res://classes/parser/BaseParser.gd"
 }, {
 "base": "Reference",
-"class": "_MainParser",
+"class": "MainParser",
 "language": "GDScript",
 "path": "res://classes/parser/MainParser.gd"
 }, {
 "base": "Reference",
-"class": "_StyleDataParser",
+"class": "StyleDataParser",
 "language": "GDScript",
 "path": "res://classes/parser/StyleDataParser.gd"
 }, {
 "base": "Reference",
-"class": "_Tile",
+"class": "Tile",
 "language": "GDScript",
 "path": "res://classes/tilemap/Tile.gd"
 }, {
 "base": "Reference",
-"class": "_TileMap",
+"class": "Tilemap",
 "language": "GDScript",
-"path": "res://classes/tilemap/TileMap.gd"
+"path": "res://classes/tilemap/Tilemap.gd"
 }, {
 "base": "Reference",
-"class": "_TileMapLayer",
+"class": "TilemapLayer",
 "language": "GDScript",
-"path": "res://classes/tilemap/TileMapLayer.gd"
+"path": "res://classes/tilemap/TilemapLayer.gd"
 }, {
 "base": "Reference",
-"class": "_TileMapParser",
+"class": "TilemapParser",
 "language": "GDScript",
-"path": "res://classes/parser/TileMapParser.gd"
+"path": "res://classes/parser/TilemapParser.gd"
 } ]
 _global_script_class_icons={
-"_BaseParser": "",
-"_MainParser": "",
-"_StyleDataParser": "",
-"_Tile": "",
-"_TileMap": "",
-"_TileMapLayer": "",
-"_TileMapParser": ""
+"BaseParser": "",
+"MainParser": "",
+"StyleDataParser": "",
+"Tile": "",
+"Tilemap": "",
+"TilemapLayer": "",
+"TilemapParser": ""
 }
 
 [application]

@@ -1,10 +1,10 @@
-class_name _StyleDataParser
+class_name StyleDataParser
 
-var _base_parser : _BaseParser
+var _base_parser : BaseParser
 const _max_StyleData_Author_length : int = 20
 const _max_StyleData_Name_length : int = 20
 
-func parse(base_parser : _BaseParser, configuration : Dictionary) -> Dictionary:
+func parse(base_parser : BaseParser, configuration : Dictionary) -> Dictionary:
 	_base_parser = base_parser
 	var style_data = _base_parser._check_obligatory_object(configuration, "StyleData")
 

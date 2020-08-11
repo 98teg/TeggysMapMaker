@@ -78,7 +78,7 @@ func _style_selected(path : String):
 
 	get_node("PathSelection/Path").set_text(path.get_file())
 
-	var configuration_parser = _MainParser.new() 
+	var configuration_parser = MainParser.new() 
 	configuration_parser.parse(path)
 
 	_style_conf = configuration_parser.get_configuration()

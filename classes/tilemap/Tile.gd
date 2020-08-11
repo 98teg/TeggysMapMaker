@@ -1,4 +1,4 @@
-class_name _Tile
+class_name Tile
 
 # Custom enums
 
@@ -62,7 +62,7 @@ func get_image(state : int = 0) -> Image:
 func get_connection_type() -> int:
 	return _connection_type
 
-func can_connect_to(another_tile : _Tile) -> bool:
+func can_connect_to(another_tile : Tile) -> bool:
 	if another_tile._id == Special_tile.AIR:
 		return false
 	elif another_tile._id == Special_tile.OUT_OF_BOUNDS:

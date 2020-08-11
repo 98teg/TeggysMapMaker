@@ -1,4 +1,4 @@
-class_name _TileMapLayer
+class_name TilemapLayer
 
 # Private variables
 
@@ -9,8 +9,6 @@ var _map : Array = []
 var _image : Image = Image.new()
 var _tileset : Array = []
 var _special_tileset : Dictionary = {}
-var _air : _Tile = _Tile.new()
-var _out_of_bounds : _Tile = _Tile.new()
 var _previous_tilemaplayer : Array = []
 var _has_been_modified : bool = false
 var _count = 0
@@ -32,7 +30,7 @@ func init(width : int, height : int, tile_size : int, tileset : Array, special_t
 func get_image() -> Image:
 	return _image
 
-func set_tile(i : int, j : int, tile : _Tile):
+func set_tile(i : int, j : int, tile : Tile):
 	var id = tile.get_id()
 	if(i >= 0 and i < _height and j >= 0 and j < _width):
 		if _get_tile_id(i, j) != id:
@@ -43,7 +41,7 @@ func set_tile(i : int, j : int, tile : _Tile):
 			
 			_has_been_modified = true
 			
-func fill(i : int, j : int, tile : _Tile):
+func fill(i : int, j : int, tile : Tile):
 	if(i >= 0 and i < _height and j >= 0 and j < _width):
 		var tile_to_replace_id = _get_tile_id(i, j)
 			
@@ -126,7 +124,7 @@ func _create_map():
 		_map.append([])
 		for j in range(_width):
 			_map[i].append([])
-			_map[i][j] = {"ID": _Tile.Special_tile.AIR, "State": 0}
+			_map[i][j] = {"ID": Tile.Special_tile.AIR, "State": 0}
 
 	_previous_tilemaplayer = _map.duplicate(true)
 
@@ -149,21 +147,21 @@ func _update_tiles_around(i : int, j : int):
 	_update_tile(i - 1, j - 1)
 
 func _update_tile(i : int, j : int):
-	if _get_tile_id(i, j) == _Tile.Special_tile.OUT_OF_BOUNDS:
+	if _get_tile_id(i, j) == Tile.Special_tile.OUT_OF_BOUNDS:
 		pass
-	elif _get_tile(i, j).get_connection_type() == _Tile.Connection_type.ISOLATED:
+	elif _get_tile(i, j).get_connection_type() == Tile.Connection_type.ISOLATED:
 		_place_tile_image(i, j, _get_tile(i, j).get_image())
 	else:
 		var condition = 0
 		var tile = _get_tile(i, j)
 		
-		if tile.get_connection_type() == _Tile.Connection_type.CROSS:
+		if tile.get_connection_type() == Tile.Connection_type.CROSS:
 			condition = _get_cross_condition_id_of_tile(i, j)
 		else:
 			condition = _get_circle_condition_id_of_tile(i, j)
 		  
 		var state = tile.get_state(condition)
-		_map[i][j].state = state
+		_map[i][j].State = state
 		_place_tile_image(i, j, tile.get_image(state))
 
 func _get_cross_condition_id_of_tile(i : int, j : int) -> int:
@@ -202,7 +200,7 @@ func _get_tile_id(i : int, j : int) -> int:
 	if(i >= 0 and i < _height and j >= 0 and j < _width):
 		return _map[i][j].ID
 
-	return _Tile.Special_tile.OUT_OF_BOUNDS
+	return Tile.Special_tile.OUT_OF_BOUNDS
 
 func _get_tile_state(i : int, j : int) -> int:
 	if(i >= 0 and i < _height and j >= 0 and j < _width):
@@ -210,7 +208,7 @@ func _get_tile_state(i : int, j : int) -> int:
 
 	return 0
 
-func _get_tile(i : int, j : int) -> _Tile:
+func _get_tile(i : int, j : int) -> Tile:
 	var tile_id = _get_tile_id(i, j)
 	
 	if tile_id >= 0:

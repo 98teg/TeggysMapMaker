@@ -1,6 +1,6 @@
-class_name _MainParser
+class_name MainParser
 
-var _base_parser : _BaseParser = _BaseParser.new()
+var _base_parser : BaseParser = BaseParser.new()
 
 # Public
 
@@ -50,12 +50,12 @@ func _parse_json(configuration : String) -> Dictionary:
 	return parsed_configuration
 
 func _parse_style(configuration : Dictionary) -> void:
-	var style_data_parser = _StyleDataParser.new()
+	var style_data_parser = StyleDataParser.new()
 	_base_parser._configuration.StyleData = style_data_parser.parse(_base_parser, configuration)
 
 	var layer = {}
 	layer.Type = "TileMap"
-	var tyle_map_parser = _TileMapParser.new()
+	var tyle_map_parser = TilemapParser.new()
 	layer.Configuration = tyle_map_parser.parse(_base_parser, configuration)
 
 	_base_parser._configuration.Layers = []

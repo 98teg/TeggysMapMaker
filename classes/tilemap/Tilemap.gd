@@ -1,4 +1,4 @@
-class_name _TileMap
+class_name Tilemap
 
 enum Tool{
 	PENCIL,
@@ -16,7 +16,7 @@ var _background : Image = Image.new()
 var _tilemaplayers : Array = []
 var _tileset : Array = []
 var _special_tileset : Dictionary = {}
-var _selected_tile : _Tile = _Tile.new()
+var _selected_tile : Tile = Tile.new()
 
 # Class public functions
 
@@ -52,7 +52,7 @@ func place_tile(i : int, j : int):
 
 func erase_tile(i : int, j : int):
 	var selected_layer = _selected_tile.get_layer()
-	_tilemaplayers[selected_layer].set_tile(i, j, _special_tileset[_Tile.Special_tile.AIR])
+	_tilemaplayers[selected_layer].set_tile(i, j, _special_tileset[Tile.Special_tile.AIR])
 
 func change_tile_state(i : int, j : int):
 	var selected_layer = _selected_tile.get_layer()
@@ -64,7 +64,7 @@ func fill(i : int, j : int):
 
 func erase_tile_in_every_layer(i : int, j : int):
 	for tilemaplayer in _tilemaplayers:
-		tilemaplayer.set_tile(i, j, _special_tileset[_Tile.Special_tile.AIR])
+		tilemaplayer.set_tile(i, j, _special_tileset[Tile.Special_tile.AIR])
 
 func retrieve_previous_tilemap():
 	var tilemaplayers = []
@@ -94,15 +94,15 @@ func _create_special_tileset():
 
 	var special_tile_conf = {
 		"Layer": 0,
-		"ConnectionType": _Tile.Connection_type.ISOLATED,
+		"ConnectionType": Tile.Connection_type.ISOLATED,
 		"Image": empty_tile_image,
 		"Variations": [],
 		"ConnectedGroup": 0
 	}
-	for special_tile_id in _Tile.Special_tile.values():
+	for special_tile_id in Tile.Special_tile.values():
 		special_tile_conf.ID = special_tile_id
 		
-		var special_tile = _Tile.new()
+		var special_tile = Tile.new()
 		special_tile.init(special_tile_conf)
 		_special_tileset[special_tile_id] = special_tile
 
@@ -110,12 +110,12 @@ func _add_tile(tile_conf : Dictionary):
 	if tile_conf.Layer == _tilemaplayers.size():
 		_add_layer()
 
-	var tile = _Tile.new()
+	var tile = Tile.new()
 	tile.init(tile_conf)
 	_tileset.append(tile)
 
 func _add_layer():
-	var tilemaplayer = _TileMapLayer.new()
+	var tilemaplayer = TilemapLayer.new()
 	tilemaplayer.init(_width, _height, _tile_size, _tileset, _special_tileset)
 
 	_tilemaplayers.append(tilemaplayer)

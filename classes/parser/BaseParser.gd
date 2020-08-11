@@ -1,4 +1,4 @@
-class_name _BaseParser
+class_name BaseParser
 
 var _directory : Directory = Directory.new()
 var _configuration : Dictionary = {}
