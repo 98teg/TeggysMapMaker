@@ -29,7 +29,7 @@ func _resized():
 
 func _loadstyle_resized():
 	var height = get_node("LoadStylePopup/LoadStyle").get_size().y + 20
-	get_node("LoadStylePopup").set_size(Vector2(450, height))
+	get_node("LoadStylePopup").set_size(Vector2(700, height))
 
 func _style_selected(canvas_conf : Dictionary, style_conf : Dictionary):
 	_style_state = StyleState.SELECTED

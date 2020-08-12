@@ -44,7 +44,7 @@ func init(configuration : Dictionary) -> void:
 
 	_init_tools()
 
-	if get_node("TilesScroller/TilesGrid").get_child_count() > 0:
+	if get_node("TilesScroller/TilesGridPanel/Margin/TilesGrid").get_child_count() > 0:
 		_get_tile_item(0).select()
 
 #####################
@@ -63,12 +63,12 @@ func _add_tile_item(tile_item_group : ButtonGroup, configuration : Dictionary) -
 	tile_item.init(configuration)
 	tile_item.add_to_button_group(tile_item_group)
 	
-	get_node("TilesScroller/TilesGrid").add_child(tile_item)
+	get_node("TilesScroller/TilesGridPanel/Margin/TilesGrid").add_child(tile_item)
 	tile_item.connect("tile_item_selected", self, "_select_tile")
 
 # Returns a tile item
 func _get_tile_item(idx : int) -> Node:
-	return get_node("TilesScroller/TilesGrid").get_child(idx)
+	return get_node("TilesScroller/TilesGridPanel/Margin/TilesGrid").get_child(idx)
 
 # It is called when the tile item emits the tile_item_selected signal
 func _select_tile(tile_id : int, extra_tools : Array) -> void:
@@ -86,22 +86,22 @@ func _update_extra_tools(extra_tools):
 				wrench_flag = true
 				if _wrench_flag == false:
 					_wrench_flag = true
-					get_node("Tools/LeftTools").add_child(_wrench_item)
+					get_node("ToolsPanel/Tools/LeftTools").add_child(_wrench_item)
 			Tilemap.Tool.BUCKET_FILL:
 				bucket_fill_flag = true
 				if _bucket_fill_flag == false:
 					_bucket_fill_flag = true
-					get_node("Tools/LeftTools").add_child(_bucket_fill_item)
+					get_node("ToolsPanel/Tools/LeftTools").add_child(_bucket_fill_item)
 
 	if wrench_flag == false and _wrench_flag:
 		_wrench_flag = false
-		get_node("Tools/LeftTools").remove_child(_wrench_item)
+		get_node("ToolsPanel/Tools/LeftTools").remove_child(_wrench_item)
 
 	if bucket_fill_flag == false and _bucket_fill_flag:
 		_bucket_fill_flag = false
-		get_node("Tools/LeftTools").remove_child(_bucket_fill_item)
+		get_node("ToolsPanel/Tools/LeftTools").remove_child(_bucket_fill_item)
 
-	get_node("Tools/LeftTools/Pencil").select()
+	get_node("ToolsPanel/Tools/LeftTools/Pencil").select()
 
 # Init tools
 func _init_tools():
@@ -118,22 +118,22 @@ func _init_default_tools_items(tool_item_group : ButtonGroup):
 # Init pencil item
 func _init_pencil_item(tool_item_group : ButtonGroup):
 	var conf = {"id": Tilemap.Tool.PENCIL, "name": "Pencil", "icon": _get_image("pencil")}
-	get_node("Tools/LeftTools/Pencil").init(conf)
-	get_node("Tools/LeftTools/Pencil").add_to_button_group(tool_item_group)
-	get_node("Tools/LeftTools/Pencil").connect("tool_item_selected", self, "_select_tool")
+	get_node("ToolsPanel/Tools/LeftTools/Pencil").init(conf)
+	get_node("ToolsPanel/Tools/LeftTools/Pencil").add_to_button_group(tool_item_group)
+	get_node("ToolsPanel/Tools/LeftTools/Pencil").connect("tool_item_selected", self, "_select_tool")
 
 # Init eraser item
 func _init_eraser_item(tool_item_group : ButtonGroup):
 	var conf = {"id": Tilemap.Tool.ERASER, "name": "Eraser", "icon": _get_image("eraser")}
-	get_node("Tools/RightTools/Eraser").init(conf)
-	get_node("Tools/RightTools/Eraser").add_to_button_group(tool_item_group)
-	get_node("Tools/RightTools/Eraser").connect("tool_item_selected", self, "_select_tool")
+	get_node("ToolsPanel/Tools/RightTools/Eraser").init(conf)
+	get_node("ToolsPanel/Tools/RightTools/Eraser").add_to_button_group(tool_item_group)
+	get_node("ToolsPanel/Tools/RightTools/Eraser").connect("tool_item_selected", self, "_select_tool")
 
 # Init grid item
 func _init_grid_item():
 	var conf = {"name": "Grid", "toggled": false, "icon": _get_image("grid")}
-	get_node("Tools/RightTools/Grid").init(conf)
-	get_node("Tools/RightTools/Grid").connect("toggle_item_updated", self, "_grid_visibility_changed")
+	get_node("ToolsPanel/Tools/RightTools/Grid").init(conf)
+	get_node("ToolsPanel/Tools/RightTools/Grid").connect("toggle_item_updated", self, "_grid_visibility_changed")
 
 # Init extra tools items
 func _init_extra_tools_items(tool_item_group : ButtonGroup):
@@ -165,3 +165,10 @@ func _select_tool(tool_id : int) -> void:
 # It is called when the toggle item emits the toggle_item_updated signal
 func _grid_visibility_changed(visibility : bool) -> void:
 	emit_signal("grid_visibility_changed", visibility)
+
+
+func _grid_resized():
+	pass
+#	var scroller_size = get_node("TilesScroller").get_size()
+#	var grid_size = get_node("TilesScroller/TilesGridPanel/Margin").get_size()
+#	get_node("TilesScroller").set_size(Vector2(scroller_size.x, grid_size.y))

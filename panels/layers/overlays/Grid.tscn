@@ -5,8 +5,8 @@
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
 
-const vec4 dark_color  = vec4(0.9, 0.9, 0.9, 1.0);
-const vec4 light_color = vec4(0.1, 0.1, 0.1, 1.0);
+uniform vec4 dark_color : hint_color;
+const vec4 light_color = vec4(1.0, 1.0, 1.0, 1.0);
 const vec4 transparent = vec4(0.0, 0.0, 0.0, 0.0);
 
 void fragment(){
@@ -22,9 +22,9 @@ void fragment(){
 		vec4 screen_color = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0);
 		float v = max(max(screen_color.r, screen_color.g), screen_color.b);
 		if (v > 0.5) {
-			COLOR = light_color;
-		} else {
 			COLOR = dark_color;
+		} else {
+			COLOR = light_color;
 		}
 	} else {
 		COLOR = transparent;
@@ -34,6 +34,7 @@ custom_defines = ""
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
+shader_param/dark_color = Color( 0.145098, 0.196078, 0.215686, 1 )
 
 [node name="Grid" type="Control"]
 material = SubResource( 2 )

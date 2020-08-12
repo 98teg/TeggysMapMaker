@@ -33,22 +33,15 @@ shader_param/mode = 0
 
 [node name="LoadStyle" type="VBoxContainer"]
 anchor_right = 1.0
-margin_top = -0.667419
-margin_bottom = -0.667419
+margin_bottom = 100.0
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LoadStyleLabel" type="Label" parent="."]
-margin_right = 1024.0
-margin_bottom = 14.0
-text = "Load Style"
-
 [node name="PathSelection" type="HBoxContainer" parent="."]
-margin_top = 18.0
 margin_right = 1024.0
-margin_bottom = 38.0
+margin_bottom = 20.0
 
 [node name="PathLabel" type="Label" parent="PathSelection"]
 margin_top = 3.0
@@ -78,9 +71,9 @@ margin_bottom = 56.0
 
 [node name="ParseResult" type="HBoxContainer" parent="."]
 visible = false
-margin_top = 42.0
+margin_top = 24.0
 margin_right = 1024.0
-margin_bottom = 56.0
+margin_bottom = 38.0
 
 [node name="Icon" type="TextureRect" parent="ParseResult"]
 material = SubResource( 2 )
@@ -99,9 +92,9 @@ text = "Succesfully Loaded"
 
 [node name="Messages" type="TabContainer" parent="."]
 visible = false
-margin_top = 78.0
+margin_top = 24.0
 margin_right = 1024.0
-margin_bottom = 278.0
+margin_bottom = 224.0
 rect_min_size = Vector2( 0, 200 )
 tab_align = 0
 
@@ -135,15 +128,15 @@ margin_right = 1020.0
 margin_bottom = 22.0
 
 [node name="Size" type="Label" parent="."]
-margin_top = 42.0
+margin_top = 24.0
 margin_right = 1024.0
-margin_bottom = 56.0
+margin_bottom = 38.0
 text = "Canvas Size:"
 
 [node name="SizeContainer" type="HBoxContainer" parent="."]
-margin_top = 60.0
+margin_top = 42.0
 margin_right = 1024.0
-margin_bottom = 84.0
+margin_bottom = 66.0
 
 [node name="WidthLabel" type="Label" parent="SizeContainer"]
 margin_top = 5.0
@@ -156,6 +149,7 @@ margin_left = 42.0
 margin_right = 116.0
 margin_bottom = 24.0
 min_value = 1.0
+max_value = 50.0
 value = 20.0
 
 [node name="HeightLabel" type="Label" parent="SizeContainer"]
@@ -170,12 +164,13 @@ margin_left = 166.0
 margin_right = 240.0
 margin_bottom = 24.0
 min_value = 1.0
+max_value = 50.0
 value = 20.0
 
 [node name="StartContainer" type="CenterContainer" parent="."]
-margin_top = 88.0
+margin_top = 70.0
 margin_right = 1024.0
-margin_bottom = 118.0
+margin_bottom = 100.0
 rect_min_size = Vector2( 0, 30 )
 
 [node name="StartButton" type="Button" parent="StartContainer"]
@@ -187,9 +182,10 @@ disabled = true
 text = "Start"
 
 [node name="SelectStyle" type="FileDialog" parent="."]
-margin_right = 285.0
-margin_bottom = 400.0
-rect_min_size = Vector2( 200, 400 )
+margin_top = 104.0
+margin_right = 700.0
+margin_bottom = 704.0
+rect_min_size = Vector2( 400, 600 )
 window_title = "Select a Style"
 mode_overrides_title = false
 mode = 0

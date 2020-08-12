@@ -1,8 +1,26 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://panels/UndoRedo.gd" type="Script" id=1]
 [ext_resource path="res://resources/icons/undo.png" type="Texture" id=2]
 [ext_resource path="res://resources/icons/redo.png" type="Texture" id=3]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform vec4 color : hint_color;
+
+void fragment() {
+	if(texture(TEXTURE, UV) == vec4(1.0, 1.0, 1.0, 1.0)){
+		COLOR = vec4(1.0, 1.0, 1.0, 0.0);
+	} else {
+		COLOR = vec4(color.rgb, texture(TEXTURE, UV).a);
+	}
+}"
+custom_defines = ""
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/color = Color( 1, 1, 1, 1 )
 
 [node name="UndoRedo" type="HBoxContainer"]
 anchor_right = 1.0
@@ -17,6 +35,7 @@ margin_right = 44.0
 margin_bottom = 600.0
 
 [node name="Undo" type="ToolButton" parent="UndoContainer"]
+material = SubResource( 2 )
 margin_top = 280.0
 margin_right = 44.0
 margin_bottom = 320.0
@@ -35,6 +54,7 @@ margin_right = 1024.0
 margin_bottom = 600.0
 
 [node name="Redo" type="ToolButton" parent="RedoContainer"]
+material = SubResource( 2 )
 margin_top = 280.0
 margin_right = 44.0
 margin_bottom = 320.0

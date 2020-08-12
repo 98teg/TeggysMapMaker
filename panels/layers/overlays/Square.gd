@@ -39,10 +39,12 @@ func set_transform(offset : Vector2, scale : Vector2) -> void:
 
 # Draws the square
 func _draw() -> void:
-	var color = Color(0.25, 0.25, 0.25)
-	var width = 2
+	var color_1 = Color(242 / 255.0, 149 / 255.0, 89 / 255.0, 0.75)
+	var color_2 = Color(242 / 255.0, 149 / 255.0, 89 / 255.0, 0.25)
+	var width = 4
 
-	draw_rect(Rect2(_transform(_pos), Vector2(_size, _size) * _scale), color, false, width, true)
+	draw_rect(Rect2(_transform(_pos), Vector2(_size, _size) * _scale), color_2, true)
+	draw_rect(Rect2(_transform(_pos), Vector2(_size, _size) * _scale), color_1, false, width, true)
 
 # Transform a point
 func _transform(p : Vector2) -> Vector2:

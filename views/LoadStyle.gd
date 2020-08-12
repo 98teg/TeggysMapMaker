@@ -72,6 +72,7 @@ func _select_style():
 
 func _style_selected(path : String):
 	get_node("Messages").hide()
+	set_size(Vector2(get_size().x, get_minimum_size().y))
 
 	get_node("Messages/Error(s)/Errors").clear()
 	get_node("Messages/Warning(s)/Warnings").clear()

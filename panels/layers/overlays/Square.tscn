@@ -12,10 +12,6 @@ void vertex() {
 	VERTEX *= scale;
 	VERTEX += offset;
 }
-
-void fragment() {
-	COLOR = vec4(texture(TEXTURE, UV).rgb, min(texture(TEXTURE, UV).a, 0.75));
-}
 "
 custom_defines = ""
 
