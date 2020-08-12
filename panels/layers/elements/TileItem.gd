@@ -23,10 +23,10 @@ var _extra_tools : Array = []
 ####################
 
 # Configuration dictionary description
-# + id: Tile id (int)
-# + name: Tile name (String)
-# + icon: Tile icon (Image)
-# + extra_tools: Tile extra tools available (Array)
+# + ID: Tile id (int)
+# + Name: Tile name (String)
+# + Image: Tile icon (Image)
+# + ExtraTools: Tile extra tools available (Array)
 #    - Each element is a member of the enum _TileMap.Tool
 func init(configuration : Dictionary) -> void:
 	_set_id(configuration.ID)

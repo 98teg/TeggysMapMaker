@@ -13,8 +13,6 @@ var _pos : Vector2 = Vector2.ZERO
 # Public functions #
 ####################
 
-# Configuration dictionary description
-# + visibility: visibility of the image (bool)
 # + image: Image (Image)
 # + pos: Position to show the image (Vector2)
 func init(image : Image, pos : Vector2) -> void:

@@ -17,8 +17,6 @@ var _scale : Vector2 = Vector2.ONE
 # Public functions #
 ####################
 
-# Configuration dictionary description
-# + visibility: visibility of the grid (bool)
 # + width: Width in number of tiles (int)
 # + height: Height in number of tiles (int)
 # + tile_size: Size of the tile in pixels (int)

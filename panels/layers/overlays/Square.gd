@@ -17,8 +17,6 @@ var _scale : Vector2 = Vector2.ONE
 # Public functions #
 ####################
 
-# Configuration dictionary description
-# + visibility: visibility of the square (bool)
 # + size: size of the square (int)
 func init(size : int) -> void:
 	_size = size
