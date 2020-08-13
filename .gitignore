@@ -4,8 +4,7 @@ export.cfg
 Thumbs.db
 *~
 .import
-
-*.json
+.vscode
 *.exe
 *.pck
 *.x86_64

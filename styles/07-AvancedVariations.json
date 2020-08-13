@@ -1,0 +1,206 @@
+{
+	"StyleData": {
+		"Author": "Tomás Espejo Gómez",
+		"Name": "Avanced Variations"
+	},
+	"Configuration": {
+		"TileSize": 16,
+        "Background": "Images/Water.png",
+        "TileSet": [
+			{
+				"Name": "Land",
+				"Image": "Images/Land.png",
+				"Layer": "Land",
+				"ConnectedGroup": "Land",
+				"Variations": [
+					{
+						"Image": "Images/Land-NE.png",
+						"Connection": ["North", "NorthEast", "East"]
+					},
+					{
+						"Image": "Images/Land-NW.png",
+						"Connection": ["North", "NorthWest", "West"]
+					},
+					{
+						"Image": "Images/Land-SE.png",
+						"Connection": ["South", "SouthEast", "East"]
+					},
+					{
+						"Image": "Images/Land-SW.png",
+						"Connection": ["South", "SouthWest", "West"]
+					}
+				]
+			},
+			{
+				"Name": "Sand",
+				"Image": "Images/Sand.png",
+				"Layer": "Land",
+				"ConnectedGroup": "Land",
+				"Variations": [
+					{
+						"Image": "Images/Sand-NE.png",
+						"Connection": ["North", "NorthEast", "East"]
+					},
+					{
+						"Image": "Images/Sand-NW.png",
+						"Connection": ["North", "NorthWest", "West"]
+					},
+					{
+						"Image": "Images/Sand-SE.png",
+						"Connection": ["South", "SouthEast", "East"]
+					},
+					{
+						"Image": "Images/Sand-SW.png",
+						"Connection": ["South", "SouthWest", "West"]
+					}
+				]
+			},
+			{
+				"Name": "BlackPath",
+				"Image": "Images/BlackPath-0.png",
+				"Layer": "Path",
+				"ConnectedGroup": "Path",
+				"Variations": [
+					{
+						"Image": "Images/BlackPath-N.png",
+						"Connection": ["North"]
+					},
+					{
+						"Image": "Images/BlackPath-E.png",
+						"Connection": ["East"]
+					},
+					{
+						"Image": "Images/BlackPath-S.png",
+						"Connection": ["South"]
+					},
+					{
+						"Image": "Images/BlackPath-W.png",
+						"Connection": ["West"]
+					},
+					{
+						"Image": "Images/BlackPath-NE.png",
+						"Connection": ["North", "East"]
+					},
+					{
+						"Image": "Images/BlackPath-NW.png",
+						"Connection": ["North", "West"]
+					},
+					{
+						"Image": "Images/BlackPath-SE.png",
+						"Connection": ["South", "East"]
+					},
+					{
+						"Image": "Images/BlackPath-SW.png",
+						"Connection": ["South", "West"]
+					},
+					{
+						"Image": "Images/BlackPath-NES.png",
+						"Connection": ["North", "East", "South"]
+					},
+					{
+						"Image": "Images/BlackPath-ESW.png",
+						"Connection": ["East", "South", "West"]
+					},
+					{
+						"Image": "Images/BlackPath-SWN.png",
+						"Connection": ["South", "West", "North"]
+					},
+					{
+						"Image": "Images/BlackPath-WNE.png",
+						"Connection": ["West", "North", "East"]
+					},
+					{
+						"Image": "Images/BlackPath-NESW.png",
+						"Connection": ["North", "East", "South", "West"]
+					},
+					{
+						"Image": "Images/BlackPath-V.png",
+						"Connection": ["North", "South"]
+					},
+					{
+						"Image": "Images/BlackPath-H.png",
+						"Connection": ["East", "West"]
+					}
+				]
+			},
+			{
+				"Name": "WhitePath",
+				"Image": "Images/WhitePath-0.png",
+				"Layer": "Path",
+				"ConnectedGroup": "Path",
+				"Variations": [
+					{
+						"Image": "Images/WhitePath-N.png",
+						"Connection": ["North"]
+					},
+					{
+						"Image": "Images/WhitePath-E.png",
+						"Connection": ["East"]
+					},
+					{
+						"Image": "Images/WhitePath-S.png",
+						"Connection": ["South"]
+					},
+					{
+						"Image": "Images/WhitePath-W.png",
+						"Connection": ["West"]
+					},
+					{
+						"Image": "Images/WhitePath-NE.png",
+						"Connection": ["North", "East"]
+					},
+					{
+						"Image": "Images/WhitePath-NW.png",
+						"Connection": ["North", "West"]
+					},
+					{
+						"Image": "Images/WhitePath-SE.png",
+						"Connection": ["South", "East"]
+					},
+					{
+						"Image": "Images/WhitePath-SW.png",
+						"Connection": ["South", "West"]
+					},
+					{
+						"Image": "Images/WhitePath-NES.png",
+						"Connection": ["North", "East", "South"]
+					},
+					{
+						"Image": "Images/WhitePath-ESW.png",
+						"Connection": ["East", "South", "West"]
+					},
+					{
+						"Image": "Images/WhitePath-SWN.png",
+						"Connection": ["South", "West", "North"]
+					},
+					{
+						"Image": "Images/WhitePath-WNE.png",
+						"Connection": ["West", "North", "East"]
+					},
+					{
+						"Image": "Images/WhitePath-NESW.png",
+						"Connection": ["North", "East", "South", "West"]
+					},
+					{
+						"Image": "Images/WhitePath-V.png",
+						"Connection": ["North", "South"]
+					},
+					{
+						"Image": "Images/WhitePath-H.png",
+						"Connection": ["East", "West"]
+					}
+				]
+			},
+			{
+				"Name": "Tree",
+				"Image": "Images/Tree.png",
+				"Layer": "Decoration"
+			},
+			{
+				"Name": "Cactus",
+				"Image": "Images/Cactus.png",
+				"Layer": "Decoration"
+			}
+		]
+	}
+}

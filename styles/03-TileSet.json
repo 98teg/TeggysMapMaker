@@ -1,0 +1,28 @@
+{
+	"StyleData": {
+		"Author": "Tomás Espejo Gómez",
+		"Name": "TileSet"
+	},
+	"Configuration": {
+		"TileSize": 16,
+        "Background": "Images/Water.png",
+        "TileSet": [
+			{
+				"Name": "Land",
+				"Image": "Images/Land.png"
+			},
+			{
+				"Name": "Sand",
+				"Image": "Images/Sand.png"
+			},
+			{
+				"Name": "Tree",
+				"Image": "Images/Tree.png"
+			},
+			{
+				"Name": "Cactus",
+				"Image": "Images/Cactus.png"
+			}
+		]
+	}
+}

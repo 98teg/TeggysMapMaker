@@ -1,0 +1,14 @@
+{
+	"StyleData": {
+		"Author": "Tomás Espejo Gómez",
+		"Name": "Basic Example"
+	},
+	"Configuration": {
+		"TileSize": 16,
+        "Background": "Images/Water.png",
+        "Tile": {
+            "Name": "Land",
+            "Image": "Images/Land.png"
+        }
+	}
+}
