@@ -105,7 +105,9 @@ func _check_tile(tile_conf : Dictionary, context : String) -> Dictionary:
 	else:
 		connected_group = ""
 
-	if _connected_groups.has(layer):
+	if connected_group == "":
+		tile.ConnectedGroup = 0
+	elif _connected_groups.has(layer):
 		tile.ConnectedGroup = _connected_groups.get(layer)
 	else:
 		var connected_group_id = _connected_groups.size()
