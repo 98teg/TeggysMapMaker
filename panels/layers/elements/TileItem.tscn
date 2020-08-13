@@ -47,7 +47,7 @@ Button/styles/hover = SubResource( 3 )
 Button/styles/normal = SubResource( 4 )
 Button/styles/pressed = SubResource( 2 )
 
-[sub_resource type="Shader" id=8]
+[sub_resource type="Shader" id=6]
 code = "shader_type canvas_item;
 
 uniform float width;
@@ -63,11 +63,11 @@ vec4 tex(sampler2D tex, vec2 uv) {
 }
 
 void fragment() {
-	float size = (width * TEXTURE_PIXEL_SIZE.x * 1.0) / float(textureSize(TEXTURE, 0).x);
-
 	vec2 offset = vec2(width, width) / tex_size;
 	vec2 scale = tex_size / (tex_size - 2.0 * vec2(width, width));
 	vec2 uv = (UV - offset) * scale;
+	
+	float size = width / (tex_size.x * scale.x);
 
 	vec4 sprite_color = tex(TEXTURE, uv);
 	float alpha = -8.0 * sprite_color.a;
@@ -86,7 +86,7 @@ void fragment() {
 custom_defines = ""
 
 [sub_resource type="ShaderMaterial" id=7]
-shader = SubResource( 8 )
+shader = SubResource( 6 )
 shader_param/width = 4.0
 shader_param/tex_size = Vector2( 58, 58 )
 shader_param/outline_color = Color( 1, 1, 1, 1 )
