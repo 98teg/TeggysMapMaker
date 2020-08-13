@@ -311,7 +311,9 @@ func _transform_variations(variations : Array) -> void:
 				else:
 					for i in range(connection.size()):
 						if connection[i]:
-							acc += (2^i)
+							acc += pow(2, i)
+
+					acc = int(acc)
 	
 				connections.append(acc)
 			else:
