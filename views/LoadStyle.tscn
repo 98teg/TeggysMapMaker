@@ -1,0 +1,199 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://views/LoadStyle.gd" type="Script" id=1]
+[ext_resource path="res://resources/icons/ok.png" type="Texture" id=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform int mode = 0;
+const vec3 ok_color = vec3(0.0, 1.0, 0.0);
+const vec3 warning_color = vec3(1.0, 1.0, 0.1);
+const vec3 error_color = vec3(1.0, 0.0, 0.0);
+
+void fragment(){
+	vec4 tex_color = texture(TEXTURE, UV);
+	switch (mode) {
+		case 0:
+			COLOR = vec4(ok_color, tex_color.a);
+			break;
+		case 1:
+			COLOR = vec4(warning_color, tex_color.a);
+			break;
+		case 2:
+			COLOR = vec4(error_color, tex_color.a);
+			break;
+	}
+}"
+custom_defines = ""
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/mode = 0
+
+[node name="LoadStyle" type="VBoxContainer"]
+anchor_right = 1.0
+margin_bottom = 100.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PathSelection" type="HBoxContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 20.0
+
+[node name="PathLabel" type="Label" parent="PathSelection"]
+margin_top = 3.0
+margin_right = 115.0
+margin_bottom = 17.0
+text = "Configuration File:"
+
+[node name="Path" type="TextEdit" parent="PathSelection"]
+margin_left = 119.0
+margin_right = 978.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 3
+readonly = true
+
+[node name="LoadStyle" type="Button" parent="PathSelection"]
+margin_left = 982.0
+margin_right = 1024.0
+margin_bottom = 20.0
+text = "Load"
+
+[node name="Style" type="Label" parent="."]
+visible = false
+margin_top = 42.0
+margin_right = 1024.0
+margin_bottom = 56.0
+
+[node name="ParseResult" type="HBoxContainer" parent="."]
+visible = false
+margin_top = 24.0
+margin_right = 1024.0
+margin_bottom = 38.0
+
+[node name="Icon" type="TextureRect" parent="ParseResult"]
+material = SubResource( 2 )
+margin_right = 14.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 14, 14 )
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
+
+[node name="Message" type="Label" parent="ParseResult"]
+margin_left = 18.0
+margin_right = 139.0
+margin_bottom = 14.0
+text = "Succesfully Loaded"
+
+[node name="Messages" type="TabContainer" parent="."]
+visible = false
+margin_top = 24.0
+margin_right = 1024.0
+margin_bottom = 224.0
+rect_min_size = Vector2( 0, 200 )
+tab_align = 0
+
+[node name="Error(s)" type="PanelContainer" parent="Messages"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="Errors" type="RichTextLabel" parent="Messages/Error(s)"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1009.0
+margin_bottom = 157.0
+
+[node name="Warning(s)" type="PanelContainer" parent="Messages"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="Warnings" type="RichTextLabel" parent="Messages/Warning(s)"]
+margin_left = -4.0
+margin_top = 22.0
+margin_right = 1020.0
+margin_bottom = 22.0
+
+[node name="Size" type="Label" parent="."]
+margin_top = 24.0
+margin_right = 1024.0
+margin_bottom = 38.0
+text = "Canvas Size:"
+
+[node name="SizeContainer" type="HBoxContainer" parent="."]
+margin_top = 42.0
+margin_right = 1024.0
+margin_bottom = 66.0
+
+[node name="WidthLabel" type="Label" parent="SizeContainer"]
+margin_top = 5.0
+margin_right = 38.0
+margin_bottom = 19.0
+text = "Width"
+
+[node name="Width" type="SpinBox" parent="SizeContainer"]
+margin_left = 42.0
+margin_right = 116.0
+margin_bottom = 24.0
+min_value = 1.0
+max_value = 50.0
+value = 20.0
+
+[node name="HeightLabel" type="Label" parent="SizeContainer"]
+margin_left = 120.0
+margin_top = 5.0
+margin_right = 162.0
+margin_bottom = 19.0
+text = "Height"
+
+[node name="Height" type="SpinBox" parent="SizeContainer"]
+margin_left = 166.0
+margin_right = 240.0
+margin_bottom = 24.0
+min_value = 1.0
+max_value = 50.0
+value = 20.0
+
+[node name="StartContainer" type="CenterContainer" parent="."]
+margin_top = 70.0
+margin_right = 1024.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 0, 30 )
+
+[node name="StartButton" type="Button" parent="StartContainer"]
+margin_left = 491.0
+margin_top = 5.0
+margin_right = 532.0
+margin_bottom = 25.0
+disabled = true
+text = "Start"
+
+[node name="SelectStyle" type="FileDialog" parent="."]
+margin_top = 104.0
+margin_right = 700.0
+margin_bottom = 704.0
+rect_min_size = Vector2( 400, 600 )
+window_title = "Select a Style"
+mode_overrides_title = false
+mode = 0
+access = 2
+filters = PoolStringArray( "*.json ; Style JSON" )
+current_dir = "/home/tomas/Escritorio/Teggy's Map Maker"
+current_path = "/home/tomas/Escritorio/Teggy's Map Maker/"
+[connection signal="gui_input" from="PathSelection/Path" to="." method="_path_text_clicked"]
+[connection signal="pressed" from="PathSelection/LoadStyle" to="." method="_select_style"]
+[connection signal="pressed" from="StartContainer/StartButton" to="." method="_create_proyect"]
+[connection signal="file_selected" from="SelectStyle" to="." method="_style_selected"]

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/brush.png-a97626a40f24e0d8d908084fdef855df.stex"
+path="res://.import/zoom_minus.png-0c81943e92110759deed7ace3237885a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://brush.png"
-dest_files=[ "res://.import/brush.png-a97626a40f24e0d8d908084fdef855df.stex" ]
+source_file="res://resources/icons/zoom_minus.png"
+dest_files=[ "res://.import/zoom_minus.png-0c81943e92110759deed7ace3237885a.stex" ]
 
 [params]
 

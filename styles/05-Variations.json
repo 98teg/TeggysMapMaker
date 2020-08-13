@@ -1,0 +1,114 @@
+{
+	"StyleData": {
+		"Author": "Tomás Espejo Gómez",
+		"Name": "Variations"
+	},
+	"Configuration": {
+		"TileSize": 16,
+        "Background": "Images/Water.png",
+        "TileSet": [
+			{
+				"Name": "Land",
+				"Image": "Images/Land.png",
+				"Layer": "Land",
+				"Variations": [
+					{
+						"Image": "Images/Land-NE.png",
+						"Connection": ["North", "East"]
+					},
+					{
+						"Image": "Images/Land-NW.png",
+						"Connection": ["North", "West"]
+					},
+					{
+						"Image": "Images/Land-SE.png",
+						"Connection": ["South", "East"]
+					},
+					{
+						"Image": "Images/Land-SW.png",
+						"Connection": ["South", "West"]
+					}
+				]
+			},
+			{
+				"Name": "Sand",
+				"Image": "Images/Sand.png",
+				"Layer": "Land",
+				"Variations": [
+					{
+						"Image": "Images/Sand-NE.png",
+						"Connection": ["North", "East"]
+					},
+					{
+						"Image": "Images/Sand-NW.png",
+						"Connection": ["North", "West"]
+					},
+					{
+						"Image": "Images/Sand-SE.png",
+						"Connection": ["South", "East"]
+					},
+					{
+						"Image": "Images/Sand-SW.png",
+						"Connection": ["South", "West"]
+					}
+				]
+			},
+			{
+				"Name": "BlackPath",
+				"Image": "Images/BlackPath.png",
+				"Layer": "Path",
+				"Variations": [
+					{
+						"Image": "Images/BlackPath-H.png",
+						"Connections": [
+							["East"],
+							["West"],
+							["East", "West"]
+						]
+					},
+					{
+						"Image": "Images/BlackPath-V.png",
+						"Connections": [
+							["North"],
+							["South"],
+							["North", "South"]
+						]
+					}
+				]
+			},
+			{
+				"Name": "WhitePath",
+				"Image": "Images/WhitePath.png",
+				"Layer": "Path",
+				"Variations": [
+					{
+						"Image": "Images/WhitePath-H.png",
+						"Connections": [
+							["East"],
+							["West"],
+							["East", "West"]
+						]
+					},
+					{
+						"Image": "Images/WhitePath-V.png",
+						"Connections": [
+							["North"],
+							["South"],
+							["North", "South"]
+						]
+					}
+				]
+			},
+			{
+				"Name": "Tree",
+				"Image": "Images/Tree.png",
+				"Layer": "Decoration"
+			},
+			{
+				"Name": "Cactus",
+				"Image": "Images/Cactus.png",
+				"Layer": "Decoration"
+			}
+		]
+	}
+}

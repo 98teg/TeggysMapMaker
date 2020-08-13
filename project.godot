@@ -8,9 +8,50 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Reference",
+"class": "BaseParser",
+"language": "GDScript",
+"path": "res://classes/parser/BaseParser.gd"
+}, {
+"base": "Reference",
+"class": "MainParser",
+"language": "GDScript",
+"path": "res://classes/parser/MainParser.gd"
+}, {
+"base": "Reference",
+"class": "StyleDataParser",
+"language": "GDScript",
+"path": "res://classes/parser/StyleDataParser.gd"
+}, {
+"base": "Reference",
+"class": "Tile",
+"language": "GDScript",
+"path": "res://classes/tilemap/Tile.gd"
+}, {
+"base": "Reference",
+"class": "Tilemap",
+"language": "GDScript",
+"path": "res://classes/tilemap/Tilemap.gd"
+}, {
+"base": "Reference",
+"class": "TilemapLayer",
+"language": "GDScript",
+"path": "res://classes/tilemap/TilemapLayer.gd"
+}, {
+"base": "Reference",
+"class": "TilemapParser",
+"language": "GDScript",
+"path": "res://classes/parser/TilemapParser.gd"
+} ]
 _global_script_class_icons={
-
+"BaseParser": "",
+"MainParser": "",
+"StyleDataParser": "",
+"Tile": "",
+"Tilemap": "",
+"TilemapLayer": "",
+"TilemapParser": ""
 }
 
 [application]
@@ -19,6 +60,30 @@ config/name="Teggy's Map Maker"
 run/main_scene="res://MainWindow.tscn"
 config/icon="res://icon.png"
 
+[input]
+
+ui_zoom_plus={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":true,"meta":false,"command":true,"pressed":false,"scancode":43,"unicode":0,"echo":false,"script":null)
+ ]
+}
+ui_zoom_minus={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":true,"meta":false,"command":true,"pressed":false,"scancode":45,"unicode":0,"echo":false,"script":null)
+ ]
+}
+ui_undo={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":true,"meta":false,"command":true,"pressed":false,"scancode":90,"unicode":0,"echo":false,"script":null)
+ ]
+}
+ui_redo={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":true,"meta":false,"command":true,"pressed":false,"scancode":89,"unicode":0,"echo":false,"script":null)
+ ]
+}
+
 [rendering]
 
+environment/default_clear_color=Color( 0.145098, 0.196078, 0.215686, 1 )
 environment/default_environment="res://default_env.tres"

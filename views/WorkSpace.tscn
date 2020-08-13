@@ -1,0 +1,150 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://panels/UndoRedo.tscn" type="PackedScene" id=1]
+[ext_resource path="res://views/WorkSpace.gd" type="Script" id=2]
+[ext_resource path="res://panels/MagnifyingGlass.tscn" type="PackedScene" id=3]
+[ext_resource path="res://panels/Canvas.tscn" type="PackedScene" id=4]
+
+[sub_resource type="Theme" id=1]
+Dialogs/constants/button_margin = 32
+Dialogs/constants/margin = 10
+
+[node name="WorkSpace" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VerticalDivision" type="VSplitContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+collapsed = true
+dragger_visibility = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TopBar" type="PanelContainer" parent="VerticalDivision"]
+margin_right = 1024.0
+margin_bottom = 54.0
+
+[node name="Margin" type="MarginContainer" parent="VerticalDivision/TopBar"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1017.0
+margin_bottom = 47.0
+
+[node name="SplitTopBar" type="HSplitContainer" parent="VerticalDivision/TopBar/Margin"]
+margin_right = 1010.0
+margin_bottom = 40.0
+dragger_visibility = 2
+
+[node name="Buttons" type="HBoxContainer" parent="VerticalDivision/TopBar/Margin/SplitTopBar"]
+margin_right = 150.0
+margin_bottom = 40.0
+
+[node name="New" type="Button" parent="VerticalDivision/TopBar/Margin/SplitTopBar/Buttons"]
+margin_right = 40.0
+margin_bottom = 40.0
+text = "New"
+
+[node name="Export" type="Button" parent="VerticalDivision/TopBar/Margin/SplitTopBar/Buttons"]
+margin_left = 44.0
+margin_right = 96.0
+margin_bottom = 40.0
+hint_tooltip = "Save"
+text = "Export"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="About" type="Button" parent="VerticalDivision/TopBar/Margin/SplitTopBar/Buttons"]
+margin_left = 100.0
+margin_right = 150.0
+margin_bottom = 40.0
+text = "About"
+
+[node name="Tools" type="HBoxContainer" parent="VerticalDivision/TopBar/Margin/SplitTopBar"]
+margin_left = 150.0
+margin_right = 1010.0
+margin_bottom = 40.0
+alignment = 2
+
+[node name="UndoRedo" parent="VerticalDivision/TopBar/Margin/SplitTopBar/Tools" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 460.0
+margin_right = 556.0
+margin_bottom = 40.0
+
+[node name="MagnifyingGlass" parent="VerticalDivision/TopBar/Margin/SplitTopBar/Tools" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 560.0
+margin_right = 860.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 300, 0 )
+
+[node name="HorizontalDivision" type="HSplitContainer" parent="VerticalDivision"]
+margin_top = 54.0
+margin_right = 1024.0
+margin_bottom = 600.0
+collapsed = true
+dragger_visibility = 2
+
+[node name="ToolBoxContainer" type="PanelContainer" parent="VerticalDivision/HorizontalDivision"]
+margin_right = 14.0
+margin_bottom = 546.0
+size_flags_vertical = 3
+
+[node name="ToolBoxMargin" type="MarginContainer" parent="VerticalDivision/HorizontalDivision/ToolBoxContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 7.0
+margin_bottom = 539.0
+
+[node name="Canvas" parent="VerticalDivision/HorizontalDivision" instance=ExtResource( 4 )]
+margin_left = 14.0
+margin_right = 1024.0
+margin_bottom = 546.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SaveImageDialog" type="FileDialog" parent="."]
+margin_right = 700.0
+margin_bottom = 600.0
+theme = SubResource( 1 )
+window_title = "Export Image"
+access = 2
+filters = PoolStringArray( "*.png ; PNG Images" )
+current_dir = "/home/tomas/Escritorio/Teggy's Map Maker"
+current_path = "/home/tomas/Escritorio/Teggy's Map Maker/"
+
+[node name="AboutDialog" type="AcceptDialog" parent="."]
+margin_right = 700.0
+margin_bottom = 600.0
+theme = SubResource( 1 )
+window_title = "About this Project"
+dialog_text = "Teggy's Map Maker:
+- Created by Tomás Espejo Gómez
+
+Icons made by:
+- Google
+- Freepik
+- Becris
+From www.flaticon.com
+
+Fonts:
+- Poppins
+- Roboto Mono
+From fonts.google.com
+
+Color Palette selected using coolors.co
+
+Built using the Godot Game Engine"
+[connection signal="pressed" from="VerticalDivision/TopBar/Margin/SplitTopBar/Buttons/New" to="." method="_new"]
+[connection signal="pressed" from="VerticalDivision/TopBar/Margin/SplitTopBar/Buttons/Export" to="." method="_save"]
+[connection signal="pressed" from="VerticalDivision/TopBar/Margin/SplitTopBar/Buttons/About" to="." method="_about"]
+[connection signal="file_selected" from="SaveImageDialog" to="." method="_save_ok"]

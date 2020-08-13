@@ -1,0 +1,134 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://panels/layers/elements/ToolItem.tscn" type="PackedScene" id=3]
+[ext_resource path="res://panels/layers/TileMapToolBox.gd" type="Script" id=5]
+[ext_resource path="res://panels/layers/elements/ToggleItem.tscn" type="PackedScene" id=6]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id=2]
+PanelContainer/styles/panel = SubResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.866667, 0.882353, 0.376471, 0 )
+border_color = Color( 0.8, 0.8, 0.8, 0 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0.976471, 0.984314, 0.698039, 1 )
+border_color = Color( 0.266667, 0.427451, 0.964706, 1 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0.866667, 0.882353, 0.376471, 0 )
+border_color = Color( 0.8, 0.8, 0.8, 0 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 0.972549, 0.690196, 0.501961, 1 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id=8]
+Button/colors/font_color = Color( 0.88, 0.88, 0.88, 1 )
+Button/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
+Button/colors/font_color_hover = Color( 0.94, 0.94, 0.94, 1 )
+Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
+Button/constants/hseparation = 2
+Button/fonts/font = null
+Button/styles/disabled = SubResource( 3 )
+Button/styles/focus = SubResource( 4 )
+Button/styles/hover = SubResource( 5 )
+Button/styles/normal = SubResource( 6 )
+Button/styles/pressed = SubResource( 7 )
+
+[node name="ToolBox" type="VSplitContainer"]
+anchor_bottom = 1.0
+margin_right = 320.0
+dragger_visibility = 1
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ToolsPanel" type="PanelContainer" parent="."]
+margin_right = 320.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 318, 0 )
+theme = SubResource( 2 )
+
+[node name="Tools" type="HBoxContainer" parent="ToolsPanel"]
+margin_right = 320.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 318, 0 )
+theme = SubResource( 8 )
+
+[node name="LeftTools" type="HBoxContainer" parent="ToolsPanel/Tools"]
+margin_right = 44.0
+margin_bottom = 40.0
+
+[node name="Pencil" parent="ToolsPanel/Tools/LeftTools" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 44.0
+margin_bottom = 40.0
+
+[node name="RightTools" type="HBoxContainer" parent="ToolsPanel/Tools"]
+margin_left = 48.0
+margin_right = 320.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="Eraser" parent="ToolsPanel/Tools/RightTools" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 180.0
+margin_right = 224.0
+margin_bottom = 40.0
+
+[node name="Grid" parent="ToolsPanel/Tools/RightTools" instance=ExtResource( 6 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 228.0
+margin_right = 272.0
+margin_bottom = 40.0
+
+[node name="TilesScroller" type="ScrollContainer" parent="."]
+margin_top = 52.0
+margin_right = 320.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 320, 0 )
+scroll_horizontal_enabled = false
+
+[node name="TilesGridPanel" type="PanelContainer" parent="TilesScroller"]
+margin_right = 320.0
+size_flags_horizontal = 3
+theme = SubResource( 2 )
+
+[node name="Margin" type="MarginContainer" parent="TilesScroller/TilesGridPanel"]
+margin_right = 320.0
+
+[node name="TilesGrid" type="GridContainer" parent="TilesScroller/TilesGridPanel/Margin"]
+margin_right = 320.0
+columns = 4
+[connection signal="resized" from="TilesScroller/TilesGridPanel/Margin/TilesGrid" to="." method="_grid_resized"]

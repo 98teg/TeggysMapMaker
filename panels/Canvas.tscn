@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://panels/Canvas.gd" type="Script" id=1]
+
+[node name="Canvas" type="ScrollContainer"]
+mouse_filter = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CanvasViewport" type="ViewportContainer" parent="."]
+margin_right = 12.0
+margin_bottom = 12.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="Layers" type="Viewport" parent="CanvasViewport"]
+size = Vector2( 12, 12 )
+handle_input_locally = false
+render_target_update_mode = 3
+gui_disable_input = true
+[connection signal="mouse_entered" from="CanvasViewport" to="." method="_on_CanvasViewport_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasViewport" to="." method="_on_CanvasViewport_mouse_exited"]

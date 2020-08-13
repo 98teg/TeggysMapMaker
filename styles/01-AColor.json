@@ -1,0 +1,10 @@
+{
+	"StyleData": {
+		"Author": "Tomás Espejo Gómez",
+		"Name": "A Color"
+	},
+	"Configuration": {
+		"TileSize": 16,
+		"Background": [0, 120, 248, 255]
+	}
+}

@@ -1,0 +1,118 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://panels/layers/elements/TileItem.gd" type="Script" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.972549, 0.690196, 0.501961, 1 )
+border_color = Color( 0.266667, 0.427451, 0.964706, 1 )
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.972549, 0.690196, 0.501961, 1 )
+border_color = Color( 0.266667, 0.427451, 0.964706, 1 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.976471, 0.984314, 0.698039, 1 )
+border_color = Color( 0.266667, 0.427451, 0.964706, 1 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.266667, 0.427451, 0.964706, 1 )
+border_color = Color( 0.266667, 0.427451, 0.964706, 1 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id=5]
+Button/colors/font_color = Color( 0.88, 0.88, 0.88, 1 )
+Button/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
+Button/colors/font_color_hover = Color( 0.94, 0.94, 0.94, 1 )
+Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
+Button/constants/hseparation = 2
+Button/fonts/font = null
+Button/styles/disabled = SubResource( 1 )
+Button/styles/focus = SubResource( 2 )
+Button/styles/hover = SubResource( 3 )
+Button/styles/normal = SubResource( 4 )
+Button/styles/pressed = SubResource( 2 )
+
+[sub_resource type="Shader" id=6]
+code = "shader_type canvas_item;
+
+uniform float width;
+uniform vec2 tex_size;
+uniform vec4 outline_color : hint_color;
+
+vec4 tex(sampler2D tex, vec2 uv) {
+	if (0.0 <= uv.x && 1.0 >= uv.x && 0.0 <= uv.y && 1.0 >= uv.y) {
+		return texture(tex, uv);
+	} else {
+		return vec4(1.0, 1.0, 1.0, 0.0);
+	}
+}
+
+void fragment() {
+	vec2 offset = vec2(width, width) / tex_size;
+	vec2 scale = tex_size / (tex_size - 2.0 * vec2(width, width));
+	vec2 uv = (UV - offset) * scale;
+	
+	float size = width / (tex_size.x * scale.x);
+
+	vec4 sprite_color = tex(TEXTURE, uv);
+	float alpha = -8.0 * sprite_color.a;
+	alpha += tex(TEXTURE, uv + vec2(size, 0.0)).a;
+	alpha += tex(TEXTURE, uv + vec2(-size, 0.0)).a;
+	alpha += tex(TEXTURE, uv + vec2(0.0, size)).a;
+	alpha += tex(TEXTURE, uv + vec2(0.0, -size)).a;
+	alpha += tex(TEXTURE, uv + vec2(size, size)).a;
+	alpha += tex(TEXTURE, uv + vec2(-size, size)).a;
+	alpha += tex(TEXTURE, uv + vec2(size, -size)).a;
+	alpha += tex(TEXTURE, uv + vec2(-size, -size)).a;
+
+	vec4 final_color = mix(sprite_color, outline_color, clamp(alpha, 0.0, 1.0));
+	COLOR = vec4(final_color.rgb, clamp(abs(alpha) + sprite_color.a, 0.0, 1.0));
+}"
+custom_defines = ""
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = SubResource( 6 )
+shader_param/width = 4.0
+shader_param/tex_size = Vector2( 58, 58 )
+shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[node name="TileItem" type="Button"]
+anchor_right = 0.072
+anchor_bottom = 1.0
+margin_right = 0.271996
+margin_bottom = -526.0
+rect_min_size = Vector2( 74, 74 )
+theme = SubResource( 5 )
+toggle_mode = true
+action_mode = 0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Icon" type="TextureRect" parent="."]
+material = SubResource( 7 )
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 66.0
+margin_bottom = 66.0
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="." to="." method="_tile_item_pressed"]

@@ -4,3 +4,9 @@ export.cfg
 Thumbs.db
 *~
 .import
+.vscode
+*.exe
+*.pck
+*.x86_64
+
+export_presets.cfg
