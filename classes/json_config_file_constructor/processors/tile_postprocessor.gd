@@ -9,6 +9,9 @@ func _postprocess(tile: Dictionary) -> Dictionary:
 		tile.ID = 0
 		set_variable("last_id", tile.ID)
 
+	if not tile.has("Icon"):
+		tile.Icon = tile.Image
+
 	if not tile.has("Layer"):
 		tile.Layer = 0
 

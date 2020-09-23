@@ -77,6 +77,12 @@ static func _get_tile_property() -> JSONPropertyObject:
 	image.set_postprocessor(
 			preload("./processors/image_postprocessor.gd").new())
 
+	var icon = JSONPropertyImage.new()
+	icon.set_preprocessor(
+			preload("./processors/image_preprocessor.gd").new())
+	icon.set_postprocessor(
+			preload("./processors/image_postprocessor.gd").new())
+
 	var layer = JSONPropertyString.new()
 	layer.set_min_length(1)
 	layer.set_max_length(50)
@@ -112,6 +118,7 @@ static func _get_tile_property() -> JSONPropertyObject:
 	var tile = JSONPropertyObject.new()
 	tile.add_property("Name", name)
 	tile.add_property("Image", image)
+	tile.add_property("Icon", icon, false)
 	tile.add_property("Layer", layer, false)
 	tile.add_property("ExtraTool", extra_tool, false)
 	tile.add_property("ExtraTools", extra_tools, false)
