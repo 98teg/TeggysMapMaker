@@ -5,13 +5,13 @@
 	},
 	"Configuration": {
 		"TileSize": 16,
-        "Background": "Images/Water.png",
+        "BackgroundImage": "Images/Water.png",
         "TileSet": [
 			{
 				"Name": "Land",
 				"Image": "Images/Land.png",
 				"Layer": "Land",
-				"ExtraTools": ["Wrench", "BukectFill"],
+				"ExtraTools": ["Wrench", "BucketFill"],
 				"ConnectedGroup": "Land",
 				"Variations": [
 					{
@@ -36,7 +36,7 @@
 				"Name": "Sand",
 				"Image": "Images/Sand.png",
 				"Layer": "Land",
-				"ExtraTools": ["Wrench", "BukectFill"],
+				"ExtraTools": ["Wrench", "BucketFill"],
 				"ConnectedGroup": "Land",
 				"Variations": [
 					{

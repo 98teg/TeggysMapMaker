@@ -47,7 +47,7 @@ func _show_errors(errors : Array):
 		get_node("Messages").set_current_tab(0)
 		get_node("Messages").set_tab_disabled(0, false)
 		for error in errors:
-			get_node("Messages/Error(s)/Errors").add_text(error + "\n")
+			get_node("Messages/Error(s)/Errors").add_text(error.as_text + "\n")
 	else:
 		get_node("Messages").set_tab_disabled(0, true)
 
@@ -57,7 +57,7 @@ func _show_warnings(warnings : Array):
 		get_node("Messages").set_current_tab(1)
 		get_node("Messages").set_tab_disabled(1, false)
 		for warning in warnings:
-			get_node("Messages/Warning(s)/Warnings").add_text(warning + "\n")
+			get_node("Messages/Warning(s)/Warnings").add_text(warning.as_text + "\n")
 	else:
 		get_node("Messages").set_tab_disabled(1, true)
 
@@ -79,24 +79,24 @@ func _style_selected(path : String):
 
 	get_node("PathSelection/Path").set_text(path.get_file())
 
-	var configuration_parser = MainParser.new() 
-	configuration_parser.parse(path)
+	var json_config_file = JSONConfigFileConstructor.get_json_config_file()
+	json_config_file.validate(path)
 
-	_style_conf = configuration_parser.get_configuration()
+	_style_conf = json_config_file.get_result()
 
-	if configuration_parser.get_errors().size() != 0:
+	if json_config_file.has_errors():
 		_set_style_parse_result(Result.ERROR)
 
-		_show_warnings(configuration_parser.get_warnings())
-		_show_errors(configuration_parser.get_errors())
+		_show_warnings(json_config_file.get_warnings())
+		_show_errors(json_config_file.get_errors())
 
 		get_node("StartContainer/StartButton").disabled = true
 		get_node("Style").hide()
-	elif configuration_parser.get_warnings().size() != 0:
+	elif json_config_file.has_warnings():
 		_set_style_parse_result(Result.WARNING)
 
-		_show_warnings(configuration_parser.get_warnings())
-		_show_errors(configuration_parser.get_errors())
+		_show_warnings(json_config_file.get_warnings())
+		_show_errors(json_config_file.get_errors())
 
 		get_node("StartContainer/StartButton").disabled = false
 		get_node("Style").show()

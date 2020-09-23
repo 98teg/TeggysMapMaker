@@ -5,6 +5,6 @@
 	},
 	"Configuration": {
 		"TileSize": 16,
-		"Background": [0, 120, 248, 255]
+		"BackgroundColor": [0, 120, 248, 255]
 	}
 }

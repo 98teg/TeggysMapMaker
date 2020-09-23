@@ -10,14 +10,14 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Reference",
-"class": "BaseParser",
-"language": "GDScript",
-"path": "res://classes/parser/BaseParser.gd"
-}, {
-"base": "Reference",
 "class": "JSONConfigFile",
 "language": "GDScript",
 "path": "res://plugins/json_config_file/json_config_file.gd"
+}, {
+"base": "Reference",
+"class": "JSONConfigFileConstructor",
+"language": "GDScript",
+"path": "res://classes/json_config_file_constructor/json_config_file_constructor.gd"
 }, {
 "base": "Reference",
 "class": "JSONConfigProcessor",
@@ -90,16 +90,6 @@ _global_script_classes=[ {
 "path": "res://plugins/json_config_file/json_properties/json_property_string.gd"
 }, {
 "base": "Reference",
-"class": "MainParser",
-"language": "GDScript",
-"path": "res://classes/parser/MainParser.gd"
-}, {
-"base": "Reference",
-"class": "StyleDataParser",
-"language": "GDScript",
-"path": "res://classes/parser/StyleDataParser.gd"
-}, {
-"base": "Reference",
 "class": "Tile",
 "language": "GDScript",
 "path": "res://classes/tilemap/Tile.gd"
@@ -113,15 +103,10 @@ _global_script_classes=[ {
 "class": "TilemapLayer",
 "language": "GDScript",
 "path": "res://classes/tilemap/TilemapLayer.gd"
-}, {
-"base": "Reference",
-"class": "TilemapParser",
-"language": "GDScript",
-"path": "res://classes/parser/TilemapParser.gd"
 } ]
 _global_script_class_icons={
-"BaseParser": "",
 "JSONConfigFile": "",
+"JSONConfigFileConstructor": "",
 "JSONConfigProcessor": "",
 "JSONProperty": "",
 "JSONPropertyArray": "",
@@ -136,12 +121,9 @@ _global_script_class_icons={
 "JSONPropertyObject": "",
 "JSONPropertyPercentage": "",
 "JSONPropertyString": "",
-"MainParser": "",
-"StyleDataParser": "",
 "Tile": "",
 "Tilemap": "",
-"TilemapLayer": "",
-"TilemapParser": ""
+"TilemapLayer": ""
 }
 
 [application]

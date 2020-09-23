@@ -5,7 +5,7 @@
 	},
 	"Configuration": {
 		"TileSize": 16,
-        "Background": "Images/Water.png",
+        "BackgroundImage": "Images/Water.png",
         "TileSet": [
 			{
 				"Name": "Land",
