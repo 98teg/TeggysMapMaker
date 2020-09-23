@@ -1,18 +1,16 @@
 class_name TilemapSubLayer
 
-# Private variables
 
-var _width : int = 0
-var _height : int = 0
-var _tile_size : int = 0
-var _map : Array = []
-var _image : Image = Image.new()
-var _tileset : Array = []
-var _special_tileset : Dictionary = {}
-var _previous_tilemap_sublayer : Array = []
-var _has_been_modified : bool = false
+var _width := 0
+var _height := 0
+var _tile_size := 0
+var _map := []
+var _image := Image.new()
+var _tileset := []
+var _special_tileset := {}
+var _previous_tilemap_sublayer := []
+var _has_been_modified := false
 
-# Class public functions
 
 func init(width: int, height: int, tile_size: int, tileset: Array,
 		special_tileset: Dictionary):
@@ -32,6 +30,16 @@ func get_image() -> Image:
 	return _image
 
 
+func get_tile(i: int, j: int) -> Tile:
+	if(i >= 0 and i < _height and j >= 0 and j < _width):
+		if _special_tileset.has(_map[i][j].ID):
+			return _special_tileset[_map[i][j].ID]
+		else:
+			return _tileset[_map[i][j].ID]
+
+	return _special_tileset[Tile.Special_tile.OUT_OF_BOUNDS]
+
+
 func set_tile(i: int, j: int, tile: Tile):
 	var id = tile.get_id()
 	if(i >= 0 and i < _height and j >= 0 and j < _width):
@@ -46,10 +54,10 @@ func set_tile(i: int, j: int, tile: Tile):
 
 func change_tile_state(i: int, j: int):
 	if(i >= 0 and i < _height and j >= 0 and j < _width):
-		if _get_tile(i, j).get_n_states() > 1:
-			var state = (_get_tile_state(i, j) + 1) % _get_tile(i, j).get_n_states()
+		if get_tile(i, j).get_n_states() > 1:
+			var state = (_get_tile_state(i, j) + 1) % get_tile(i, j).get_n_states()
 			_map[i][j].State = state
-			_place_tile_image(i, j, _get_tile(i, j).get_image(state))
+			_place_tile_image(i, j, get_tile(i, j).get_image(state))
 			
 			_has_been_modified = true
 
@@ -73,9 +81,8 @@ func load_tilemapsublayer(map: Array):
 	
 	for i in range(_height):
 		for j in range(_width):
-			_place_tile_image(i, j, _get_tile(i, j).get_image(_get_tile_state(i, j)))
+			_place_tile_image(i, j, get_tile(i, j).get_image(_get_tile_state(i, j)))
 
-# Class private functions
 
 func _create_map():
 	_map = []
@@ -111,11 +118,11 @@ func _update_tiles_around(i: int, j: int):
 func _update_tile(i: int, j: int):
 	if _get_tile_id(i, j) == Tile.Special_tile.OUT_OF_BOUNDS:
 		pass
-	elif _get_tile(i, j).get_connection_type() == Tile.Connection_type.ISOLATED:
-		_place_tile_image(i, j, _get_tile(i, j).get_image())
+	elif get_tile(i, j).get_connection_type() == Tile.Connection_type.ISOLATED:
+		_place_tile_image(i, j, get_tile(i, j).get_image())
 	else:
 		var condition = 0
-		var tile = _get_tile(i, j)
+		var tile = get_tile(i, j)
 		
 		if tile.get_connection_type() == Tile.Connection_type.CROSS:
 			condition = _get_cross_condition_id_of_tile(i, j)
@@ -129,28 +136,28 @@ func _update_tile(i: int, j: int):
 
 func _get_cross_condition_id_of_tile(i: int, j: int) -> int:
 	var condition = 0
-	var tile = _get_tile(i, j)
+	var tile = get_tile(i, j)
 	
-	condition += 1 if tile.can_connect_to(_get_tile(i - 1, j)) else 0
-	condition += 2 if tile.can_connect_to(_get_tile(i, j + 1)) else 0
-	condition += 4 if tile.can_connect_to(_get_tile(i + 1, j)) else 0
-	condition += 8 if tile.can_connect_to(_get_tile(i, j - 1)) else 0
+	condition += 1 if tile.can_connect_to(get_tile(i - 1, j)) else 0
+	condition += 2 if tile.can_connect_to(get_tile(i, j + 1)) else 0
+	condition += 4 if tile.can_connect_to(get_tile(i + 1, j)) else 0
+	condition += 8 if tile.can_connect_to(get_tile(i, j - 1)) else 0
 	
 	return condition
 
 
 func _get_circle_condition_id_of_tile(i: int, j: int) -> int:
 	var condition = 0
-	var tile = _get_tile(i, j)
+	var tile = get_tile(i, j)
 
-	condition += 1   if tile.can_connect_to(_get_tile(i - 1, j    )) else 0
-	condition += 2   if tile.can_connect_to(_get_tile(i - 1, j + 1)) else 0
-	condition += 4   if tile.can_connect_to(_get_tile(i    , j + 1)) else 0
-	condition += 8   if tile.can_connect_to(_get_tile(i + 1, j + 1)) else 0
-	condition += 16  if tile.can_connect_to(_get_tile(i + 1, j    )) else 0
-	condition += 32  if tile.can_connect_to(_get_tile(i + 1, j - 1)) else 0
-	condition += 64  if tile.can_connect_to(_get_tile(i    , j - 1)) else 0
-	condition += 128 if tile.can_connect_to(_get_tile(i - 1, j - 1)) else 0
+	condition += 1   if tile.can_connect_to(get_tile(i - 1, j    )) else 0
+	condition += 2   if tile.can_connect_to(get_tile(i - 1, j + 1)) else 0
+	condition += 4   if tile.can_connect_to(get_tile(i    , j + 1)) else 0
+	condition += 8   if tile.can_connect_to(get_tile(i + 1, j + 1)) else 0
+	condition += 16  if tile.can_connect_to(get_tile(i + 1, j    )) else 0
+	condition += 32  if tile.can_connect_to(get_tile(i + 1, j - 1)) else 0
+	condition += 64  if tile.can_connect_to(get_tile(i    , j - 1)) else 0
+	condition += 128 if tile.can_connect_to(get_tile(i - 1, j - 1)) else 0
 
 	return condition
 
@@ -163,10 +170,7 @@ func _place_tile_image(i: int, j: int, tile_image: Image):
 
 
 func _get_tile_id(i: int, j: int) -> int:
-	if(i >= 0 and i < _height and j >= 0 and j < _width):
-		return _map[i][j].ID
-
-	return Tile.Special_tile.OUT_OF_BOUNDS
+	return get_tile(i, j).get_id()
 
 
 func _get_tile_state(i: int, j: int) -> int:
@@ -175,12 +179,3 @@ func _get_tile_state(i: int, j: int) -> int:
 			return _map[i][j].State
 
 	return 0
-
-
-func _get_tile(i: int, j: int) -> Tile:
-	var tile_id = _get_tile_id(i, j)
-	
-	if tile_id >= 0:
-		return _tileset[tile_id]
-	else:
-		return _special_tileset[tile_id]
