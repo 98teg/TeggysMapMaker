@@ -71,6 +71,8 @@ static func _get_tile_property() -> JSONPropertyObject:
 	name.set_min_length(1)
 	name.set_max_length(50)
 
+	var structure = _get_structure_property()
+
 	var image = JSONPropertyImage.new()
 	image.set_preprocessor(
 			preload("./processors/image_preprocessor.gd").new())
@@ -79,7 +81,7 @@ static func _get_tile_property() -> JSONPropertyObject:
 
 	var icon = JSONPropertyImage.new()
 	icon.set_preprocessor(
-			preload("./processors/image_preprocessor.gd").new())
+			preload("./processors/icon_preprocessor.gd").new())
 	icon.set_postprocessor(
 			preload("./processors/image_postprocessor.gd").new())
 
@@ -117,6 +119,7 @@ static func _get_tile_property() -> JSONPropertyObject:
 
 	var tile = JSONPropertyObject.new()
 	tile.add_property("Name", name)
+	tile.add_property("Structure", structure, false, {"Size": [1, 1]})
 	tile.add_property("Image", image)
 	tile.add_property("Icon", icon, false)
 	tile.add_property("Layer", layer, false)
@@ -131,6 +134,24 @@ static func _get_tile_property() -> JSONPropertyObject:
 		preload("./processors/tile_postprocessor.gd").new())
 
 	return tile
+
+
+static func _get_structure_property() -> JSONPropertyObject:
+	var size_value = JSONPropertyInteger.new()
+	size_value.set_min_value(1)
+	size_value.set_max_value(10)
+
+	var size = JSONPropertyArray.new()
+	size.set_min_size(2)
+	size.set_max_size(2)
+	size.set_element_property(size_value)
+	size.set_postprocessor(
+			preload("./processors/size_postprocessor.gd").new())
+
+	var structure = JSONPropertyObject.new()
+	structure.add_property("Size", size)
+
+	return structure
 
 
 static func _get_variation_property() -> JSONPropertyObject:
