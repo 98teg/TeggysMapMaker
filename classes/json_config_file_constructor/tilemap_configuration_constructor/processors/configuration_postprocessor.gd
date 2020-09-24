@@ -56,6 +56,7 @@ func _get_tile_set_dictionary(tile_size: int, tile_set: Array) -> Dictionary:
 		"ConnectionType": Tile.Connection_type.ISOLATED,
 		"Image": empty_tile_image,
 		"Variations": [],
+		"CanConnectToBorders": false,
 		"ConnectedGroup": 0
 	}
 

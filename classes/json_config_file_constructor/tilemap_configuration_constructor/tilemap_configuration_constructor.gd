@@ -60,7 +60,7 @@ static func _get_tile_property() -> JSONPropertyObject:
 	layer.set_min_length(1)
 	layer.set_max_length(50)
 	layer.set_postprocessor(
-		preload("./processors/layer_postprocessor.gd").new())
+			preload("./processors/layer_postprocessor.gd").new())
 
 	var extra_tool_enum = ["Wrench", "BucketFill"]
 
@@ -79,7 +79,7 @@ static func _get_tile_property() -> JSONPropertyObject:
 	connected_group.set_min_length(1)
 	connected_group.set_max_length(50)
 	connected_group.set_postprocessor(
-		preload("./processors/connected_group_postprocessor.gd").new())
+			preload("./processors/connected_group_postprocessor.gd").new())
 
 	var variation = _get_variation_property()
 
@@ -87,6 +87,8 @@ static func _get_tile_property() -> JSONPropertyObject:
 	variations.set_min_size(2)
 	variations.set_max_size(512)
 	variations.set_element_property(variation)
+
+	var can_connect_to_borders = JSONPropertyBool.new()
 
 	var tile = JSONPropertyObject.new()
 	tile.add_property("Name", name)
@@ -101,8 +103,10 @@ static func _get_tile_property() -> JSONPropertyObject:
 	tile.add_property("Variation", variation, false)
 	tile.add_property("Variations", variations, false)
 	tile.add_exclusivity(["Variation", "Variations"])
+	tile.add_property("CanConnectToBorders", can_connect_to_borders, false,
+			false)
 	tile.set_postprocessor(
-		preload("./processors/tile_postprocessor.gd").new())
+			preload("./processors/tile_postprocessor.gd").new())
 
 	return tile
 

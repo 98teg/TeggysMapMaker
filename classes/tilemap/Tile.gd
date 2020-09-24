@@ -43,6 +43,8 @@ func init(tile_conf : Dictionary):
 
 	_connected_group = tile_conf.ConnectedGroup
 
+	_can_connect_to_borders = tile_conf.CanConnectToBorders
+
 
 func get_id() -> int:
 	return _id
