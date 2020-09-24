@@ -53,8 +53,6 @@ static func _get_tile_property() -> JSONPropertyObject:
 			preload("./processors/image_postprocessor.gd").new())
 
 	var icon = JSONPropertyImage.new()
-	icon.set_preprocessor(
-			preload("./processors/icon_preprocessor.gd").new())
 	icon.set_postprocessor(
 			preload("./processors/image_postprocessor.gd").new())
 
