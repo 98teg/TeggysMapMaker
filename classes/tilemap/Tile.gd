@@ -19,6 +19,7 @@ var _id := 0
 var _name := ""
 var _icon : Image
 var _structure_size := [1, 1]
+var _structure_colission_mask := []
 var _layer := 0
 var _extra_tools := []
 var _subtiles := []
@@ -34,6 +35,7 @@ func init(tile_conf: Dictionary):
 	_name = tile_conf.Name
 	_icon = tile_conf.Icon
 	_structure_size = tile_conf.Structure.Size
+	_structure_colission_mask = tile_conf.Structure.ColissionMask
 	_layer = tile_conf.Layer
 	_extra_tools = tile_conf.ExtraTools
 
@@ -123,13 +125,14 @@ func _add_state(image : Image, connections : Array = []):
 
 	for i in range(_structure_size[0]):
 		for j in range(_structure_size[1]):
-			_subtiles.append([i, j])
-
-			var x = i * size.x
-			var y = image.get_size().y - (size.y * (j + 1))
-			var rect = Rect2(Vector2(x, y), size)
-
-			_images[[state, i, j]] = image.get_rect(rect)
+			if _structure_colission_mask[_structure_size[1] - 1 - j][i]:
+				_subtiles.append([i, j])
+	
+				var x = i * size.x
+				var y = image.get_size().y - (size.y * (j + 1))
+				var rect = Rect2(Vector2(x, y), size)
+	
+				_images[[state, i, j]] = image.get_rect(rect)
 	
 	for connection in connections:
 		_connections_for_each_state[connection] = state

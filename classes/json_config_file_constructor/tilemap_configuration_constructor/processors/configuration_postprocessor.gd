@@ -50,7 +50,8 @@ func _get_tile_set_dictionary(tile_size: int, tile_set: Array) -> Dictionary:
 		"Name": "",
 		"Icon": empty_tile_image,
 		"Structure": {
-			"Size": [1, 1]
+			"Size": [1, 1],
+			"ColissionMask": [[true]]
 		},
 		"ExtraTools": [],
 		"ConnectionType": Tile.Connection_type.ISOLATED,

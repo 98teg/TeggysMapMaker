@@ -17,14 +17,23 @@
 			{
 				"Name": "J",
 				"Structure":{
-					"Size": [3, 2]
+					"Size": [3, 2],
+					"ColissionMask": [
+						[true, false, false],
+						[true, true, true]
+					]
 				},
 				"Image": "Images/J.png"
 			},
 			{
 				"Name": "L",
 				"Structure":{
-					"Size": [2, 3]
+					"Size": [2, 3],
+					"ColissionMask": [
+						[true, true],
+						[false, true],
+						[false, true]
+					]
 				},
 				"Image": "Images/L.png"
 			},
@@ -38,21 +47,35 @@
 			{
 				"Name": "S",
 				"Structure":{
-					"Size": [2, 3]
+					"Size": [2, 3],
+					"ColissionMask": [
+						[true, false],
+						[true, true],
+						[false, true]
+					]
 				},
 				"Image": "Images/S.png"
 			},
 			{
 				"Name": "T",
 				"Structure":{
-					"Size": [2, 3]
+					"Size": [2, 3],
+					"ColissionMask": [
+						[true, false],
+						[true, true],
+						[true, false]
+					]
 				},
 				"Image": "Images/T.png"
 			},
 			{
 				"Name": "Z",
 				"Structure":{
-					"Size": [3, 2]
+					"Size": [3, 2],
+					"ColissionMask": [
+						[true, true, false],
+						[false, true, true]
+					]
 				},
 				"Image": "Images/Z.png"
 			}

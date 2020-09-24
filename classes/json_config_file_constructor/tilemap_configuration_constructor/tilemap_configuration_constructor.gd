@@ -92,7 +92,10 @@ static func _get_tile_property() -> JSONPropertyObject:
 
 	var tile = JSONPropertyObject.new()
 	tile.add_property("Name", name)
-	tile.add_property("Structure", structure, false, {"Size": [1, 1]})
+	tile.add_property("Structure", structure, false, {
+		"Size": [1, 1],
+		"ColssionMask": [[true]]
+	})
 	tile.add_property("Image", image)
 	tile.add_property("Icon", icon, false)
 	tile.add_property("Layer", layer, false)
@@ -123,8 +126,21 @@ static func _get_structure_property() -> JSONPropertyObject:
 	size.set_postprocessor(
 			preload("./processors/size_postprocessor.gd").new())
 
+	var colission_row = JSONPropertyArray.new()
+	colission_row.set_element_property(JSONPropertyBool.new())
+	colission_row.set_preprocessor(
+			preload("./processors/colission_row_preprocessor.gd").new())
+
+	var colission_mask = JSONPropertyArray.new()
+	colission_mask.set_element_property(colission_row)
+	colission_mask.set_preprocessor(
+			preload("./processors/colission_mask_preprocessor.gd").new())
+
 	var structure = JSONPropertyObject.new()
 	structure.add_property("Size", size)
+	structure.add_property("ColissionMask", colission_mask, false)
+	structure.set_postprocessor(
+			preload("./processors/structure_postprocessor.gd").new())
 
 	return structure
 
