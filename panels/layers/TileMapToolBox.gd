@@ -36,11 +36,12 @@ var _bucket_fill_item : Button = preload("res://panels/layers/elements/ToolItem.
 #       + icon: Tile icon (Image)
 #       + extra_tools: Tile extra tools available (Array)
 #          - Each element is a member of the enum _TileMap.Tool
-func init(configuration : Dictionary) -> void:
+func init(configuration: Dictionary) -> void:
 	var tile_item_group = ButtonGroup.new()
 
-	for tile in configuration.TileSet:
-		_add_tile_item(tile_item_group, tile)
+	for tile_id in configuration.TileSet.keys():
+		if tile_id >= 0:
+			_add_tile_item(tile_item_group, configuration.TileSet[tile_id])
 
 	_init_tools()
 
@@ -58,9 +59,9 @@ func init(configuration : Dictionary) -> void:
 # + icon: Tile icon (Image)
 # + extra_tools: Tile extra tools available (Array)
 #    - Each element is a member of the enum _TileMap.Tool
-func _add_tile_item(tile_item_group : ButtonGroup, configuration : Dictionary) -> void:
+func _add_tile_item(tile_item_group: ButtonGroup, tile: Tile) -> void:
 	var tile_item = preload("res://panels/layers/elements/TileItem.tscn").instance()
-	tile_item.init(configuration)
+	tile_item.init(tile)
 	tile_item.add_to_button_group(tile_item_group)
 	
 	get_node("TilesScroller/TilesGridPanel/Margin/TilesGrid").add_child(tile_item)

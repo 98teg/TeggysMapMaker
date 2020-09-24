@@ -4,9 +4,8 @@ class_name TilemapLayer
 var _tilemap_sublayers := [TilemapSubLayer.new()]
 
 
-func init(width: int, height: int, tile_size: int, tileset: Array,
-		special_tileset: Dictionary):
-	_tilemap_sublayers[0].init(width, height, tile_size, tileset, special_tileset)
+func init(width: int, height: int, tile_size: int, tile_set: Dictionary):
+	_tilemap_sublayers[0].init(width, height, tile_size, tile_set)
 
 
 func get_image() -> Image:

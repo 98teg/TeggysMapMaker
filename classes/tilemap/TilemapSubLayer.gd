@@ -6,14 +6,12 @@ var _height := 0
 var _tile_size := 0
 var _map := []
 var _image := Image.new()
-var _tileset := []
-var _special_tileset := {}
+var _tile_set := {}
 var _previous_tilemap_sublayer := []
 var _has_been_modified := false
 
 
-func init(width: int, height: int, tile_size: int, tileset: Array,
-		special_tileset: Dictionary):
+func init(width: int, height: int, tile_size: int, tile_set: Dictionary):
 	_width = width
 	_height = height
 
@@ -22,8 +20,7 @@ func init(width: int, height: int, tile_size: int, tileset: Array,
 	_create_map()
 	_create_image()
 
-	_tileset = tileset
-	_special_tileset = special_tileset
+	_tile_set = tile_set
 
 
 func get_image() -> Image:
@@ -32,12 +29,9 @@ func get_image() -> Image:
 
 func get_tile(i: int, j: int) -> Tile:
 	if(i >= 0 and i < _height and j >= 0 and j < _width):
-		if _special_tileset.has(_map[i][j].ID):
-			return _special_tileset[_map[i][j].ID]
-		else:
-			return _tileset[_map[i][j].ID]
+		return _tile_set[_map[i][j].ID]
 
-	return _special_tileset[Tile.Special_tile.OUT_OF_BOUNDS]
+	return _tile_set[Tile.Special_tile.OUT_OF_BOUNDS]
 
 
 func set_tile(i: int, j: int, tile: Tile):

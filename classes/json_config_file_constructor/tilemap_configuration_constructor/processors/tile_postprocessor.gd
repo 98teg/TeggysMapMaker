@@ -1,7 +1,7 @@
 extends JSONConfigProcessor
 
 
-func _postprocess(tile: Dictionary) -> Dictionary:
+func _postprocess(tile: Dictionary) -> Tile:
 	if has_variable("last_id"):
 		tile.ID = get_variable("last_id") + 1
 		set_variable("last_id", tile.ID)
@@ -40,7 +40,10 @@ func _postprocess(tile: Dictionary) -> Dictionary:
 
 	_transform_variations(tile.Variations, tile.ConnectionType)
 
-	return tile
+	var new_tile = Tile.new()
+	new_tile.init(tile)
+
+	return new_tile
 
 
 func _get_connection_type(variations: Array) -> int:
