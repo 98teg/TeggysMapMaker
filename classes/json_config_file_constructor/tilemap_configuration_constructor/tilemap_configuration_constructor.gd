@@ -94,7 +94,7 @@ static func _get_tile_property() -> JSONPropertyObject:
 	tile.add_property("Name", name)
 	tile.add_property("Structure", structure, false, {
 		"Size": [1, 1],
-		"ColssionMask": [[true]]
+		"ColissionMask": [[true]]
 	})
 	tile.add_property("Image", image)
 	tile.add_property("Icon", icon, false)
