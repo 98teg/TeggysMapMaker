@@ -43,8 +43,8 @@ func set_tile(i: int, j: int, tile: Tile):
 			var pos_j = j + subtile[0]
 
 			if(pos_i >= 0 and pos_i < _height and pos_j >= 0 and pos_j < _width):
-				if (_get_tile_id(i, j) != id or
-						_get_tile_subtile(i, j) != subtile):
+				if (_get_tile_id(pos_i, pos_j) != id or
+						_get_tile_subtile(pos_i, pos_j) != subtile):
 					_remove_subtiles(pos_i, pos_j)
 
 		for subtile in tile.get_subtiles():
@@ -52,8 +52,8 @@ func set_tile(i: int, j: int, tile: Tile):
 			var pos_j = j + subtile[0]
 
 			if(pos_i >= 0 and pos_i < _height and pos_j >= 0 and pos_j < _width):
-				if (_get_tile_id(i, j) != id or
-						_get_tile_subtile(i, j) != subtile):
+				if (_get_tile_id(pos_i, pos_j) != id or
+						_get_tile_subtile(pos_i, pos_j) != subtile):
 					_map[pos_i][pos_j] = {"ID": id, "Subtile": subtile}
 	
 					_update_tile(pos_i, pos_j)
