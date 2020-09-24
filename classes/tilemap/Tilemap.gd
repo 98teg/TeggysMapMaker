@@ -172,7 +172,6 @@ func _get_top_tile(i: int, j: int) -> Tile:
 		var tile = _tilemaplayers[it].get_tile(i, j)
 
 		if tile.get_id() != Tile.Special_tile.AIR:
-			print(tile.get_id())
 			return tile
 
 	return _special_tileset[Tile.Special_tile.AIR]
