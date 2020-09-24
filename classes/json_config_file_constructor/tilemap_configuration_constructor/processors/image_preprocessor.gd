@@ -7,6 +7,8 @@ func _preprocess():
 
 		if has_variable("size"):
 			var size = get_variable("size")
-			get_property().set_size(tile_size * size.x, tile_size * size.y, true, Image.INTERPOLATE_NEAREST)
+			get_property().set_size(tile_size * size[0], tile_size * size[1],
+					true, Image.INTERPOLATE_NEAREST)
 		else:
-			get_property().set_size(tile_size, tile_size, true, Image.INTERPOLATE_NEAREST)
+			get_property().set_size(tile_size, tile_size, true,
+					Image.INTERPOLATE_NEAREST)

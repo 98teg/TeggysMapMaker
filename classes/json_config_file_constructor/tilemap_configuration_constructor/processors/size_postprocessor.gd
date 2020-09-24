@@ -1,7 +1,7 @@
 extends JSONConfigProcessor
 
 
-func _postprocess(size: Array) -> Vector2:
-	set_variable("size", Vector2(size[0], size[1]))
+func _postprocess(size: Array) -> Array:
+	set_variable("size", size)
 
-	return  Vector2(size[0], size[1])
+	return  size

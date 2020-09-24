@@ -1,0 +1,61 @@
+{
+	"StyleData": {
+		"Author": "Tomás Espejo Gómez",
+		"Name": "Extra Tools"
+	},
+	"Configuration": {
+		"TileSize": 32,
+        "BackgroundColor": [125, 125, 125],
+        "TileSet": [
+			{
+				"Name": "I",
+				"Structure":{
+					"Size": [1, 4]
+				},
+				"Image": "Images/I.png"
+			},
+			{
+				"Name": "J",
+				"Structure":{
+					"Size": [3, 2]
+				},
+				"Image": "Images/J.png"
+			},
+			{
+				"Name": "L",
+				"Structure":{
+					"Size": [2, 3]
+				},
+				"Image": "Images/L.png"
+			},
+			{
+				"Name": "O",
+				"Structure":{
+					"Size": [2, 2]
+				},
+				"Image": "Images/O.png"
+			},
+			{
+				"Name": "S",
+				"Structure":{
+					"Size": [2, 3]
+				},
+				"Image": "Images/S.png"
+			},
+			{
+				"Name": "T",
+				"Structure":{
+					"Size": [2, 3]
+				},
+				"Image": "Images/T.png"
+			},
+			{
+				"Name": "Z",
+				"Structure":{
+					"Size": [3, 2]
+				},
+				"Image": "Images/Z.png"
+			}
+		]
+	}
+}

@@ -29,8 +29,6 @@ func init(canvas_conf: Dictionary, layer_conf: Dictionary):
 
 		_tilemap_layers.append(tilemap_layer)
 
-	print(_tilemap_layers)
-
 	_create_background(_width, _height, layer_conf.TileSize,
 			layer_conf.Background)
 

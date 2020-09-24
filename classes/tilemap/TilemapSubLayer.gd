@@ -36,14 +36,40 @@ func get_tile(i: int, j: int) -> Tile:
 
 func set_tile(i: int, j: int, tile: Tile):
 	var id = tile.get_id()
-	if(i >= 0 and i < _height and j >= 0 and j < _width):
-		if _get_tile_id(i, j) != id:
-			_map[i][j] = {"ID": id}
-			
-			_update_tile(i, j)
-			_update_tiles_around(i, j)
-			
-			_has_been_modified = true
+
+	if tile.is_a_multi_title():
+		for subtile in tile.get_subtiles():
+			var pos_i = i - subtile[1]
+			var pos_j = j + subtile[0]
+
+			if(pos_i >= 0 and pos_i < _height and pos_j >= 0 and pos_j < _width):
+				if (_get_tile_id(i, j) != id or
+						_get_tile_subtile(i, j) != subtile):
+					_remove_subtiles(pos_i, pos_j)
+
+		for subtile in tile.get_subtiles():
+			var pos_i = i - subtile[1]
+			var pos_j = j + subtile[0]
+
+			if(pos_i >= 0 and pos_i < _height and pos_j >= 0 and pos_j < _width):
+				if (_get_tile_id(i, j) != id or
+						_get_tile_subtile(i, j) != subtile):
+					_map[pos_i][pos_j] = {"ID": id, "Subtile": subtile}
+	
+					_update_tile(pos_i, pos_j)
+					_update_tiles_around(pos_i, pos_j)
+	
+					_has_been_modified = true
+	else:
+		if(i >= 0 and i < _height and j >= 0 and j < _width):
+			if _get_tile_id(i, j) != id:
+				_remove_subtiles(i, j)
+				_map[i][j] = {"ID": id}
+
+				_update_tile(i, j)
+				_update_tiles_around(i, j)
+
+				_has_been_modified = true
 
 
 func change_tile_state(i: int, j: int):
@@ -51,7 +77,8 @@ func change_tile_state(i: int, j: int):
 		if get_tile(i, j).get_n_states() > 1:
 			var state = (_get_tile_state(i, j) + 1) % get_tile(i, j).get_n_states()
 			_map[i][j].State = state
-			_place_tile_image(i, j, get_tile(i, j).get_image(state))
+
+			_place_tile_image(i, j)
 			
 			_has_been_modified = true
 
@@ -75,7 +102,7 @@ func load_tilemapsublayer(map: Array):
 	
 	for i in range(_height):
 		for j in range(_width):
-			_place_tile_image(i, j, get_tile(i, j).get_image(_get_tile_state(i, j)))
+			_place_tile_image(i, j)
 
 
 func _create_map():
@@ -98,6 +125,23 @@ func _create_image():
 	_image.create(w, h, false, Image.FORMAT_RGBA8)
 
 
+func _remove_subtiles(i: int, j: int):
+	var tile = get_tile(i, j)
+
+	if tile.is_a_multi_title():
+		for subtile in tile.get_subtiles(_map[i][j].Subtile[0], 
+				_map[i][j].Subtile[1]):
+			var pos_i = i - subtile[1]
+			var pos_j = j + subtile[0]
+
+			if(pos_i >= 0 and pos_i < _height and pos_j >= 0
+					and pos_j < _width):
+				_map[pos_i][pos_j] = {"ID": Tile.Special_tile.AIR}
+
+				_update_tile(pos_i, pos_j)
+				_update_tiles_around(pos_i, pos_j)
+
+
 func _update_tiles_around(i: int, j: int):
 	_update_tile(i - 1, j    )
 	_update_tile(i - 1, j + 1)
@@ -113,7 +157,7 @@ func _update_tile(i: int, j: int):
 	if _get_tile_id(i, j) == Tile.Special_tile.OUT_OF_BOUNDS:
 		pass
 	elif get_tile(i, j).get_connection_type() == Tile.Connection_type.ISOLATED:
-		_place_tile_image(i, j, get_tile(i, j).get_image())
+		_place_tile_image(i, j)
 	else:
 		var condition = 0
 		var tile = get_tile(i, j)
@@ -125,7 +169,8 @@ func _update_tile(i: int, j: int):
 		  
 		var state = tile.get_state(condition)
 		_map[i][j].State = state
-		_place_tile_image(i, j, tile.get_image(state))
+
+		_place_tile_image(i, j)
 
 
 func _get_cross_condition_id_of_tile(i: int, j: int) -> int:
@@ -156,7 +201,11 @@ func _get_circle_condition_id_of_tile(i: int, j: int) -> int:
 	return condition
 
 
-func _place_tile_image(i: int, j: int, tile_image: Image):
+func _place_tile_image(i: int, j: int):
+	var state = _get_tile_state(i, j)
+	var subtile = _get_tile_subtile(i, j)
+	var tile_image = _tile_set[_get_tile_id(i, j)].get_image(state, subtile[0],
+			subtile[1])
 	var rect = Rect2(Vector2.ZERO, Vector2(_tile_size, _tile_size))
 	var pos = Vector2(j * _tile_size, i * _tile_size)
 
@@ -173,3 +222,11 @@ func _get_tile_state(i: int, j: int) -> int:
 			return _map[i][j].State
 
 	return 0
+
+
+func _get_tile_subtile(i: int, j: int) -> Array:
+	if(i >= 0 and i < _height and j >= 0 and j < _width):
+		if _map[i][j].has("Subtile"):
+			return _map[i][j].Subtile
+
+	return [0, 0]

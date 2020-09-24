@@ -18,19 +18,22 @@ enum Connection_type {
 var _id := 0
 var _name := ""
 var _icon : Image
+var _structure_size := [1, 1]
 var _layer := 0
 var _extra_tools := []
-var _images := []
+var _subtiles := []
+var _images := {}
 var _connections_for_each_state := {}
 var _connection_type : int
 var _connected_group := 0
 var _can_connect_to_borders := true
 
 
-func init(tile_conf : Dictionary):
+func init(tile_conf: Dictionary):
 	_id = tile_conf.ID
 	_name = tile_conf.Name
 	_icon = tile_conf.Icon
+	_structure_size = tile_conf.Structure.Size
 	_layer = tile_conf.Layer
 	_extra_tools = tile_conf.ExtraTools
 
@@ -66,7 +69,7 @@ func get_layer() -> int:
 	return _layer
 
 
-func get_state(connection : int) -> int:
+func get_state(connection: int) -> int:
 	if _connections_for_each_state.has(connection):
 		return _connections_for_each_state[connection]
 	else:
@@ -77,15 +80,26 @@ func get_n_states() -> int:
 	return _images.size()
 
 
-func get_image(state : int = 0) -> Image:
-	return _images[state]
+func get_image(state := 0, i := 0, j := 0) -> Image:
+	return _images[[state, i, j]]
 
 
 func get_connection_type() -> int:
 	return _connection_type
 
 
-func can_connect_to(another_tile : Tile) -> bool:
+func get_subtiles(i := 0, j := 0) -> Array:
+	if i != 0 or j != 0:
+		var subtiles = []
+	
+		for subtile in _subtiles:
+			subtiles.append([subtile[0] - i, subtile[1] - j])
+
+		return subtiles
+	return _subtiles
+
+
+func can_connect_to(another_tile: Tile) -> bool:
 	if another_tile._id == Special_tile.AIR:
 		return false
 	elif another_tile._id == Special_tile.OUT_OF_BOUNDS:
@@ -98,9 +112,24 @@ func can_connect_to(another_tile : Tile) -> bool:
 			return same_group and _connected_group != 0
 
 
+func is_a_multi_title() -> bool:
+	return _structure_size != [1, 1]
+
+
 func _add_state(image : Image, connections : Array = []):
 	var state = _images.size()
-	_images.append(image)
+	var size = image.get_size().x / _structure_size[0]
+	size = Vector2(size, size)
+
+	for i in range(_structure_size[0]):
+		for j in range(_structure_size[1]):
+			_subtiles.append([i, j])
+
+			var x = i * size.x
+			var y = image.get_size().y - (size.y * (j + 1))
+			var rect = Rect2(Vector2(x, y), size)
+
+			_images[[state, i, j]] = image.get_rect(rect)
 	
 	for connection in connections:
 		_connections_for_each_state[connection] = state
