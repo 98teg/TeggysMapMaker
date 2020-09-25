@@ -9,6 +9,7 @@
         "TileSet": [
 			{
 				"Name": "I",
+				"Icon": "Images/I_icon.png",
 				"Structure":{
 					"Size": [1, 4]
 				},
@@ -27,6 +28,7 @@
 			},
 			{
 				"Name": "L",
+				"Icon": "Images/L_icon.png",
 				"Structure":{
 					"Size": [2, 3],
 					"ColissionMask": [
@@ -46,6 +48,7 @@
 			},
 			{
 				"Name": "S",
+				"Icon": "Images/S_icon.png",
 				"Structure":{
 					"Size": [2, 3],
 					"ColissionMask": [
@@ -58,6 +61,7 @@
 			},
 			{
 				"Name": "T",
+				"Icon": "Images/T_icon.png",
 				"Structure":{
 					"Size": [2, 3],
 					"ColissionMask": [
@@ -70,6 +74,7 @@
 			},
 			{
 				"Name": "Z",
+				"Icon": "Images/Z_icon.png",
 				"Structure":{
 					"Size": [3, 2],
 					"ColissionMask": [
