@@ -2,7 +2,7 @@
 
 [ext_resource path="res://panels/layers/TileMapOverlay.gd" type="Script" id=1]
 [ext_resource path="res://panels/layers/overlays/Grid.tscn" type="PackedScene" id=2]
-[ext_resource path="res://panels/layers/overlays/Square.tscn" type="PackedScene" id=4]
+[ext_resource path="res://panels/layers/overlays/Squares.tscn" type="PackedScene" id=4]
 
 [node name="TileMapOverlay" type="Control"]
 anchor_right = 1.0
@@ -18,7 +18,7 @@ visible = false
 margin_right = 0.0
 margin_bottom = 0.0
 
-[node name="Square" parent="." instance=ExtResource( 4 )]
+[node name="Squares" parent="." instance=ExtResource( 4 )]
 visible = false
 material = null
 margin_right = -40.0
