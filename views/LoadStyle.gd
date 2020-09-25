@@ -82,8 +82,6 @@ func _style_selected(path : String):
 	var json_config_file = JSONConfigFileConstructor.get_json_config_file()
 	json_config_file.validate(path)
 
-	_style_conf = json_config_file.get_result()
-
 	if json_config_file.has_errors():
 		_set_style_parse_result(Result.ERROR)
 
@@ -93,6 +91,8 @@ func _style_selected(path : String):
 		get_node("StartContainer/StartButton").disabled = true
 		get_node("Style").hide()
 	elif json_config_file.has_warnings():
+		_style_conf = json_config_file.get_result()
+
 		_set_style_parse_result(Result.WARNING)
 
 		_show_warnings(json_config_file.get_warnings())
@@ -102,6 +102,8 @@ func _style_selected(path : String):
 		get_node("Style").show()
 		get_node("Style").set_text(_style_conf.StyleData.Name + " by " + _style_conf.StyleData.Author + ":")
 	else:
+		_style_conf = json_config_file.get_result()
+
 		_set_style_parse_result(Result.OK)
 		get_node("StartContainer/StartButton").disabled = false
 		get_node("Style").show()

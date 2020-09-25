@@ -8,7 +8,7 @@ func _postprocess(structure: Dictionary) -> Dictionary:
 			structure.ColissionMask = []
 			for i in range(size[1]):
 				structure.ColissionMask.append([])
-				for j in range(size[0]):
+				for _j in range(size[0]):
 					structure.ColissionMask[i].append(true)
 
 	return structure

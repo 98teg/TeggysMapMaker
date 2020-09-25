@@ -35,7 +35,8 @@
 						[true, true],
 						[false, true],
 						[false, true]
-					]
+					],
+					"MainTile": [1, 0]
 				},
 				"Image": "Images/L.png"
 			},
@@ -55,7 +56,8 @@
 						[true, false],
 						[true, true],
 						[false, true]
-					]
+					],
+					"MainTile": [1, 0]
 				},
 				"Image": "Images/S.png"
 			},
@@ -80,7 +82,8 @@
 					"ColissionMask": [
 						[true, true, false],
 						[false, true, true]
-					]
+					],
+					"MainTile": [1, 0]
 				},
 				"Image": "Images/Z.png"
 			}
