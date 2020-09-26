@@ -62,6 +62,8 @@ func _create_tool_box(layer_conf : Dictionary):
 		print("Error connecting ToolBox's 'grid_visibility_changed' signal")
 	if _tool_box.connect("tile_selected", _overlay, "set_squares") != OK:
 		print("Error connecting ToolBox's 'set_squares' signal")
+	if _tool_box.connect("tool_selected", _overlay, "set_tool") != OK:
+		print("Error connecting ToolBox's 'set_squares' signal")
 
 	_tool_box.init(layer_conf)
 
