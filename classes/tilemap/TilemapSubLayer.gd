@@ -146,13 +146,13 @@ func _remove_subtiles(i: int, j: int):
 
 
 func _update_tiles_around(i: int, j: int):
-	_update_tile(i - 1, j    )
+	_update_tile(i - 1, j)
 	_update_tile(i - 1, j + 1)
-	_update_tile(i    , j + 1)
+	_update_tile(i, j + 1)
 	_update_tile(i + 1, j + 1)
-	_update_tile(i + 1, j    )
+	_update_tile(i + 1, j)
 	_update_tile(i + 1, j - 1)
-	_update_tile(i    , j - 1)
+	_update_tile(i, j - 1)
 	_update_tile(i - 1, j - 1)
 
 
@@ -165,7 +165,7 @@ func _update_tile(i: int, j: int):
 		var connection = 0
 		var tile = get_tile(i, j)
 
-		for subtile in tile.get_subtiles(_map[i][j].Subtile):
+		for subtile in tile.get_subtiles(_get_tile_subtile(i, j)):
 			var pos_i = i - subtile[1]
 			var pos_j = j + subtile[0]
 
