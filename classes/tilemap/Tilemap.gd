@@ -109,59 +109,59 @@ func fill(i: int, j: int):
 
 				can_be_processed = true
 				for subtile in _selected_tile.get_subtiles():
-					var pos_x = pos.x + w - subtile[1]
-					var pos_y = pos.y + subtile[0]
+					var pos_i = pos.x + h - subtile[1]
+					var pos_j = pos.y + subtile[0]
 		
-					if (_get_top_tile(pos_x, pos_y).get_id()
+					if (_get_top_tile(pos_i, pos_j).get_id()
 							!= tile_to_replace.get_id()):
 						can_be_processed = false
 
 				if can_be_processed:
-					if marked[pos.x + w][pos.y] == false:
-						process_next.append(Vector2(pos.x + w, pos.y))
-						marked[pos.x + w][pos.y] = true
+					if marked[pos.x + h][pos.y] == false:
+						process_next.append(Vector2(pos.x + h, pos.y))
+						marked[pos.x + h][pos.y] = true
 
 				can_be_processed = true
 				for subtile in _selected_tile.get_subtiles():
-					var pos_x = pos.x - subtile[1]
-					var pos_y = pos.y + h + subtile[0]
+					var pos_i = pos.x - subtile[1]
+					var pos_j = pos.y + w + subtile[0]
 		
-					if (_get_top_tile(pos_x, pos_y).get_id()
+					if (_get_top_tile(pos_i, pos_j).get_id()
 							!= tile_to_replace.get_id()):
 						can_be_processed = false
 
 				if can_be_processed:
-					if marked[pos.x][pos.y + h] == false:
-						process_next.append(Vector2(pos.x, pos.y + h))
-						marked[pos.x][pos.y + h] = true
+					if marked[pos.x][pos.y + w] == false:
+						process_next.append(Vector2(pos.x, pos.y + w))
+						marked[pos.x][pos.y + w] = true
 
 				can_be_processed = true
 				for subtile in _selected_tile.get_subtiles():
-					var pos_x = pos.x - w - subtile[1]
-					var pos_y = pos.y + subtile[0]
+					var pos_i = pos.x - h - subtile[1]
+					var pos_j = pos.y + subtile[0]
 		
-					if (_get_top_tile(pos_x, pos_y).get_id()
+					if (_get_top_tile(pos_i, pos_j).get_id()
 							!= tile_to_replace.get_id()):
 						can_be_processed = false
 
 				if can_be_processed:
-					if marked[pos.x - w][pos.y] == false:
-						process_next.append(Vector2(pos.x - w, pos.y))
-						marked[pos.x - w][pos.y] = true
+					if marked[pos.x - h][pos.y] == false:
+						process_next.append(Vector2(pos.x - h, pos.y))
+						marked[pos.x - h][pos.y] = true
 
 				can_be_processed = true
 				for subtile in _selected_tile.get_subtiles():
-					var pos_x = pos.x - subtile[1]
-					var pos_y = pos.y - h + subtile[0]
+					var pos_i = pos.x - subtile[1]
+					var pos_j = pos.y - w + subtile[0]
 		
-					if (_get_top_tile(pos_x, pos_y).get_id()
+					if (_get_top_tile(pos_i, pos_j).get_id()
 							!= tile_to_replace.get_id()):
 						can_be_processed = false
 
 				if can_be_processed:
-					if marked[pos.x][pos.y - h] == false:
-						process_next.append(Vector2(pos.x, pos.y - h))
-						marked[pos.x][pos.y - h] = true
+					if marked[pos.x][pos.y - w] == false:
+						process_next.append(Vector2(pos.x, pos.y - w))
+						marked[pos.x][pos.y - w] = true
 
 			process_now = process_next
 
