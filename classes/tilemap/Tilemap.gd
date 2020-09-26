@@ -70,12 +70,27 @@ func fill(i: int, j: int):
 	if(i >= 0 and i < _height and j >= 0 and j < _width):
 		var tile_to_replace = _get_top_tile(i, j)
 		var selected_layer = _tilemap_layers[_selected_tile.get_layer()]
+		var w = _selected_tile.get_structure_size()[0]
+		var h = _selected_tile.get_structure_size()[1]
 
 		if tile_to_replace.get_id() == _selected_tile.get_id():
 			return
 
 		var process_now = []
-		process_now.append(Vector2(i, j))
+
+		var can_be_processed = true
+		for subtile in _selected_tile.get_subtiles():
+			var pos_i = i - subtile[1]
+			var pos_j = j + subtile[0]
+
+			if(pos_i >= 0 and pos_i < _height and pos_j >= 0
+					and pos_j < _width):
+				if (_get_top_tile(pos_i, pos_j).get_id()
+						!= tile_to_replace.get_id()):
+					can_be_processed = false
+
+		if can_be_processed:
+			process_now.append(Vector2(i, j))
 
 		var process_next = []
 
@@ -92,29 +107,61 @@ func fill(i: int, j: int):
 			for pos in process_now:
 				selected_layer.set_tile(pos.x, pos.y, _selected_tile)
 
-				if (_get_top_tile(pos.x + 1, pos.y).get_id()
-						== tile_to_replace.get_id()):
-					if marked[pos.x + 1][pos.y] == false:
-						process_next.append(Vector2(pos.x + 1, pos.y))
-						marked[pos.x + 1][pos.y] = true
+				can_be_processed = true
+				for subtile in _selected_tile.get_subtiles():
+					var pos_x = pos.x + w - subtile[1]
+					var pos_y = pos.y + subtile[0]
+		
+					if (_get_top_tile(pos_x, pos_y).get_id()
+							!= tile_to_replace.get_id()):
+						can_be_processed = false
 
-				if (_get_top_tile(pos.x, pos.y + 1).get_id()
-						== tile_to_replace.get_id()):
-					if marked[pos.x][pos.y + 1] == false:
-						process_next.append(Vector2(pos.x, pos.y + 1))
-						marked[pos.x][pos.y + 1] = true
+				if can_be_processed:
+					if marked[pos.x + w][pos.y] == false:
+						process_next.append(Vector2(pos.x + w, pos.y))
+						marked[pos.x + w][pos.y] = true
 
-				if (_get_top_tile(pos.x - 1, pos.y).get_id()
-						== tile_to_replace.get_id()):
-					if marked[pos.x - 1][pos.y] == false:
-						process_next.append(Vector2(pos.x - 1, pos.y))
-						marked[pos.x - 1][pos.y] = true
+				can_be_processed = true
+				for subtile in _selected_tile.get_subtiles():
+					var pos_x = pos.x - subtile[1]
+					var pos_y = pos.y + h + subtile[0]
+		
+					if (_get_top_tile(pos_x, pos_y).get_id()
+							!= tile_to_replace.get_id()):
+						can_be_processed = false
 
-				if (_get_top_tile(pos.x, pos.y - 1).get_id()
-						== tile_to_replace.get_id()):
-					if marked[pos.x][pos.y - 1] == false:
-						process_next.append(Vector2(pos.x, pos.y - 1))
-						marked[pos.x][pos.y - 1] = true
+				if can_be_processed:
+					if marked[pos.x][pos.y + h] == false:
+						process_next.append(Vector2(pos.x, pos.y + h))
+						marked[pos.x][pos.y + h] = true
+
+				can_be_processed = true
+				for subtile in _selected_tile.get_subtiles():
+					var pos_x = pos.x - w - subtile[1]
+					var pos_y = pos.y + subtile[0]
+		
+					if (_get_top_tile(pos_x, pos_y).get_id()
+							!= tile_to_replace.get_id()):
+						can_be_processed = false
+
+				if can_be_processed:
+					if marked[pos.x - w][pos.y] == false:
+						process_next.append(Vector2(pos.x - w, pos.y))
+						marked[pos.x - w][pos.y] = true
+
+				can_be_processed = true
+				for subtile in _selected_tile.get_subtiles():
+					var pos_x = pos.x - subtile[1]
+					var pos_y = pos.y - h + subtile[0]
+		
+					if (_get_top_tile(pos_x, pos_y).get_id()
+							!= tile_to_replace.get_id()):
+						can_be_processed = false
+
+				if can_be_processed:
+					if marked[pos.x][pos.y - h] == false:
+						process_next.append(Vector2(pos.x, pos.y - h))
+						marked[pos.x][pos.y - h] = true
 
 			process_now = process_next
 
