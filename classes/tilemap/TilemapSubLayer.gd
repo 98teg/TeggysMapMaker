@@ -4,23 +4,21 @@ class_name TilemapSubLayer
 var _width := 0
 var _height := 0
 var _tile_size := 0
+var _tile_set := {}
 var _map := []
 var _image := Image.new()
-var _tile_set := {}
 var _previous_tilemap_sublayer := []
 var _has_been_modified := false
 
 
-func init(width: int, height: int, tile_size: int, tile_set: Dictionary):
+func init(width: int, height: int, tile_size: int, tile_set: Dictionary) -> void:
 	_width = width
 	_height = height
-
 	_tile_size = tile_size
+	_tile_set = tile_set
 
 	_create_map()
 	_create_image()
-
-	_tile_set = tile_set
 
 
 func get_image() -> Image:
@@ -36,28 +34,21 @@ func get_tile(i: int, j: int) -> Tile:
 
 func set_tile(i: int, j: int, tile: Tile):
 	var id = tile.get_id()
+	var tiles_to_update = []
 
 	if tile.is_a_multi_title():
 		for subtile in tile.get_subtiles():
 			var pos_i = i - subtile[1]
 			var pos_j = j + subtile[0]
 
-			if(pos_i >= 0 and pos_i < _height and pos_j >= 0 and pos_j < _width):
+			if(pos_i >= 0 and pos_i < _height and
+					pos_j >= 0 and pos_j < _width):
 				if (_get_tile_id(pos_i, pos_j) != id or
 						_get_tile_subtile(pos_i, pos_j) != subtile):
 					_remove_subtiles(pos_i, pos_j)
-
-		for subtile in tile.get_subtiles():
-			var pos_i = i - subtile[1]
-			var pos_j = j + subtile[0]
-
-			if(pos_i >= 0 and pos_i < _height and pos_j >= 0 and pos_j < _width):
-				if (_get_tile_id(pos_i, pos_j) != id or
-						_get_tile_subtile(pos_i, pos_j) != subtile):
 					_map[pos_i][pos_j] = {"ID": id, "Subtile": subtile}
 	
-					_update_tile(pos_i, pos_j)
-					_update_tiles_around(pos_i, pos_j)
+					tiles_to_update.append([pos_i, pos_j])
 	
 					_has_been_modified = true
 	else:
@@ -66,21 +57,30 @@ func set_tile(i: int, j: int, tile: Tile):
 				_remove_subtiles(i, j)
 				_map[i][j] = {"ID": id}
 
-				_update_tile(i, j)
-				_update_tiles_around(i, j)
+				tiles_to_update.append([i, j])
 
 				_has_been_modified = true
+
+	for tile_to_update in tiles_to_update:
+		_update_tile(tile_to_update[0], tile_to_update[1])
+		_update_tiles_around(tile_to_update[0], tile_to_update[1])
 
 
 func change_tile_state(i: int, j: int):
 	if(i >= 0 and i < _height and j >= 0 and j < _width):
 		if get_tile(i, j).get_n_states() > 1:
-			var state = (_get_tile_state(i, j) + 1) % get_tile(i, j).get_n_states()
-			_map[i][j].State = state
+			var state = ((_get_tile_state(i, j) + 1) %
+						get_tile(i, j).get_n_states())
 
-			_place_tile_image(i, j)
-			
-			_has_been_modified = true
+			for subtile in get_tile(i, j).get_subtiles(_get_tile_subtile(i, j)):
+				var pos_i = i - subtile[1]
+				var pos_j = j + subtile[0]
+
+				_map[pos_i][pos_j].State = state
+	
+				_place_tile_image(pos_i, pos_j)
+				
+				_has_been_modified = true
 
 
 func has_been_modified():
@@ -127,10 +127,10 @@ func _create_image():
 
 func _remove_subtiles(i: int, j: int):
 	var tile = get_tile(i, j)
+	var tiles_to_update = []
 
 	if tile.is_a_multi_title():
-		for subtile in tile.get_subtiles(_map[i][j].Subtile[0], 
-				_map[i][j].Subtile[1]):
+		for subtile in tile.get_subtiles(_map[i][j].Subtile):
 			var pos_i = i - subtile[1]
 			var pos_j = j + subtile[0]
 
@@ -138,8 +138,11 @@ func _remove_subtiles(i: int, j: int):
 					and pos_j < _width):
 				_map[pos_i][pos_j] = {"ID": Tile.Special_tile.AIR}
 
-				_update_tile(pos_i, pos_j)
-				_update_tiles_around(pos_i, pos_j)
+				tiles_to_update.append([pos_i, pos_j])
+
+	for tile_to_update in tiles_to_update:
+		_update_tile(tile_to_update[0], tile_to_update[1])
+		_update_tiles_around(tile_to_update[0], tile_to_update[1])
 
 
 func _update_tiles_around(i: int, j: int):
@@ -159,53 +162,92 @@ func _update_tile(i: int, j: int):
 	elif get_tile(i, j).get_connection_type() == Tile.Connection_type.ISOLATED:
 		_place_tile_image(i, j)
 	else:
-		var condition = 0
+		var connection = 0
 		var tile = get_tile(i, j)
+
+		for subtile in tile.get_subtiles(_map[i][j].Subtile):
+			var pos_i = i - subtile[1]
+			var pos_j = j + subtile[0]
+
+			if(pos_i >= 0 and pos_i < _height and pos_j >= 0
+					and pos_j < _width):
+				if tile.get_connection_type() == Tile.Connection_type.CROSS:
+					connection = _get_cross_connection(pos_i, pos_j)
+				else:
+					connection = _get_circle_connection(pos_i, pos_j)
+				  
+				var state = tile.get_state(connection)
+				_map[pos_i][pos_j].State = state
 		
-		if tile.get_connection_type() == Tile.Connection_type.CROSS:
-			condition = _get_cross_condition_id_of_tile(i, j)
-		else:
-			condition = _get_circle_condition_id_of_tile(i, j)
-		  
-		var state = tile.get_state(condition)
-		_map[i][j].State = state
-
-		_place_tile_image(i, j)
+				_place_tile_image(pos_i, pos_j)
 
 
-func _get_cross_condition_id_of_tile(i: int, j: int) -> int:
-	var condition = 0
+func _get_cross_connection(i: int, j: int) -> int:
+	var connection = 0
+
 	var tile = get_tile(i, j)
+	var subtile = _get_tile_subtile(i, j)
+
+	var size = tile.get_structure_size()
+	var x = size[0]
+	var y = size[1]
+
+	if subtile == _get_tile_subtile(i - x, j):
+		connection += 1 if tile.can_connect_to(get_tile(i - x, j)) else 0
+
+	if subtile == _get_tile_subtile(i, j + y):
+		connection += 2 if tile.can_connect_to(get_tile(i, j + y)) else 0
+
+	if subtile == _get_tile_subtile(i + x, j):
+		connection += 4 if tile.can_connect_to(get_tile(i + x, j)) else 0
+
+	if subtile == _get_tile_subtile(i, j - y):
+		connection += 8 if tile.can_connect_to(get_tile(i, j - y)) else 0
 	
-	condition += 1 if tile.can_connect_to(get_tile(i - 1, j)) else 0
-	condition += 2 if tile.can_connect_to(get_tile(i, j + 1)) else 0
-	condition += 4 if tile.can_connect_to(get_tile(i + 1, j)) else 0
-	condition += 8 if tile.can_connect_to(get_tile(i, j - 1)) else 0
-	
-	return condition
+	return connection
 
 
-func _get_circle_condition_id_of_tile(i: int, j: int) -> int:
-	var condition = 0
+func _get_circle_connection(i: int, j: int) -> int:
+	var connection = 0
+
 	var tile = get_tile(i, j)
+	var subtile = _get_tile_subtile(i, j)
 
-	condition += 1   if tile.can_connect_to(get_tile(i - 1, j    )) else 0
-	condition += 2   if tile.can_connect_to(get_tile(i - 1, j + 1)) else 0
-	condition += 4   if tile.can_connect_to(get_tile(i    , j + 1)) else 0
-	condition += 8   if tile.can_connect_to(get_tile(i + 1, j + 1)) else 0
-	condition += 16  if tile.can_connect_to(get_tile(i + 1, j    )) else 0
-	condition += 32  if tile.can_connect_to(get_tile(i + 1, j - 1)) else 0
-	condition += 64  if tile.can_connect_to(get_tile(i    , j - 1)) else 0
-	condition += 128 if tile.can_connect_to(get_tile(i - 1, j - 1)) else 0
+	var size = tile.get_structure_size()
+	var x = size[0]
+	var y = size[1]
 
-	return condition
+	if subtile == _get_tile_subtile(i - x, j):
+		connection += 1   if tile.can_connect_to(get_tile(i - x, j)) else 0
+
+	if subtile == _get_tile_subtile(i - x, j + y):
+		connection += 2   if tile.can_connect_to(get_tile(i - x, j + y)) else 0
+
+	if subtile == _get_tile_subtile(i, j + y):
+		connection += 4   if tile.can_connect_to(get_tile(i, j + y)) else 0
+
+	if subtile == _get_tile_subtile(i + x, j + y):
+		connection += 8   if tile.can_connect_to(get_tile(i + x, j + y)) else 0
+
+	if subtile == _get_tile_subtile(i + x, j):
+		connection += 16  if tile.can_connect_to(get_tile(i + x, j)) else 0
+
+	if subtile == _get_tile_subtile(i + x, j - y):
+		connection += 32  if tile.can_connect_to(get_tile(i + x, j - y)) else 0
+
+	if subtile == _get_tile_subtile(i, j - y):
+		connection += 64  if tile.can_connect_to(get_tile(i, j - y)) else 0
+
+	if subtile == _get_tile_subtile(i - x, j - y):
+		connection += 128 if tile.can_connect_to(get_tile(i - x, j - y)) else 0
+
+	return connection
 
 
 func _place_tile_image(i: int, j: int):
 	var state = _get_tile_state(i, j)
 	var subtile = _get_tile_subtile(i, j)
-	var tile_image = _tile_set[_get_tile_id(i, j)].get_image(state, subtile[0],
-			subtile[1])
+	var tile_image = _tile_set[_get_tile_id(i, j)].get_image(state, subtile)
 	var rect = Rect2(Vector2.ZERO, Vector2(_tile_size, _tile_size))
 	var pos = Vector2(j * _tile_size, i * _tile_size)
 
