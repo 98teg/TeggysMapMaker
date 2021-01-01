@@ -1,8 +1,13 @@
 [gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://panels/layers/elements/ToolItem.tscn" type="PackedScene" id=3]
-[ext_resource path="res://panels/layers/TileMapToolBox.gd" type="Script" id=5]
-[ext_resource path="res://panels/layers/elements/ToggleItem.tscn" type="PackedScene" id=6]
+[ext_resource path="res://views/work_space/components/canvas/layers/tilemap/toolbox/TilemapToolBox.gd" type="Script" id=1]
+[ext_resource path="res://views/work_space/components/canvas/layers/tilemap/toolbox/components/tool_item/ToolItem.tscn" type="PackedScene" id=2]
+[ext_resource path="res://views/work_space/components/canvas/layers/tilemap/toolbox/components/toggle_item/ToggleItem.tscn" type="PackedScene" id=3]
+
+
+
+
+
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 1, 1, 1, 1 )
@@ -65,7 +70,7 @@ Button/styles/pressed = SubResource( 7 )
 anchor_bottom = 1.0
 margin_right = 320.0
 dragger_visibility = 1
-script = ExtResource( 5 )
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -86,7 +91,7 @@ theme = SubResource( 8 )
 margin_right = 44.0
 margin_bottom = 40.0
 
-[node name="Pencil" parent="ToolsPanel/Tools/LeftTools" instance=ExtResource( 3 )]
+[node name="Pencil" parent="ToolsPanel/Tools/LeftTools" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 44.0
@@ -99,14 +104,14 @@ margin_bottom = 40.0
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="Eraser" parent="ToolsPanel/Tools/RightTools" instance=ExtResource( 3 )]
+[node name="Eraser" parent="ToolsPanel/Tools/RightTools" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 180.0
 margin_right = 224.0
 margin_bottom = 40.0
 
-[node name="Grid" parent="ToolsPanel/Tools/RightTools" instance=ExtResource( 6 )]
+[node name="Grid" parent="ToolsPanel/Tools/RightTools" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 228.0

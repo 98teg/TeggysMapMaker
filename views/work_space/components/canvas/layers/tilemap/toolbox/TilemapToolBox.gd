@@ -18,11 +18,11 @@ signal grid_visibility_changed(visibility)
 # If the wrench is present
 var _wrench_flag : bool = false
 # Wrench item
-var _wrench_item : Button = preload("res://panels/layers/elements/ToolItem.tscn").instance()
+var _wrench_item : Button = preload("./components/tool_item/ToolItem.tscn").instance()
 # If the bucket fill is present
 var _bucket_fill_flag : bool = false
 # Bucket fill item
-var _bucket_fill_item : Button = preload("res://panels/layers/elements/ToolItem.tscn").instance()
+var _bucket_fill_item : Button = preload("./components/tool_item/ToolItem.tscn").instance()
 
 ####################
 # Public functions #
@@ -60,7 +60,7 @@ func init(configuration: Dictionary) -> void:
 # + extra_tools: Tile extra tools available (Array)
 #    - Each element is a member of the enum _TileMap.Tool
 func _add_tile_item(tile_item_group: ButtonGroup, tile: Tile) -> void:
-	var tile_item = preload("res://panels/layers/elements/TileItem.tscn").instance()
+	var tile_item = preload("./components/tile_item/TileItem.tscn").instance()
 	tile_item.init(tile)
 	tile_item.add_to_button_group(tile_item_group)
 	

@@ -61,7 +61,7 @@ func _add_layer(canvas_conf : Dictionary, layer_conf : Dictionary):
 	var new_layer
 	match layer_conf.Type:
 		"TileMap":
-			new_layer = preload("res://panels/layers/TileMapCanvasLayer.tscn").instance()
+			new_layer = preload("./layers/tilemap/TilemapCanvasLayer.tscn").instance()
 
 	get_node("CanvasViewport/Layers").add_child(new_layer)
 	new_layer.init(canvas_conf, layer_conf.Configuration)

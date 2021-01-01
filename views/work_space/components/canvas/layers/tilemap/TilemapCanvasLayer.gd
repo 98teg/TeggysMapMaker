@@ -48,12 +48,12 @@ func _create_tilemap(canvas_conf : Dictionary, layer_conf : Dictionary):
 	_tilemap_tex.create_from_image(_tilemap.get_image(), 3)
 	
 func _create_overlay(canvas_conf : Dictionary, layer_conf : Dictionary):
-	_overlay = preload("res://panels/layers/TileMapOverlay.tscn").instance()
+	_overlay = preload("./overlay/TilemapOverlay.tscn").instance()
 
 	_overlay.init(canvas_conf, layer_conf)
 	
 func _create_tool_box(layer_conf : Dictionary):
-	_tool_box = preload("res://panels/layers/TileMapToolBox.tscn").instance()
+	_tool_box = preload("./toolbox/TilemapToolBox.tscn").instance()
 	if _tool_box.connect("tile_selected", self, "_select_tile") != OK:
 		print("Error connecting ToolBox's 'tile_selected' signal")
 	if _tool_box.connect("tool_selected", self, "_select_tool") != OK:

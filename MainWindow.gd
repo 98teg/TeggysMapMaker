@@ -6,7 +6,7 @@ enum StyleState{
 	SELECT_ANOTHER_ONE
 }
 
-var _work_space = preload("res://views/WorkSpace.tscn")
+var _work_space = preload("res://views/work_space/WorkSpace.tscn")
 var _style_state = StyleState.NONE
 
 func _ready():
