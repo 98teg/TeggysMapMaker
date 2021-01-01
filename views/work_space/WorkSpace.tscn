@@ -1,9 +1,13 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://panels/UndoRedo.tscn" type="PackedScene" id=1]
-[ext_resource path="res://views/WorkSpace.gd" type="Script" id=2]
-[ext_resource path="res://panels/MagnifyingGlass.tscn" type="PackedScene" id=3]
-[ext_resource path="res://panels/Canvas.tscn" type="PackedScene" id=4]
+[ext_resource path="res://views/work_space/components/undo_redo/UndoRedo.tscn" type="PackedScene" id=1]
+[ext_resource path="res://views/work_space/WorkSpace.gd" type="Script" id=2]
+[ext_resource path="res://views/work_space/components/magnifying_glass/MagnifyingGlass.tscn" type="PackedScene" id=3]
+[ext_resource path="res://views/work_space/components/canvas/Canvas.tscn" type="PackedScene" id=4]
+
+
+
+
 
 [sub_resource type="Theme" id=1]
 Dialogs/constants/button_margin = 32

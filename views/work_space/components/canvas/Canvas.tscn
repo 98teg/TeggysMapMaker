@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://panels/Canvas.gd" type="Script" id=1]
+[ext_resource path="res://views/work_space/components/canvas/Canvas.gd" type="Script" id=1]
 
 [node name="Canvas" type="ScrollContainer"]
 mouse_filter = 2

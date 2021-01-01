@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://resources/icons/zoom_minus.png" type="Texture" id=1]
-[ext_resource path="res://resources/icons/zoom_plus.png" type="Texture" id=2]
-[ext_resource path="res://panels/MagnifyingGlass.gd" type="Script" id=3]
+[ext_resource path="res://views/work_space/components/magnifying_glass/MagnifyingGlass.gd" type="Script" id=1]
+[ext_resource path="res://resources/icons/zoom_minus.png" type="Texture" id=2]
+[ext_resource path="res://resources/icons/zoom_plus.png" type="Texture" id=3]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -25,7 +25,7 @@ shader_param/color = Color( 1, 1, 1, 1 )
 [node name="MagnifyingGlass" type="HBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 3 )
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -41,7 +41,7 @@ margin_right = 44.0
 margin_bottom = 320.0
 hint_tooltip = "Zoom -"
 size_flags_vertical = 0
-icon = ExtResource( 1 )
+icon = ExtResource( 2 )
 
 [node name="Slider" type="HSlider" parent="."]
 margin_left = 48.0
@@ -63,7 +63,7 @@ margin_right = 44.0
 margin_bottom = 320.0
 hint_tooltip = "Zoom +"
 size_flags_vertical = 0
-icon = ExtResource( 2 )
+icon = ExtResource( 3 )
 [connection signal="pressed" from="MinusContainer/Minus" to="." method="_add_to_magnifying_factor" binds= [ -10 ]]
 [connection signal="value_changed" from="Slider" to="." method="_set_magnifying_factor"]
 [connection signal="pressed" from="PlusContainer/Plus" to="." method="_add_to_magnifying_factor" binds= [ 10 ]]
