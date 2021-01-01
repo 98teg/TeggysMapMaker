@@ -55,7 +55,7 @@ func _get_tile_set_dictionary(tile_size: int, tile_set: Array) -> Dictionary:
 			"MainTile": [0, 0]
 		},
 		"ExtraTools": [],
-		"ConnectionType": Tile.Connection_type.ISOLATED,
+		"ConnectionType": Tile.ConnectionType.ISOLATED,
 		"Image": empty_tile_image,
 		"Variations": [],
 		"CanConnectToBorders": false,
@@ -64,7 +64,7 @@ func _get_tile_set_dictionary(tile_size: int, tile_set: Array) -> Dictionary:
 
 	var new_tile_set = {}
 
-	for special_tile_id in Tile.Special_tile.values():
+	for special_tile_id in Tile.SpecialTile.values():
 		special_tile_conf.ID = special_tile_id
 
 		var special_tile = Tile.new()

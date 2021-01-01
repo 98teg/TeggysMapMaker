@@ -48,33 +48,33 @@ func _postprocess(tile: Dictionary) -> Tile:
 
 func _get_connection_type(variations: Array) -> int:
 	if variations.empty():
-		return Tile.Connection_type.ISOLATED
+		return Tile.ConnectionType.ISOLATED
 
 	for variation in variations:
 		for connection in variation.Connections:
 			for cardinal_coordinate in connection:
 				match cardinal_coordinate:
 					"NorthEast":
-						return Tile.Connection_type.CIRCLE
+						return Tile.ConnectionType.CIRCLE
 					"SouthEast":
-						return Tile.Connection_type.CIRCLE
+						return Tile.ConnectionType.CIRCLE
 					"SouthWest":
-						return Tile.Connection_type.CIRCLE
+						return Tile.ConnectionType.CIRCLE
 					"NorthWest":
-						return Tile.Connection_type.CIRCLE
+						return Tile.ConnectionType.CIRCLE
 
-	return Tile.Connection_type.CROSS
+	return Tile.ConnectionType.CROSS
 
 
 func _transform_variations(variations: Array, connection_type: int) -> void:
-	if connection_type == Tile.Connection_type.ISOLATED:
+	if connection_type == Tile.ConnectionType.ISOLATED:
 		return
 
 	for variation in variations:
 		for i in range(variation.Connections.size()):
 			var acc = 0
 
-			if connection_type == Tile.Connection_type.CROSS:
+			if connection_type == Tile.ConnectionType.CROSS:
 				for cardinal_coordinate in variation.Connections[i]:
 					match cardinal_coordinate:
 						"North":

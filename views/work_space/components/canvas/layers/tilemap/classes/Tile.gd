@@ -1,14 +1,14 @@
 class_name Tile
 
 
-enum Special_tile {
+enum SpecialTile {
 	AIR = -1,
 	OUT_OF_BOUNDS = -2,
 	UNSELECTED = -3
 }
 
 
-enum Connection_type {
+enum ConnectionType {
 	ISOLATED,
 	CROSS,
 	CIRCLE
@@ -27,7 +27,7 @@ var _subtiles := []
 var _images := {}
 var _n_states := 0
 var _connections_for_each_state := {}
-var _connection_type : int = Connection_type.ISOLATED
+var _connection_type : int = ConnectionType.ISOLATED
 var _connected_group := 0
 var _can_connect_to_borders := true
 
@@ -110,9 +110,9 @@ func get_subtiles(subtile_of_reference := [0, 0]) -> Array:
 
 
 func can_connect_to(another_tile: Tile) -> bool:
-	if another_tile._id == Special_tile.AIR:
+	if another_tile._id == SpecialTile.AIR:
 		return false
-	elif another_tile._id == Special_tile.OUT_OF_BOUNDS:
+	elif another_tile._id == SpecialTile.OUT_OF_BOUNDS:
 		return _can_connect_to_borders
 	else:
 		if _id == another_tile._id:

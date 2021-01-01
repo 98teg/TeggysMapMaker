@@ -29,7 +29,7 @@ func get_tile(i: int, j: int) -> Tile:
 	if(i >= 0 and i < _height and j >= 0 and j < _width):
 		return _tile_set[_map[i][j].ID]
 
-	return _tile_set[Tile.Special_tile.OUT_OF_BOUNDS]
+	return _tile_set[Tile.SpecialTile.OUT_OF_BOUNDS]
 
 
 func set_tile(i: int, j: int, tile: Tile):
@@ -111,7 +111,7 @@ func _create_map():
 		_map.append([])
 		for j in range(_width):
 			_map[i].append([])
-			_map[i][j] = {"ID": Tile.Special_tile.AIR}
+			_map[i][j] = {"ID": Tile.SpecialTile.AIR}
 
 	_previous_tilemap_sublayer = _map.duplicate(true)
 
@@ -136,7 +136,7 @@ func _remove_subtiles(i: int, j: int):
 
 			if(pos_i >= 0 and pos_i < _height and pos_j >= 0
 					and pos_j < _width):
-				_map[pos_i][pos_j] = {"ID": Tile.Special_tile.AIR}
+				_map[pos_i][pos_j] = {"ID": Tile.SpecialTile.AIR}
 
 				tiles_to_update.append([pos_i, pos_j])
 
@@ -157,9 +157,9 @@ func _update_tiles_around(i: int, j: int):
 
 
 func _update_tile(i: int, j: int):
-	if _get_tile_id(i, j) == Tile.Special_tile.OUT_OF_BOUNDS:
+	if _get_tile_id(i, j) == Tile.SpecialTile.OUT_OF_BOUNDS:
 		pass
-	elif get_tile(i, j).get_connection_type() == Tile.Connection_type.ISOLATED:
+	elif get_tile(i, j).get_connection_type() == Tile.ConnectionType.ISOLATED:
 		_place_tile_image(i, j)
 	else:
 		var connection = 0
@@ -171,7 +171,7 @@ func _update_tile(i: int, j: int):
 
 			if(pos_i >= 0 and pos_i < _height and pos_j >= 0
 					and pos_j < _width):
-				if tile.get_connection_type() == Tile.Connection_type.CROSS:
+				if tile.get_connection_type() == Tile.ConnectionType.CROSS:
 					connection = _get_cross_connection(pos_i, pos_j)
 				else:
 					connection = _get_circle_connection(pos_i, pos_j)

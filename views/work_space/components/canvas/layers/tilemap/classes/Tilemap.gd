@@ -58,7 +58,7 @@ func place_tile(i: int, j: int):
 
 func erase_tile(i: int, j: int):
 	var selected_layer = _tilemap_layers[_selected_tile.get_layer()]
-	selected_layer.set_tile(i, j, _tile_set[Tile.Special_tile.AIR])
+	selected_layer.set_tile(i, j, _tile_set[Tile.SpecialTile.AIR])
 
 
 func change_tile_state(i: int, j: int):
@@ -168,7 +168,7 @@ func fill(i: int, j: int):
 
 func erase_tile_in_every_layer(i: int, j: int):
 	for tilemaplayer in _tilemap_layers:
-		tilemaplayer.set_tile(i, j, _tile_set[Tile.Special_tile.AIR])
+		tilemaplayer.set_tile(i, j, _tile_set[Tile.SpecialTile.AIR])
 
 
 func retrieve_previous_tilemap():
@@ -198,7 +198,7 @@ func _get_top_tile(i: int, j: int) -> Tile:
 	for it in range(_tilemap_layers.size() - 1, -1, -1):
 		var tile = _tilemap_layers[it].get_tile(i, j)
 
-		if tile.get_id() != Tile.Special_tile.AIR:
+		if tile.get_id() != Tile.SpecialTile.AIR:
 			return tile
 
-	return _tile_set[Tile.Special_tile.AIR]
+	return _tile_set[Tile.SpecialTile.AIR]
