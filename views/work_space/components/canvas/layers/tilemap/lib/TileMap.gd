@@ -193,7 +193,7 @@ func _create_background(width: int, height: int, tile_size: int,
 	var background_size = Vector2(tile_size * width, tile_size * height)
 	_background = GoostImage.tile(background_tile, background_size)
 
-
+const Tile := preload("./Tile.gd")
 func _get_top_tile(i: int, j: int) -> Tile:
 	for it in range(_tilemap_layers.size() - 1, -1, -1):
 		var tile = _tilemap_layers[it].get_tile(i, j)

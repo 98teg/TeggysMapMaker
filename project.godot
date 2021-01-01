@@ -97,12 +97,12 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "Tile",
 "language": "GDScript",
-"path": "res://views/work_space/components/canvas/layers/tilemap/classes/Tile.gd"
+"path": "res://views/work_space/components/canvas/layers/tilemap/lib/Tile.gd"
 }, {
 "base": "Reference",
 "class": "Tilemap",
 "language": "GDScript",
-"path": "res://views/work_space/components/canvas/layers/tilemap/classes/Tilemap.gd"
+"path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileMap.gd"
 }, {
 "base": "Reference",
 "class": "TilemapConfigurationConstructor",
@@ -112,12 +112,12 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "TilemapLayer",
 "language": "GDScript",
-"path": "res://views/work_space/components/canvas/layers/tilemap/classes/TilemapLayer.gd"
+"path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileMapLayer.gd"
 }, {
 "base": "Reference",
 "class": "TilemapSubLayer",
 "language": "GDScript",
-"path": "res://views/work_space/components/canvas/layers/tilemap/classes/TilemapSubLayer.gd"
+"path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileMapSubLayer.gd"
 } ]
 _global_script_class_icons={
 "JSONConfigFile": "",
