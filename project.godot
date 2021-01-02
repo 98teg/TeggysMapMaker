@@ -95,9 +95,14 @@ _global_script_classes=[ {
 "path": "res://views/load_style/json_config_file_constructor/style_data_constructor/style_data_constructor.gd"
 }, {
 "base": "Reference",
-"class": "Tile",
+"class": "TMM_Tile",
 "language": "GDScript",
 "path": "res://views/work_space/components/canvas/layers/tilemap/lib/Tile.gd"
+}, {
+"base": "Reference",
+"class": "TMM_TileStructure",
+"language": "GDScript",
+"path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileStructure.gd"
 }, {
 "base": "Reference",
 "class": "Tilemap",
@@ -137,7 +142,8 @@ _global_script_class_icons={
 "JSONPropertyPercentage": "",
 "JSONPropertyString": "",
 "StyleDataConstructor": "",
-"Tile": "",
+"TMM_Tile": "",
+"TMM_TileStructure": "",
 "Tilemap": "",
 "TilemapConfigurationConstructor": "",
 "TilemapLayer": "",
