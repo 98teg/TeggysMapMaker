@@ -35,7 +35,7 @@ func has_multiple_tiles() -> bool:
 	return size != [1, 1]
 
 
-func get_tile(connection_id: int, tile_relative_pos := [0,  0]):
+func get_tile(connection_id: int, tile_relative_pos := [0,  0]) -> TMM_Tile:
 	assert(tile_relative_pos.size() == 2)
 	for i in range(2):
 		assert(tile_relative_pos[i] is int)
@@ -129,7 +129,7 @@ func generate_tiles_relative_pos() -> void:
 				_tiles_relative_pos.append([x - main_tile[0], y - main_tile[1]])
 
 
-func add_autotiling_state(image: Image, connection_ids: Array = []):
+func add_autotiling_state(image: Image, connection_ids: Array = []) -> void:
 	var autotiling_state = n_autotiling_states()
 
 	var tiles_matrix = {}
