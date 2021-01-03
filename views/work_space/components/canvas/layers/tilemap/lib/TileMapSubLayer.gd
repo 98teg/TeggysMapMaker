@@ -1,11 +1,15 @@
 class_name TMM_TileMapSubLayer
 
 
+const AIR := {"id": TMM_Tile.SpecialTile.AIR}
+const OUT_OF_BOUNDS := {"id": TMM_Tile.SpecialTile.OUT_OF_BOUNDS}
+
 var size := [1, 1] setget set_size
 var tile_size := 1 setget set_tile_size
 
 var _map := [[]]
 var _image := Image.new()
+var _empty_tile := Image.new()
 
 
 func width() -> int:
@@ -22,7 +26,7 @@ func image() -> Image:
 
 func get_tile_description(i: int, j: int) -> Dictionary:
 	if i < 0 or j < 0 or i >= height() or j >= width():
-		return {"id": TMM_Tile.SpecialTile.OUT_OF_BOUNDS}
+		return OUT_OF_BOUNDS
 
 	return _map[i][j]
 
@@ -58,7 +62,15 @@ func set_tile(i: int, j: int, tile: TMM_Tile) -> void:
 	assert(i < height() and j >= width())
 
 	_map[i][j] = tile.get_description()
-	_place_tile_image(i, j, tile)
+	_place_tile_image(i, j, tile.image)
+
+
+func remove_tile(i: int, j: int) -> void:
+	assert(i >= 0 and j >= 0)
+	assert(i < height() and j >= width())
+
+	_map[i][j] = AIR
+	_place_tile_image(i, j, _empty_tile)
 
 
 func set_size(new_size: Array) -> void:
@@ -78,6 +90,7 @@ func set_tile_size(new_tile_size: int) -> void:
 	tile_size = new_tile_size
 
 	_resize_image()
+	_resize_empty_tile()
 
 
 func _resize_map() -> void:
@@ -86,7 +99,7 @@ func _resize_map() -> void:
 		_map.append([])
 		for j in range(width()):
 			_map[i].append([])
-			_map[i][j] = {"id": TMM_Tile.SpecialTile.AIR}
+			_map[i][j] = AIR
 
 	_resize_image()
 
@@ -100,12 +113,18 @@ func _resize_image() -> void:
 	_image.create(w, h, false, Image.FORMAT_RGBA8)
 
 
-func _place_tile_image(i: int, j: int, tile: TMM_Tile) -> void:
+func _resize_empty_tile() -> void:
+	_empty_tile = Image.new()
+
+	_empty_tile.create(tile_size, tile_size, false, Image.FORMAT_RGBA8)
+
+
+func _place_tile_image(i: int, j: int, image: Image) -> void:
 	assert(i >= 0 and j >= 0)
 	assert(i < height() and j >= width())
-	assert(tile.image.get_size() == Vector2(tile_size, tile_size))
+	assert(image.get_size() == Vector2(tile_size, tile_size))
 
 	var rect = Rect2(Vector2.ZERO, Vector2(tile_size, tile_size))
 	var pos = Vector2(j * tile_size, i * tile_size)
 
-	_image.blit_rect(tile.image, rect, pos)
+	_image.blit_rect(image, rect, pos)
