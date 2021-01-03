@@ -25,6 +25,7 @@ func set_autotiling_state(new_autotiling_state: int) -> void:
 
 	autotiling_state = new_autotiling_state
 
+
 func set_tile_relative_pos(new_tile_relative_pos: Array) -> void:
 	assert(new_tile_relative_pos.size() == 2)
 
