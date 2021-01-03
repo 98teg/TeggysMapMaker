@@ -4,7 +4,7 @@ class_name TMM_TileStructure
 var id := 0
 var name := ""
 var icon := Image.new()
-var tile_size := 0 setget set_tile_size
+var tile_size := 1 setget set_tile_size
 var layer := 0 setget set_layer
 var size := [1, 1] setget set_size
 var colission_mask := [[true]] setget set_colission_mask
