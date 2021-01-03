@@ -100,29 +100,34 @@ _global_script_classes=[ {
 "path": "res://views/work_space/components/canvas/layers/tilemap/lib/Tile.gd"
 }, {
 "base": "Reference",
+"class": "TMM_TileMap",
+"language": "GDScript",
+"path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileMap.gd"
+}, {
+"base": "Reference",
+"class": "TMM_TileMapLayer",
+"language": "GDScript",
+"path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileMapLayer.gd"
+}, {
+"base": "Reference",
+"class": "TMM_TileMapSubLayer",
+"language": "GDScript",
+"path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileMapSubLayer.gd"
+}, {
+"base": "Reference",
+"class": "TMM_TileSet",
+"language": "GDScript",
+"path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileSet.gd"
+}, {
+"base": "Reference",
 "class": "TMM_TileStructure",
 "language": "GDScript",
 "path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileStructure.gd"
 }, {
 "base": "Reference",
-"class": "Tilemap",
-"language": "GDScript",
-"path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileMap.gd"
-}, {
-"base": "Reference",
 "class": "TilemapConfigurationConstructor",
 "language": "GDScript",
 "path": "res://views/load_style/json_config_file_constructor/tilemap_configuration_constructor/tilemap_configuration_constructor.gd"
-}, {
-"base": "Reference",
-"class": "TilemapLayer",
-"language": "GDScript",
-"path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileMapLayer.gd"
-}, {
-"base": "Reference",
-"class": "TilemapSubLayer",
-"language": "GDScript",
-"path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileMapSubLayer.gd"
 } ]
 _global_script_class_icons={
 "JSONConfigFile": "",
@@ -143,11 +148,12 @@ _global_script_class_icons={
 "JSONPropertyString": "",
 "StyleDataConstructor": "",
 "TMM_Tile": "",
+"TMM_TileMap": "",
+"TMM_TileMapLayer": "",
+"TMM_TileMapSubLayer": "",
+"TMM_TileSet": "",
 "TMM_TileStructure": "",
-"Tilemap": "",
-"TilemapConfigurationConstructor": "",
-"TilemapLayer": "",
-"TilemapSubLayer": ""
+"TilemapConfigurationConstructor": ""
 }
 
 [application]

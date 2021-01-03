@@ -123,7 +123,7 @@ func set_main_tile(new_main_tile: Array) -> void:
 
 func set_extra_tools(new_extra_tools: Array) -> void:
 	for extra_tool in new_extra_tools:
-		assert(Tilemap.Tool.has(extra_tool))
+		assert(TMM_TileMap.Tool.has(extra_tool))
 
 	extra_tools = new_extra_tools
 

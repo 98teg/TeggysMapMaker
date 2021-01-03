@@ -1,36 +1,40 @@
-class_name TilemapLayer
+class_name TMM_TileMapLayer
 
 
-var _tilemap_sublayers := [TilemapSubLayer.new()]
+var size := [1, 1] setget set_size
+
+var _sub_layers := []
 
 
-func init(width: int, height: int, tile_size: int, tile_set: Dictionary):
-	_tilemap_sublayers[0].init(width, height, tile_size, tile_set)
+func width() -> int:
+	return size[0]
 
 
-func get_image() -> Image:
-	return _tilemap_sublayers[0].get_image()
+func height() -> int:
+	return size[1]
 
 
-func get_tile(i: int, j: int) -> Tile:
-	return _tilemap_sublayers[0].get_tile(i, j)
+func get_sub_layer(sub_layer_id: int) -> TMM_TileMapSubLayer:
+	assert(sub_layer_id >= 0)
+	assert(sub_layer_id < _sub_layers.size())
+
+	return _sub_layers[sub_layer_id]
 
 
-func set_tile(i: int, j: int, tile: Tile):
-	_tilemap_sublayers[0].set_tile(i, j, tile)
+func set_size(new_size: Array) -> void:
+	assert(new_size.size() == 2)
+	for value in new_size:
+		assert(value is int)
+		assert(value >= 1)
+
+	size = new_size
+
+	for sub_layer in _sub_layers:
+		sub_layer.set_size(new_size)
 
 
-func change_tile_state(i: int, j: int):
-	_tilemap_sublayers[0].change_tile_state(i, j)
+func add_sub_layer() -> void:
+	var sub_layer = TMM_TileMapSubLayer.new()
+	sub_layer.set_size(size)
 
-
-func has_been_modified():
-	return _tilemap_sublayers[0].has_been_modified()
-
-
-func retrieve_previous_tilemaplayer():
-	return _tilemap_sublayers[0].retrieve_previous_tilemapsublayer()
-
-
-func load_tilemaplayer(map : Array):
-	_tilemap_sublayers[0].load_tilemapsublayer(map)
+	_sub_layers.append(sub_layer)
