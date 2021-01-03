@@ -31,32 +31,6 @@ func get_tile_description(i: int, j: int) -> Dictionary:
 	return _map[i][j]
 
 
-func get_tile_structure_id(i: int, j: int) -> int:
-	var tile_description = get_tile_description(i, j)
-
-	assert(tile_description.has("id"))
-
-	return tile_description.id
-
-
-func get_autotiling_state(i: int, j: int) -> int:
-	var tile_description = get_tile_description(i, j)
-
-	if tile_description.has("autotiling_state"):
-		return tile_description.autotiling_state
-
-	return 0
-
-
-func get_relative_pos(i: int, j: int) -> Array:
-	var tile_description = get_tile_description(i, j)
-
-	if tile_description.has("relative_pos"):
-		return tile_description.relative_pos
-
-	return [0, 0]
-
-
 func set_tile(i: int, j: int, tile: TMM_Tile) -> void:
 	assert(i >= 0 and j >= 0)
 	assert(i < height() and j >= width())
