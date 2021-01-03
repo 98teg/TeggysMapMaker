@@ -35,6 +35,18 @@ func has_multiple_tiles() -> bool:
 	return size != [1, 1]
 
 
+func get_tile(connection_id: int, tile_relative_pos := [0,  0]):
+	assert(tile_relative_pos.size() == 2)
+	for i in range(2):
+		assert(tile_relative_pos[i] is int)
+		assert(tile_relative_pos[i] >= 0 - main_tile[i])
+		assert(tile_relative_pos[i] < size[i] - main_tile[i])
+
+	var autotiling_state = _get_autotiling_state(connection_id)
+	var tiles_matrix = _tiles[autotiling_state]
+	return tiles_matrix[tile_relative_pos[0]][tile_relative_pos[1]]
+
+
 func get_tiles_relative_pos(tile_pos_ref := [0, 0]) -> Array:
 	assert(tile_pos_ref.size() == 2)
 	for value in tile_pos_ref:
@@ -52,18 +64,6 @@ func get_tiles_relative_pos(tile_pos_ref := [0, 0]) -> Array:
 
 		return tiles_relative_pos
 	return _tiles_relative_pos
-
-
-func get_tile(connection_id: int, tile_relative_pos := [0,  0]):
-	assert(tile_relative_pos.size() == 2)
-	for i in range(2):
-		assert(tile_relative_pos[i] is int)
-		assert(tile_relative_pos[i] >= 0 - main_tile[i])
-		assert(tile_relative_pos[i] < size[i] - main_tile[i])
-
-	var autotiling_state = _get_autotiling_state(connection_id)
-	var tiles_matrix = _tiles[autotiling_state]
-	return tiles_matrix[tile_relative_pos[0]][tile_relative_pos[1]]
 
 
 func set_tile_size(new_tile_size: int) -> void:
