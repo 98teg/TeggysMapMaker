@@ -11,8 +11,6 @@ func get_tile_structure(tile_structure_id: int) -> TMM_TileStructure:
 
 
 func get_tile(tile_description: Dictionary) -> TMM_Tile:
-	assert(tile_description.has("id"))
-
 	var tile_structure = get_tile_structure(tile_description.id)
 
 	var autotiling_state
@@ -32,27 +30,12 @@ func get_tile(tile_description: Dictionary) -> TMM_Tile:
 	return tile
 
 
-func create_tile_set(tile_set_conf: Array) -> void:
+func init(tile_set_conf: Array) -> void:
 	for tile_structure_conf in tile_set_conf:
 		_create_tile_structure(tile_structure_conf)
 
 
 func _create_tile_structure(tile_structure_conf: Dictionary) -> void:
-	assert(tile_structure_conf.has("ID"))
-	assert(tile_structure_conf.has("Name"))
-	assert(tile_structure_conf.has("Icon"))
-	assert(tile_structure_conf.has("Structure"))
-	assert(tile_structure_conf.Structure.has("Size"))
-	assert(tile_structure_conf.Structure.has("ColissionMask"))
-	assert(tile_structure_conf.Structure.has("MainTile"))
-	assert(tile_structure_conf.has("Layer"))
-	assert(tile_structure_conf.has("ExtraTools"))
-	assert(tile_structure_conf.has("ConnectionType"))
-	assert(tile_structure_conf.has("ConnectedGroup"))
-	assert(tile_structure_conf.has("CanConnectToBorders"))
-	assert(tile_structure_conf.has("Image"))
-	assert(tile_structure_conf.has("Variations"))
-
 	var tile_structure = TMM_TileStructure.new()
 	_set_properties(tile_structure, tile_structure_conf)
 	_set_default_state(tile_structure, tile_structure_conf.Image)
@@ -84,8 +67,5 @@ func _set_default_state(tile_structure: TMM_TileStructure,
 func _create_autotiling_states(tile_structure: TMM_TileStructure,
 		variations_conf: Array) -> void:
 	for variation_conf in variations_conf:
-		assert(variation_conf.has("Image"))
-		assert(variation_conf.has("Connections"))
-
 		tile_structure.add_autotiling_state(variation_conf.Image,
 				variation_conf.Connections)
