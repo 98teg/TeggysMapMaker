@@ -152,6 +152,7 @@ func add_autotiling_state(image: Image, connection_ids: Array = []) -> void:
 				var tile = TMM_Tile.new()
 				tile.tile_structure_id = id
 				tile.autotiling_state = autotiling_state
+				tile.sublayer = 0
 
 				var i = y - main_tile[0]
 				var j = x - main_tile[1]
