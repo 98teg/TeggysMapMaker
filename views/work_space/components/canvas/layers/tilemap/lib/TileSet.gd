@@ -5,7 +5,7 @@ var _tile_set := []
 var tile_size := 1 setget set_tile_size
 
 
-func size() -> int:
+func n_of_tiles() -> int:
 	return _tile_set.size()
 
 

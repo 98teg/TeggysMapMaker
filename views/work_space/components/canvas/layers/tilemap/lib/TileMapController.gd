@@ -7,6 +7,7 @@ var _selected_tile_structure : TMM_TileStructure
 var _has_been_modified := false
 var _tiles_to_update := []
 
+
 func init(canvas_conf: Dictionary, layer_conf: Dictionary) -> void:
 	_tile_map.size = [canvas_conf.Width, canvas_conf.Height]
 	_tile_map.tile_size = layer_conf.TileSize
@@ -20,7 +21,8 @@ func init(canvas_conf: Dictionary, layer_conf: Dictionary) -> void:
 
 	_tile_set.tile_size = layer_conf.TileSize
 	_tile_set.init(layer_conf.TileSet)
-	_selected_tile_structure = _tile_set.get_tile_structure(0)
+	if _tile_set.n_of_tiles() != 0:
+		_selected_tile_structure = _tile_set.get_tile_structure(0)
 
 
 func get_image() -> Image:
@@ -29,7 +31,7 @@ func get_image() -> Image:
 
 func select_tile(tile_structure_id: int) -> void:
 	assert(tile_structure_id >= 0)
-	assert(tile_structure_id < _tile_set.size())
+	assert(tile_structure_id < _tile_set.n_of_tiles())
 
 	_selected_tile_structure = _tile_set.get_tile_structure(tile_structure_id)
 
@@ -45,104 +47,8 @@ func erase_tile(i: int, j: int) -> void:
 
 
 func fill(i: int, j: int) -> void:
-	pass
-#	if(i >= 0 and i < _height and j >= 0 and j < _width):
-#		var tile_to_replace = _get_top_tile(i, j)
-#		var selected_layer = _tilemap_layers[_selected_tile.get_layer()]
-#		var w = _selected_tile.get_structure_size()[0]
-#		var h = _selected_tile.get_structure_size()[1]
-#
-#		if tile_to_replace.get_id() == _selected_tile.get_id():
-#			return
-#
-#		var process_now = []
-#
-#		var can_be_processed = true
-#		for subtile in _selected_tile.get_subtiles():
-#			var pos_i = i - subtile[1]
-#			var pos_j = j + subtile[0]
-#
-#			if(pos_i >= 0 and pos_i < _height and pos_j >= 0
-#					and pos_j < _width):
-#				if (_get_top_tile(pos_i, pos_j).get_id()
-#						!= tile_to_replace.get_id()):
-#					can_be_processed = false
-#
-#		if can_be_processed:
-#			process_now.append(Vector2(i, j))
-#
-#		var process_next = []
-#
-#		var marked = []
-#		for i in range(_height):
-#			marked.append([])
-#			for j in range(_width):
-#				marked[i].append([])
-#				marked[i][j] = false
-#
-#		while process_now.size() != 0:
-#			process_next = []
-#
-#			for pos in process_now:
-#				selected_layer.set_tile(pos.x, pos.y, _selected_tile)
-#
-#				can_be_processed = true
-#				for subtile in _selected_tile.get_subtiles():
-#					var pos_i = pos.x + h - subtile[1]
-#					var pos_j = pos.y + subtile[0]
-#
-#					if (_get_top_tile(pos_i, pos_j).get_id()
-#							!= tile_to_replace.get_id()):
-#						can_be_processed = false
-#
-#				if can_be_processed:
-#					if marked[pos.x + h][pos.y] == false:
-#						process_next.append(Vector2(pos.x + h, pos.y))
-#						marked[pos.x + h][pos.y] = true
-#
-#				can_be_processed = true
-#				for subtile in _selected_tile.get_subtiles():
-#					var pos_i = pos.x - subtile[1]
-#					var pos_j = pos.y + w + subtile[0]
-#
-#					if (_get_top_tile(pos_i, pos_j).get_id()
-#							!= tile_to_replace.get_id()):
-#						can_be_processed = false
-#
-#				if can_be_processed:
-#					if marked[pos.x][pos.y + w] == false:
-#						process_next.append(Vector2(pos.x, pos.y + w))
-#						marked[pos.x][pos.y + w] = true
-#
-#				can_be_processed = true
-#				for subtile in _selected_tile.get_subtiles():
-#					var pos_i = pos.x - h - subtile[1]
-#					var pos_j = pos.y + subtile[0]
-#
-#					if (_get_top_tile(pos_i, pos_j).get_id()
-#							!= tile_to_replace.get_id()):
-#						can_be_processed = false
-#
-#				if can_be_processed:
-#					if marked[pos.x - h][pos.y] == false:
-#						process_next.append(Vector2(pos.x - h, pos.y))
-#						marked[pos.x - h][pos.y] = true
-#
-#				can_be_processed = true
-#				for subtile in _selected_tile.get_subtiles():
-#					var pos_i = pos.x - subtile[1]
-#					var pos_j = pos.y - w + subtile[0]
-#
-#					if (_get_top_tile(pos_i, pos_j).get_id()
-#							!= tile_to_replace.get_id()):
-#						can_be_processed = false
-#
-#				if can_be_processed:
-#					if marked[pos.x][pos.y - w] == false:
-#						process_next.append(Vector2(pos.x, pos.y - w))
-#						marked[pos.x][pos.y - w] = true
-#
-#			process_now = process_next
+	var current_layer = _selected_tile_structure.layer
+	_fill_with_tile_structure(_tile_map.get_layer(current_layer), i, j)
 
 
 func change_tile_state(i: int, j: int) -> void:
@@ -166,12 +72,9 @@ func load_tilemap(tilemaplayers: Dictionary) -> void:
 
 func _set_tile_structure(layer: TMM_TileMapLayer, i: int, j: int) -> void:
 	if _selected_tile_structure.has_multiple_tiles():
-		var relative_i
-		var relative_j
-
 		for tile in _selected_tile_structure.get_tiles():
-			relative_i = i + tile.relative_pos[0]
-			relative_j = j + tile.relative_pos[1]
+			var relative_i = i + tile.relative_pos[0]
+			var relative_j = j + tile.relative_pos[1]
 
 			if _set_tile(layer, relative_i, relative_j, tile):
 				_tiles_to_update.append([i, j])
@@ -206,12 +109,9 @@ func _remove_tile_structure(layer: TMM_TileMapLayer, i: int, j: int) -> void:
 	if tile_structure.has_multiple_tiles():
 		var pos_ref = tile_description.relative_pos
 
-		var relative_i
-		var relative_j
-
 		for tile in tile_structure.get_tiles(0, pos_ref):
-			relative_i = i + tile.relative_pos[0]
-			relative_j = j + tile.relative_pos[1]
+			var relative_i = i + tile.relative_pos[0]
+			var relative_j = j + tile.relative_pos[1]
 
 			if _remove_tile(layer, relative_i, relative_j, tile):
 				_tiles_to_update.append([i, j])
@@ -233,6 +133,85 @@ func _remove_tile(layer: TMM_TileMapLayer, i: int, j: int,
 	return false
 
 
+func _fill_with_tile_structure(layer: TMM_TileMapLayer, i: int, j: int) -> void:
+	if not _tile_map.is_in_bounds(i, j):
+		return
+
+	var sub_layer = layer.get_sub_layer(0)
+	var tile_structure_to_replace_id = sub_layer.get_tile_description(i, j).id
+
+	if tile_structure_to_replace_id == _selected_tile_structure.id:
+		return
+
+	var place_now = []
+
+	if _can_tile_structure_be_placed(layer, tile_structure_to_replace_id, i, j):
+		place_now.append([i, j])
+	else:
+		return
+
+	var marked = _create_tile_map_bitmap()
+
+	var w = _selected_tile_structure.width()
+	var h = _selected_tile_structure.height()
+
+	while place_now.size() != 0:
+		var place_next = []
+
+		for coord in place_now:
+			_set_tile_structure(layer, coord[0], coord[1])
+
+			_add_to_place_next(layer, tile_structure_to_replace_id,
+				coord[0] + h, coord[1], place_next, marked)
+			_add_to_place_next(layer, tile_structure_to_replace_id,
+				coord[0], coord[1] + w, place_next, marked)
+			_add_to_place_next(layer, tile_structure_to_replace_id,
+				coord[0] - h, coord[1], place_next, marked)
+			_add_to_place_next(layer, tile_structure_to_replace_id,
+				coord[0], coord[1] - w, place_next, marked)
+
+		place_now = place_next
+
+
+func _add_to_place_next(layer: TMM_TileMapLayer,
+		tile_structure_to_replace_id: int, i: int, j: int, place_next: Array,
+		marked: Array) -> void:
+	if not _tile_map.is_in_bounds(i, j):
+		return
+
+	if _can_tile_structure_be_placed(layer, tile_structure_to_replace_id, i, j):
+		if not marked[i][j]:
+			place_next.append([i, j])
+			marked[i][j] = true
+
+
+func _can_tile_structure_be_placed(layer: TMM_TileMapLayer,
+		tile_structure_to_replace_id: int, i: int, j: int) -> bool:
+	for tile in _selected_tile_structure.get_tiles():
+		var relative_i = i + tile.relative_pos[0]
+		var relative_j = j + tile.relative_pos[1]
+
+		if _tile_map.is_in_bounds(relative_i, relative_j):
+			var sub_layer = layer.get_sub_layer(tile.sub_layer)
+			var top_tile_structure = sub_layer.get_tile_description(relative_i,
+				relative_j)
+			if top_tile_structure.id != tile_structure_to_replace_id:
+				return false
+	return true
+
+
+func _create_tile_map_bitmap() -> Array:
+	var bitmap = []
+
+	for i in _tile_map.height():
+		bitmap.append([])
+		for j in _tile_map.width():
+			bitmap[i].append([])
+			bitmap[i][j] = false
+
+	return bitmap
+
+
 func _change_tile_structure_autotiling_state(layer: TMM_TileMapLayer, i: int,
 		j: int) -> void:
 	if layer.has_air(i, j):
@@ -248,12 +227,9 @@ func _change_tile_structure_autotiling_state(layer: TMM_TileMapLayer, i: int,
 	if tile_structure.has_multiple_tiles():
 		var pos_ref = tile_description.relative_pos
 
-		var relative_i
-		var relative_j
-
 		for tile in tile_structure.get_tiles(pos_ref):
-			relative_i = i + tile.relative_pos[0]
-			relative_j = j + tile.relative_pos[1]
+			var relative_i = i + tile.relative_pos[0]
+			var relative_j = j + tile.relative_pos[1]
 
 			_change_tile_autotiling_state(layer, i, j, tile_structure,
 				tile_description.autotiling_state, tile.relative_pos)

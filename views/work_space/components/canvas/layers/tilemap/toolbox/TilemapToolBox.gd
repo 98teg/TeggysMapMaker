@@ -82,12 +82,12 @@ func _update_extra_tools(extra_tools):
 
 	for extra_tool in extra_tools:
 		match extra_tool:
-			TMM_TileMap.Tool.WRENCH:
+			TMM_TileMapEnum.Tool.WRENCH:
 				wrench_flag = true
 				if _wrench_flag == false:
 					_wrench_flag = true
 					get_node("ToolsPanel/Tools/LeftTools").add_child(_wrench_item)
-			TMM_TileMap.Tool.BUCKET_FILL:
+			TMM_TileMapEnum.Tool.BUCKET_FILL:
 				bucket_fill_flag = true
 				if _bucket_fill_flag == false:
 					_bucket_fill_flag = true

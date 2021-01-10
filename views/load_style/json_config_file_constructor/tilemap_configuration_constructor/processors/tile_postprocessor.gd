@@ -60,7 +60,7 @@ func _get_connection_type(variations: Array) -> int:
 					"NorthWest":
 						return TMM_TileMapEnum.ConnectionType.CIRCLE
 
-	return TMM_Tile.ConnectionType.CROSS
+	return TMM_TileMapEnum.ConnectionType.CROSS
 
 
 func _transform_variations(variations: Array, connection_type: int) -> void:
