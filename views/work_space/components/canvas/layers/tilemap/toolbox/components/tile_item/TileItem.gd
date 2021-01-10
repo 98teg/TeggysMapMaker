@@ -28,12 +28,12 @@ var _extra_tools : Array = []
 # + Icon: Tile icon (Image)
 # + ExtraTools: Tile extra tools available (Array)
 #    - Each element is a member of the enum _TileMap.Tool
-func init(tile: Tile) -> void:
-	_set_id(tile.get_id())
-	_set_name(tile.get_name())
-	_set_icon(tile.get_icon())
+func init(tile: Dictionary) -> void:
+	_set_id(tile.ID)
+	_set_name(tile.Name)
+	_set_icon(tile.Icon)
 
-	for extra_tool in tile.get_extra_tools():
+	for extra_tool in tile.ExtraTools:
 		_add_extra_tool(extra_tool)
 
 # Selects this tile

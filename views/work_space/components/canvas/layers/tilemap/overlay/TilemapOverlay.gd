@@ -13,7 +13,7 @@ var _tile_size : int = 0
 
 var _selected_tile : int
 
-var _tile_set := {}
+var _tile_set := []
 
 ####################
 # Public functions #
@@ -42,12 +42,12 @@ func set_grid_visibility(visibility: bool) -> void:
 
 # Sets the squares
 func set_squares(tile_id: int) -> void:
-	get_node("Squares").set_squares(_tile_set[tile_id].get_subtiles())
+	# get_node("Squares").set_squares(_tile_set[tile_id].get_subtiles())
 	_selected_tile = tile_id
 
 
 func set_tool(tool_id: int) -> void:
-	if tool_id != Tilemap.Tool.PENCIL and tool_id != Tilemap.Tool.BUCKET_FILL:
+	if tool_id != TMM_TileMap.Tool.PENCIL and tool_id != TMM_TileMap.Tool.BUCKET_FILL:
 		get_node("Squares").set_squares([[0, 0]])
 	else:
 		set_squares(_selected_tile)

@@ -105,6 +105,11 @@ _global_script_classes=[ {
 "path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileMap.gd"
 }, {
 "base": "Reference",
+"class": "TMM_TileMapController",
+"language": "GDScript",
+"path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileMapController.gd"
+}, {
+"base": "Reference",
 "class": "TMM_TileMapLayer",
 "language": "GDScript",
 "path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileMapLayer.gd"
@@ -149,6 +154,7 @@ _global_script_class_icons={
 "StyleDataConstructor": "",
 "TMM_Tile": "",
 "TMM_TileMap": "",
+"TMM_TileMapController": "",
 "TMM_TileMapLayer": "",
 "TMM_TileMapSubLayer": "",
 "TMM_TileSet": "",

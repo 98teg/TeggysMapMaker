@@ -41,6 +41,14 @@ func image() -> Image:
 	return image
 
 
+func is_in_bounds(i: int, j: int) -> bool:
+	return i >= 0 and i < height() and j >= 0 and j < width()
+
+
+func n_of_layers() -> int:
+	return _layers.size()
+
+
 func get_layer(layer_id: int) -> TMM_TileMapLayer:
 	assert(layer_id >= 0)
 	assert(layer_id < _layers.size())
@@ -97,7 +105,9 @@ func _resize_background() -> void:
 	var h = tile_size * height()
 
 	_background.create(w, h, false, Image.FORMAT_RGBA8)
-	_fill_background()
+
+	if not background_tile_image.is_empty():
+		_fill_background()
 
 
 func _fill_background() -> void:

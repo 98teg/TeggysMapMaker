@@ -2,8 +2,7 @@ class_name TMM_Tile
 
 
 enum SpecialTile {
-	AIR = -1,
-	OUT_OF_BOUNDS = -2
+	AIR = -1
 }
 
 
@@ -16,7 +15,7 @@ enum ConnectionType {
 
 var tile_structure_id := 0
 var autotiling_state := 0 setget set_autotiling_state
-var sublayer := 0 setget set_sublayer
+var sub_layer := 0 setget set_sub_layer
 var relative_pos := [0, 0] setget set_relative_pos
 var image := Image.new()
 
@@ -41,10 +40,10 @@ func set_autotiling_state(new_autotiling_state: int) -> void:
 	autotiling_state = new_autotiling_state
 
 
-func set_sublayer(new_sublayer: int) -> void:
-	assert(new_sublayer >= 0)
+func set_sub_layer(new_sub_layer: int) -> void:
+	assert(new_sub_layer >= 0)
 
-	sublayer = new_sublayer
+	sub_layer = new_sub_layer
 
 
 func set_relative_pos(new_relative_pos: Array) -> void:

@@ -114,8 +114,8 @@ func _create_proyect():
 	var height = get_node("SizeContainer/Height").get_value()
 
 	var canvas_conf = {
-		"Width": width,
-		"Height": height
+		"Width": int(width),
+		"Height": int(height)
 	}
 
 	emit_signal("style_selected", canvas_conf, _style_conf)

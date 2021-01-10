@@ -3,7 +3,6 @@
 [ext_resource path="res://views/load_style/LoadStyle.gd" type="Script" id=1]
 [ext_resource path="res://resources/icons/ok.png" type="Texture" id=2]
 
-
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
 
@@ -192,8 +191,8 @@ mode_overrides_title = false
 mode = 0
 access = 2
 filters = PoolStringArray( "*.json ; Style JSON" )
-current_dir = "/home/tomas/Escritorio/Teggy's Map Maker"
-current_path = "/home/tomas/Escritorio/Teggy's Map Maker/"
+current_dir = "/home/tomas/Escritorio/Godot/Teggy's Map Maker"
+current_path = "/home/tomas/Escritorio/Godot/Teggy's Map Maker/"
 [connection signal="gui_input" from="PathSelection/Path" to="." method="_path_text_clicked"]
 [connection signal="pressed" from="PathSelection/LoadStyle" to="." method="_select_style"]
 [connection signal="pressed" from="StartContainer/StartButton" to="." method="_create_proyect"]

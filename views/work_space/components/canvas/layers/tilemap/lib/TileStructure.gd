@@ -15,7 +15,6 @@ var connected_group := 0
 var can_connect_to_borders := true
 
 var _tiles := []
-var _tiles_relative_pos := []
 var _connection_id_to_autotiling_state := {}
 
 
@@ -35,7 +34,7 @@ func has_multiple_tiles() -> bool:
 	return size != [1, 1]
 
 
-func get_tile(autotiling_state: int, relative_pos := [0,  0]) -> TMM_Tile:
+func get_tile(autotiling_state := 0, relative_pos := [0,  0]) -> TMM_Tile:
 	assert(relative_pos.size() == 2)
 	for i in range(2):
 		assert(relative_pos[i] is int)
@@ -59,23 +58,19 @@ func get_autotiling_state(connection_id: int) -> int:
 		return 0
 
 
-func get_tiles_relative_pos(tile_pos_ref := [0, 0]) -> Array:
+func get_tiles(autotiling_state := 0, tile_pos_ref := [0, 0]) -> Array:
 	assert(tile_pos_ref.size() == 2)
 	for value in tile_pos_ref:
 		assert(value is int)
 
-	if tile_pos_ref != [0, 0]:
-		var tiles_relative_pos = []
+	var tiles_matrix = _tiles[autotiling_state]
+	var tiles = []
 
-		for tile_relative_pos in _tiles_relative_pos:
-			var new_tile_relative_pos = [0, 0]
-			new_tile_relative_pos[0] = tile_relative_pos[0] - tile_pos_ref[0]
-			new_tile_relative_pos[1] = tile_relative_pos[1] - tile_pos_ref[1]
+	for i in tiles_matrix.keys():
+		for j in tiles_matrix[i].keys():
+			tiles.append(_duplicate(tiles_matrix[i][j], tile_pos_ref))
 
-			tiles_relative_pos.append(new_tile_relative_pos)
-
-		return tiles_relative_pos
-	return _tiles_relative_pos
+	return tiles
 
 
 func set_tile_size(new_tile_size: int) -> void:
@@ -129,16 +124,9 @@ func set_extra_tools(new_extra_tools: Array) -> void:
 
 
 func set_connection_type(new_connection_type: int) -> void:
-	assert(TMM_Tile.ConnectionType.has(new_connection_type))
+	assert(TMM_Tile.ConnectionType.values().has(new_connection_type))
 
 	connection_type = new_connection_type
-
-
-func generate_tiles_relative_pos() -> void:
-	for x in range(width()):
-		for y in range(height()):
-			if colission_mask[height() - 1 - y][x]:
-				_tiles_relative_pos.append([x - main_tile[0], y - main_tile[1]])
 
 
 func add_autotiling_state(image: Image, connection_ids: Array = []) -> void:
@@ -152,10 +140,10 @@ func add_autotiling_state(image: Image, connection_ids: Array = []) -> void:
 				var tile = TMM_Tile.new()
 				tile.tile_structure_id = id
 				tile.autotiling_state = autotiling_state
-				tile.sublayer = 0
+				tile.sub_layer = 0
 
-				var i = y - main_tile[0]
-				var j = x - main_tile[1]
+				var i = - y - main_tile[1]
+				var j = x - main_tile[0]
 				tile.relative_pos = [i, j]
 
 				var pos_x = x * tile_size
@@ -173,6 +161,25 @@ func add_autotiling_state(image: Image, connection_ids: Array = []) -> void:
 		_connection_id_to_autotiling_state[connection_id] = autotiling_state
 	
 	_tiles.append(tiles_matrix)
+
+
+func _duplicate(tile: TMM_Tile, pos_ref := [0, 0]) -> TMM_Tile:
+	assert(pos_ref.size() == 2)
+	for value in pos_ref:
+		assert(value is int)
+
+	var new_tile = TMM_Tile.new()
+
+	new_tile.tile_structure_id = tile.tile_structure_id
+	new_tile.autotiling_state = tile.autotiling_state
+	new_tile.sub_layer = tile.sub_layer
+	new_tile.relative_pos = [
+		tile.relative_pos[0] - pos_ref[0],
+		tile.relative_pos[1] - pos_ref[1]
+	]
+	new_tile.image = tile.image
+
+	return new_tile
 
 
 func _is_trimmed(new_colission_mask: Array) -> bool:

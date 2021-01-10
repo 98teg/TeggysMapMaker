@@ -1,7 +1,7 @@
 extends JSONConfigProcessor
 
 
-func _postprocess(tile: Dictionary) -> Tile:
+func _postprocess(tile: Dictionary) -> Dictionary:
 	if has_variable("last_id"):
 		tile.ID = get_variable("last_id") + 1
 		set_variable("last_id", tile.ID)
@@ -40,41 +40,38 @@ func _postprocess(tile: Dictionary) -> Tile:
 
 	_transform_variations(tile.Variations, tile.ConnectionType)
 
-	var new_tile = Tile.new()
-	new_tile.init(tile)
-
-	return new_tile
+	return tile
 
 
 func _get_connection_type(variations: Array) -> int:
 	if variations.empty():
-		return Tile.ConnectionType.ISOLATED
+		return TMM_Tile.ConnectionType.ISOLATED
 
 	for variation in variations:
 		for connection in variation.Connections:
 			for cardinal_coordinate in connection:
 				match cardinal_coordinate:
 					"NorthEast":
-						return Tile.ConnectionType.CIRCLE
+						return TMM_Tile.ConnectionType.CIRCLE
 					"SouthEast":
-						return Tile.ConnectionType.CIRCLE
+						return TMM_Tile.ConnectionType.CIRCLE
 					"SouthWest":
-						return Tile.ConnectionType.CIRCLE
+						return TMM_Tile.ConnectionType.CIRCLE
 					"NorthWest":
-						return Tile.ConnectionType.CIRCLE
+						return TMM_Tile.ConnectionType.CIRCLE
 
-	return Tile.ConnectionType.CROSS
+	return TMM_Tile.ConnectionType.CROSS
 
 
 func _transform_variations(variations: Array, connection_type: int) -> void:
-	if connection_type == Tile.ConnectionType.ISOLATED:
+	if connection_type == TMM_Tile.ConnectionType.ISOLATED:
 		return
 
 	for variation in variations:
 		for i in range(variation.Connections.size()):
 			var acc = 0
 
-			if connection_type == Tile.ConnectionType.CROSS:
+			if connection_type == TMM_Tile.ConnectionType.CROSS:
 				for cardinal_coordinate in variation.Connections[i]:
 					match cardinal_coordinate:
 						"North":

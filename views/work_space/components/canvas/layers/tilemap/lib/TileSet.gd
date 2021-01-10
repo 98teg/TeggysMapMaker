@@ -2,6 +2,11 @@ class_name TMM_TileSet
 
 
 var _tile_set := []
+var tile_size := 1 setget set_tile_size
+
+
+func size() -> int:
+	return _tile_set.size()
 
 
 func get_tile_structure(tile_structure_id: int) -> TMM_TileStructure:
@@ -30,6 +35,12 @@ func get_tile(tile_description: Dictionary) -> TMM_Tile:
 	return tile
 
 
+func set_tile_size(new_tile_size: int) -> void:
+	assert(new_tile_size > 0)
+
+	tile_size = new_tile_size
+
+
 func init(tile_set_conf: Array) -> void:
 	for tile_structure_conf in tile_set_conf:
 		_create_tile_structure(tile_structure_conf)
@@ -40,12 +51,12 @@ func _create_tile_structure(tile_structure_conf: Dictionary) -> void:
 	_set_properties(tile_structure, tile_structure_conf)
 	_set_default_state(tile_structure, tile_structure_conf.Image)
 	_create_autotiling_states(tile_structure, tile_structure_conf.Variations)
-
-	tile_structure.generate_tiles_relative_pos()
+	_tile_set.append(tile_structure)
 
 
 func _set_properties(tile_structure: TMM_TileStructure,
 		tile_structure_conf: Dictionary) -> void:
+	tile_structure.tile_size = tile_size
 	tile_structure.id = tile_structure_conf.ID
 	tile_structure.name = tile_structure_conf.Name
 	tile_structure.icon = tile_structure_conf.Icon

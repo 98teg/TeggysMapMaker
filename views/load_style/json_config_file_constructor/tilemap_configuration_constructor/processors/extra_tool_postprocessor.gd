@@ -4,8 +4,8 @@ extends JSONConfigProcessor
 func _postprocess(extra_tool: String) -> int:
 	match extra_tool:
 		"Wrench":
-			return Tilemap.Tool.WRENCH
+			return TMM_TileMap.Tool.WRENCH
 		"BucketFill":
-			return Tilemap.Tool.BUCKET_FILL
+			return TMM_TileMap.Tool.BUCKET_FILL
 
 	return -1
