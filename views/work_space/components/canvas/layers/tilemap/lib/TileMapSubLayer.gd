@@ -9,6 +9,8 @@ var tile_size := 1 setget set_tile_size
 var _map := [[]]
 var _image := Image.new()
 var _empty_tile := Image.new()
+var _has_been_modified := false
+var _prev_map := [[]]
 
 
 func width() -> int:
@@ -39,6 +41,10 @@ func has_tile(i: int, j: int, tile: TMM_Tile) -> bool:
 	return tile.get_description().hash() == get_tile_description(i, j).hash()
 
 
+func has_been_modified() -> bool:
+	return _has_been_modified
+
+
 func get_tile_description(i: int, j: int) -> Dictionary:
 	assert(is_in_bounds(i, j))
 
@@ -51,20 +57,6 @@ func get_tile_description(i: int, j: int) -> Dictionary:
 		tile_description["relative_pos"] = [0, 0]
 
 	return tile_description
-
-
-func set_tile(i: int, j: int, tile: TMM_Tile) -> void:
-	assert(is_in_bounds(i, j))
-
-	_map[i][j] = tile.get_description()
-	_place_tile_image(i, j, tile.image)
-
-
-func remove_tile(i: int, j: int) -> void:
-	assert(is_in_bounds(i, j))
-
-	_map[i][j] = AIR
-	_place_tile_image(i, j, _empty_tile)
 
 
 func set_size(new_size: Array) -> void:
@@ -87,6 +79,46 @@ func set_tile_size(new_tile_size: int) -> void:
 	_resize_empty_tile()
 
 
+func set_tile(i: int, j: int, tile: TMM_Tile) -> void:
+	assert(is_in_bounds(i, j))
+
+	_map[i][j] = tile.get_description()
+	_has_been_modified = true
+
+	_place_tile_image(i, j, tile.image)
+
+
+func remove_tile(i: int, j: int) -> void:
+	assert(is_in_bounds(i, j))
+
+	_map[i][j] = AIR
+	_has_been_modified = true
+
+	_place_tile_image(i, j, _empty_tile)
+
+
+func retrieve_prev_map() -> Array:
+	var prev_map = _prev_map
+	_prev_map = _map.duplicate(true)
+
+	_has_been_modified = false
+
+	return prev_map
+
+
+func load_map(tile_set: TMM_TileSet, map: Array) -> void:
+	_map = map
+	_has_been_modified = true
+	
+	for i in height():
+		for j in width():
+			if has_air(i, j):
+				_place_tile_image(i, j, _empty_tile)
+			else:
+				var tile = tile_set.get_tile(get_tile_description(i, j))
+				_place_tile_image(i, j, tile.image)
+
+
 func _resize_map() -> void:
 	_map = []
 	for i in range(height()):
@@ -94,6 +126,11 @@ func _resize_map() -> void:
 		for j in range(width()):
 			_map[i].append([])
 			_map[i][j] = AIR
+
+	if _prev_map == [[]]:
+		_prev_map = _map.duplicate(true)
+	else:
+		_has_been_modified = true
 
 	_resize_image()
 

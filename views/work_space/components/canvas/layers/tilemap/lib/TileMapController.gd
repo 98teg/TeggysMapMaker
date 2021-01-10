@@ -145,34 +145,23 @@ func fill(i: int, j: int) -> void:
 #			process_now = process_next
 
 
-func change_tile_state(i: int, j: int):
+func change_tile_state(i: int, j: int) -> void:
 	var current_layer = _selected_tile_structure.layer
 	var layer = _tile_map.get_layer(current_layer)
 	_change_tile_structure_autotiling_state(layer, i, j)
 
 
-func erase_tile_in_every_layer(i: int, j: int):
+func erase_tile_in_every_layer(i: int, j: int) -> void:
 	for layer in _tile_map.n_of_layers():
 		_remove_tile_structure(_tile_map.get_layer(layer), i, j)
 
 
-func retrieve_previous_tilemap():
-	return {}
-#	var tilemap_layers = []
-#	for i in range(_tilemap_layers.size()):
-#		if _tilemap_layers[i].has_been_modified():
-#			tilemap_layers.append({
-#				"ID": i,
-#				"TileMap": _tilemap_layers[i].retrieve_previous_tilemaplayer()
-#			})
-#
-#	return tilemap_layers
+func retrieve_previous_tilemap() -> Dictionary:
+	return _tile_map.retrieve_prev_map()
 
 
-func load_tilemap(tilemaplayers : Array):
-	pass
-#	for tilemaplayer in tilemaplayers:
-#		_tilemap_layers[tilemaplayer.ID].load_tilemaplayer(tilemaplayer.TileMap)
+func load_tilemap(tilemaplayers: Dictionary) -> void:
+	_tile_map.load_map(_tile_set, tilemaplayers)
 
 
 func _set_tile_structure(layer: TMM_TileMapLayer, i: int, j: int) -> void:

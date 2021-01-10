@@ -34,6 +34,17 @@ func is_in_bounds(i: int, j: int) -> bool:
 	return i >= 0 and i < height() and j >= 0 and j < width()
 
 
+func n_of_sub_layers() -> int:
+	return _sub_layers.size()
+
+
+func get_sub_layer(sub_layer_id: int) -> TMM_TileMapSubLayer:
+	assert(sub_layer_id >= 0)
+	assert(sub_layer_id < _sub_layers.size())
+
+	return _sub_layers[sub_layer_id]
+
+
 func has_air(i: int, j: int) -> bool:
 	assert(is_in_bounds(i, j))
 
@@ -44,13 +55,6 @@ func has_air(i: int, j: int) -> bool:
 	return true
 
 
-func get_sub_layer(sub_layer_id: int) -> TMM_TileMapSubLayer:
-	assert(sub_layer_id >= 0)
-	assert(sub_layer_id < _sub_layers.size())
-
-	return _sub_layers[sub_layer_id]
-
-
 func get_top_tile_description(i: int, j: int) -> Dictionary:
 	assert(is_in_bounds(i, j))
 
@@ -59,6 +63,13 @@ func get_top_tile_description(i: int, j: int) -> Dictionary:
 			return get_sub_layer(sub_layer_id).get_tile_description(i, j)
 
 	return get_sub_layer(0).get_tile_description(i, j)
+
+
+func has_been_modified() -> bool:
+	for i in n_of_sub_layers():
+		if get_sub_layer(i).has_been_modified():
+			return true
+	return false
 
 
 func set_size(new_size: Array) -> void:
@@ -88,3 +99,18 @@ func add_sub_layer() -> void:
 	sub_layer.tile_size = tile_size
 
 	_sub_layers.append(sub_layer)
+
+
+func retrieve_prev_map() -> Dictionary:
+	var prev_map = {}
+
+	for i in n_of_sub_layers():
+		if get_sub_layer(i).has_been_modified():
+			prev_map[i] = get_sub_layer(i).retrieve_prev_map()
+
+	return prev_map
+
+
+func load_map(tile_set: TMM_TileSet, map: Dictionary) -> void:
+	for i in map.keys():
+		get_sub_layer(i).load_map(tile_set, map[i])

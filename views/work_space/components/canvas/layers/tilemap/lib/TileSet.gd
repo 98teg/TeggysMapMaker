@@ -17,18 +17,8 @@ func get_tile_structure(tile_structure_id: int) -> TMM_TileStructure:
 
 func get_tile(tile_description: Dictionary) -> TMM_Tile:
 	var tile_structure = get_tile_structure(tile_description.id)
-
-	var autotiling_state
-	if tile_description.has("autotiling_state"):
-		autotiling_state = tile_description.autotiling_state
-	else:
-		autotiling_state = 0
-
-	var relative_pos
-	if tile_description.has("relative_pos"):
-		relative_pos = tile_description.relative_pos
-	else:
-		relative_pos = [0, 0]
+	var autotiling_state = tile_description.autotiling_state
+	var relative_pos = tile_description.relative_pos
 
 	var tile = tile_structure.get_tile(autotiling_state, relative_pos)
 	

@@ -36,10 +36,12 @@ func has_multiple_tiles() -> bool:
 
 func get_tile(autotiling_state := 0, relative_pos := [0,  0]) -> TMM_Tile:
 	assert(relative_pos.size() == 2)
-	for i in range(2):
-		assert(relative_pos[i] is int)
-		assert(relative_pos[i] >= 0 - main_tile[i])
-		assert(relative_pos[i] < size[i] - main_tile[i])
+	assert(relative_pos[0] is int)
+	assert(relative_pos[0] > 0 - height())
+	assert(relative_pos[0] < height() - main_tile[1])
+	assert(relative_pos[1] is int)
+	assert(relative_pos[1] > 0 - width())
+	assert(relative_pos[1] < width() - main_tile[0])
 
 	var tiles_matrix = _tiles[autotiling_state]
 	var tile = tiles_matrix[relative_pos[0]][relative_pos[1]]
@@ -118,7 +120,7 @@ func set_main_tile(new_main_tile: Array) -> void:
 
 func set_extra_tools(new_extra_tools: Array) -> void:
 	for extra_tool in new_extra_tools:
-		assert(TMM_TileMap.Tool.has(extra_tool))
+		assert(TMM_TileMapEnum.Tool.values().has(extra_tool))
 
 	extra_tools = new_extra_tools
 

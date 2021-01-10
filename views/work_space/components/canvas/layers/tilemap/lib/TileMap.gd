@@ -48,6 +48,13 @@ func get_layer(layer_id: int) -> TMM_TileMapLayer:
 	return _layers[layer_id]
 
 
+func has_been_modified() -> bool:
+	for i in n_of_layers():
+		if get_layer(i).has_been_modified():
+			return true
+	return false
+
+
 func set_size(new_size: Array) -> void:
 	assert(new_size.size() == 2)
 	for value in new_size:
@@ -88,6 +95,21 @@ func add_layer() -> void:
 	layer.tile_size = tile_size
 
 	_layers.append(layer)
+
+
+func retrieve_prev_map() -> Dictionary:
+	var prev_map = {}
+
+	for i in n_of_layers():
+		if get_layer(i).has_been_modified():
+			prev_map[i] = get_layer(i).retrieve_prev_map()
+
+	return prev_map
+
+
+func load_map(tile_set: TMM_TileSet, map: Dictionary) -> void:
+	for i in map.keys():
+		get_layer(i).load_map(tile_set, map[i])
 
 
 func _resize_background() -> void:
