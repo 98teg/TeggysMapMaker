@@ -47,7 +47,7 @@ func set_squares(tile_id: int) -> void:
 
 
 func set_tool(tool_id: int) -> void:
-	if tool_id != TMM_TileMap.Tool.PENCIL and tool_id != TMM_TileMap.Tool.BUCKET_FILL:
+	if tool_id != TMM_TileMapEnum.Tool.PENCIL and tool_id != TMM_TileMapEnum.Tool.BUCKET_FILL:
 		get_node("Squares").set_squares([[0, 0]])
 	else:
 		set_squares(_selected_tile)

@@ -1,7 +1,7 @@
 class_name TMM_TileMapSubLayer
 
 
-const AIR := {"id": TMM_Tile.SpecialTile.AIR}
+const AIR := {"id": TMM_TileMapEnum.SpecialTile.AIR}
 
 var size := [1, 1] setget set_size
 var tile_size := 1 setget set_tile_size

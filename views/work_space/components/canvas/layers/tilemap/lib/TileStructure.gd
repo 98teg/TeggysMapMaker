@@ -10,7 +10,7 @@ var size := [1, 1] setget set_size
 var colission_mask := [[true]] setget set_colission_mask
 var main_tile := [0, 0] setget set_main_tile
 var extra_tools := [] setget set_extra_tools
-var connection_type : int = TMM_Tile.ConnectionType.ISOLATED setget set_connection_type
+var connection_type : int = TMM_TileMapEnum.ConnectionType.ISOLATED setget set_connection_type
 var connected_group := 0
 var can_connect_to_borders := true
 
@@ -124,7 +124,7 @@ func set_extra_tools(new_extra_tools: Array) -> void:
 
 
 func set_connection_type(new_connection_type: int) -> void:
-	assert(TMM_Tile.ConnectionType.values().has(new_connection_type))
+	assert(TMM_TileMapEnum.ConnectionType.values().has(new_connection_type))
 
 	connection_type = new_connection_type
 

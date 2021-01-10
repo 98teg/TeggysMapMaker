@@ -110,6 +110,11 @@ _global_script_classes=[ {
 "path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileMapController.gd"
 }, {
 "base": "Reference",
+"class": "TMM_TileMapEnum",
+"language": "GDScript",
+"path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileMapEnum.gd"
+}, {
+"base": "Reference",
 "class": "TMM_TileMapLayer",
 "language": "GDScript",
 "path": "res://views/work_space/components/canvas/layers/tilemap/lib/TileMapLayer.gd"
@@ -155,6 +160,7 @@ _global_script_class_icons={
 "TMM_Tile": "",
 "TMM_TileMap": "",
 "TMM_TileMapController": "",
+"TMM_TileMapEnum": "",
 "TMM_TileMapLayer": "",
 "TMM_TileMapSubLayer": "",
 "TMM_TileSet": "",

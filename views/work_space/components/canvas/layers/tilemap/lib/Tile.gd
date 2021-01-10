@@ -1,18 +1,6 @@
 class_name TMM_Tile
 
 
-enum SpecialTile {
-	AIR = -1
-}
-
-
-enum ConnectionType {
-	ISOLATED,
-	CROSS,
-	CIRCLE
-}
-
-
 var tile_structure_id := 0
 var autotiling_state := 0 setget set_autotiling_state
 var sub_layer := 0 setget set_sub_layer

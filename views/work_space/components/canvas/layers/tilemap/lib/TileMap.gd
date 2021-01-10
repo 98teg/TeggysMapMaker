@@ -1,14 +1,6 @@
 class_name TMM_TileMap
 
 
-enum Tool{
-	PENCIL,
-	WRENCH,
-	ERASER,
-	BUCKET_FILL
-}
-
-
 var size := [1, 1] setget set_size
 var tile_size := 1 setget set_tile_size
 var background_tile_image := Image.new() setget set_background_tile_image
