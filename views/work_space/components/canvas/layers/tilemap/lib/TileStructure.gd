@@ -34,21 +34,21 @@ func has_multiple_tiles() -> bool:
 	return size != [1, 1]
 
 
-func get_tile(autotiling_state := 0, relative_pos := [0,  0]) -> TMM_Tile:
-	assert(relative_pos.size() == 2)
-	assert(relative_pos[0] is int)
-	assert(relative_pos[0] > 0 - height())
-	assert(relative_pos[0] < height() - main_tile[1])
-	assert(relative_pos[1] is int)
-	assert(relative_pos[1] > 0 - width())
-	assert(relative_pos[1] < width() - main_tile[0])
+func get_tile(autotiling_state := 0, relative_coord := [0,  0]) -> TMM_Tile:
+	assert(relative_coord.size() == 2)
+	assert(relative_coord[0] is int)
+	assert(relative_coord[0] > 0 - height())
+	assert(relative_coord[0] < height() - main_tile[1])
+	assert(relative_coord[1] is int)
+	assert(relative_coord[1] > 0 - width())
+	assert(relative_coord[1] < width() - main_tile[0])
 
 	var tiles_matrix = _tiles[autotiling_state]
-	var tile = tiles_matrix[relative_pos[0]][relative_pos[1]]
+	var tile = tiles_matrix[relative_coord[0]][relative_coord[1]]
 
 	assert(tile.tile_structure_id == id)
 	assert(tile.autotiling_state == autotiling_state)
-	assert(tile.relative_pos == relative_pos)
+	assert(tile.relative_coord == relative_coord)
 
 	return tile
 
@@ -60,9 +60,9 @@ func get_autotiling_state(connection_id: int) -> int:
 		return 0
 
 
-func get_tiles(autotiling_state := 0, tile_pos_ref := [0, 0]) -> Array:
-	assert(tile_pos_ref.size() == 2)
-	for value in tile_pos_ref:
+func get_tiles(autotiling_state := 0, tile_coord_ref := [0, 0]) -> Array:
+	assert(tile_coord_ref.size() == 2)
+	for value in tile_coord_ref:
 		assert(value is int)
 
 	var tiles_matrix = _tiles[autotiling_state]
@@ -70,7 +70,7 @@ func get_tiles(autotiling_state := 0, tile_pos_ref := [0, 0]) -> Array:
 
 	for i in tiles_matrix.keys():
 		for j in tiles_matrix[i].keys():
-			tiles.append(_duplicate(tiles_matrix[i][j], tile_pos_ref))
+			tiles.append(_duplicate(tiles_matrix[i][j], tile_coord_ref))
 
 	return tiles
 
@@ -146,7 +146,7 @@ func add_autotiling_state(image: Image, connection_ids: Array = []) -> void:
 
 				var i = - y - main_tile[1]
 				var j = x - main_tile[0]
-				tile.relative_pos = [i, j]
+				tile.relative_coord = [i, j]
 
 				var pos_x = x * tile_size
 				var pos_y = image.get_size().y - (tile_size * (y + 1))
@@ -165,9 +165,9 @@ func add_autotiling_state(image: Image, connection_ids: Array = []) -> void:
 	_tiles.append(tiles_matrix)
 
 
-func _duplicate(tile: TMM_Tile, pos_ref := [0, 0]) -> TMM_Tile:
-	assert(pos_ref.size() == 2)
-	for value in pos_ref:
+func _duplicate(tile: TMM_Tile, coord_ref := [0, 0]) -> TMM_Tile:
+	assert(coord_ref.size() == 2)
+	for value in coord_ref:
 		assert(value is int)
 
 	var new_tile = TMM_Tile.new()
@@ -175,9 +175,9 @@ func _duplicate(tile: TMM_Tile, pos_ref := [0, 0]) -> TMM_Tile:
 	new_tile.tile_structure_id = tile.tile_structure_id
 	new_tile.autotiling_state = tile.autotiling_state
 	new_tile.sub_layer = tile.sub_layer
-	new_tile.relative_pos = [
-		tile.relative_pos[0] - pos_ref[0],
-		tile.relative_pos[1] - pos_ref[1]
+	new_tile.relative_coord = [
+		tile.relative_coord[0] - coord_ref[0],
+		tile.relative_coord[1] - coord_ref[1]
 	]
 	new_tile.image = tile.image
 

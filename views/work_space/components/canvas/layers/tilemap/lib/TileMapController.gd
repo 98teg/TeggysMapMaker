@@ -73,8 +73,8 @@ func load_tilemap(tilemaplayers: Dictionary) -> void:
 func _set_tile_structure(layer: TMM_TileMapLayer, i: int, j: int) -> void:
 	if _selected_tile_structure.has_multiple_tiles():
 		for tile in _selected_tile_structure.get_tiles():
-			var relative_i = i + tile.relative_pos[0]
-			var relative_j = j + tile.relative_pos[1]
+			var relative_i = i + tile.relative_coord[0]
+			var relative_j = j + tile.relative_coord[1]
 
 			if _set_tile(layer, relative_i, relative_j, tile):
 				_tiles_to_update.append([i, j])
@@ -107,11 +107,11 @@ func _remove_tile_structure(layer: TMM_TileMapLayer, i: int, j: int) -> void:
 	var tile_structure = _tile_set.get_tile_structure(tile_description.id)
 
 	if tile_structure.has_multiple_tiles():
-		var pos_ref = tile_description.relative_pos
+		var coord_ref = tile_description.relative_coord
 
-		for tile in tile_structure.get_tiles(0, pos_ref):
-			var relative_i = i + tile.relative_pos[0]
-			var relative_j = j + tile.relative_pos[1]
+		for tile in tile_structure.get_tiles(0, coord_ref):
+			var relative_i = i + tile.relative_coord[0]
+			var relative_j = j + tile.relative_coord[1]
 
 			if _remove_tile(layer, relative_i, relative_j, tile):
 				_tiles_to_update.append([i, j])
@@ -188,8 +188,8 @@ func _add_to_place_next(layer: TMM_TileMapLayer,
 func _can_tile_structure_be_placed(layer: TMM_TileMapLayer,
 		tile_structure_to_replace_id: int, i: int, j: int) -> bool:
 	for tile in _selected_tile_structure.get_tiles():
-		var relative_i = i + tile.relative_pos[0]
-		var relative_j = j + tile.relative_pos[1]
+		var relative_i = i + tile.relative_coord[0]
+		var relative_j = j + tile.relative_coord[1]
 
 		if _tile_map.is_in_bounds(relative_i, relative_j):
 			var sub_layer = layer.get_sub_layer(tile.sub_layer)
@@ -225,14 +225,14 @@ func _change_tile_structure_autotiling_state(layer: TMM_TileMapLayer, i: int,
 	var tile_structure = _tile_set.get_tile_structure(tile_description.id)
 
 	if tile_structure.has_multiple_tiles():
-		var pos_ref = tile_description.relative_pos
+		var coord_ref = tile_description.relative_coord
 
-		for tile in tile_structure.get_tiles(pos_ref):
-			var relative_i = i + tile.relative_pos[0]
-			var relative_j = j + tile.relative_pos[1]
+		for tile in tile_structure.get_tiles(0, coord_ref):
+			var relative_i = i + tile.relative_coord[0]
+			var relative_j = j + tile.relative_coord[1]
 
 			_change_tile_autotiling_state(layer, i, j, tile_structure,
-				tile_description.autotiling_state, tile.relative_pos)
+				tile_description.autotiling_state, tile.relative_coord)
 	else:
 		_change_tile_autotiling_state(layer, i, j, tile_structure,
 			tile_description.autotiling_state)
@@ -240,11 +240,11 @@ func _change_tile_structure_autotiling_state(layer: TMM_TileMapLayer, i: int,
 
 func _change_tile_autotiling_state(layer: TMM_TileMapLayer, i: int, j: int,
 		tile_structure: TMM_TileStructure,
-		prev_autotiling_state: int, relative_pos := [0, 0]) -> void:
+		prev_autotiling_state: int, relative_coord := [0, 0]) -> void:
 	var new_autotiling_state = prev_autotiling_state + 1
 	new_autotiling_state %= tile_structure.n_autotiling_states()
 
-	var tile = tile_structure.get_tile(new_autotiling_state, relative_pos)
+	var tile = tile_structure.get_tile(new_autotiling_state, relative_coord)
 
 	_set_tile(layer, i, j, tile)
 

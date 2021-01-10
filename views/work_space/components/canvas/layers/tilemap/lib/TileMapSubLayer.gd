@@ -53,8 +53,8 @@ func get_tile_description(i: int, j: int) -> Dictionary:
 	if not tile_description.has("autotiling_state"):
 		tile_description["autotiling_state"] = 0
 
-	if not tile_description.has("relative_pos"):
-		tile_description["relative_pos"] = [0, 0]
+	if not tile_description.has("relative_coord"):
+		tile_description["relative_coord"] = [0, 0]
 
 	return tile_description
 
