@@ -47,9 +47,9 @@ func _create_grid_lines(width : int, height : int, size : int) -> void:
 # Draws the grid
 func _draw() -> void:
 	for line in _grid_h_lines:
-		draw_line(_transform(line[0]), _transform(line[1]), Color.red, 2)
+		draw_line(_transform(line[0]), _transform(line[1]), Color.red, 1)
 	for line in _grid_v_lines:
-		draw_line(_transform(line[0]), _transform(line[1]), Color.green, 2)
+		draw_line(_transform(line[0]), _transform(line[1]), Color.green, 1)
 
 # Transform a point
 func _transform(p : Vector2) -> Vector2:

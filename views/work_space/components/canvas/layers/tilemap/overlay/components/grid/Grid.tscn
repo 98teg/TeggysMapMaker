@@ -6,28 +6,22 @@
 code = "shader_type canvas_item;
 
 uniform vec4 dark_color : hint_color;
-const vec4 light_color = vec4(1.0, 1.0, 1.0, 1.0);
-const vec4 transparent = vec4(0.0, 0.0, 0.0, 0.0);
+const vec4 light_color = vec4(1.0);
+const vec4 transparent = vec4(0.0);
 
 void fragment(){
 	bool parity;
 
 	if (COLOR.r > 0.5) {
-		parity = (int(FRAGCOORD.x) / 10) % 2 == 0;
+		parity = (int(FRAGCOORD.x) / 1) % 2 == 0;
 	} else {
-		parity = (int(FRAGCOORD.y) / 10) % 2 == 1;
+		parity = (int(FRAGCOORD.y) / 1) % 2 == 1;
 	}
 	
 	if (parity) {
-		vec4 screen_color = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0);
-		float v = max(max(screen_color.r, screen_color.g), screen_color.b);
-		if (v > 0.5) {
-			COLOR = dark_color;
-		} else {
-			COLOR = light_color;
-		}
+		COLOR = dark_color;
 	} else {
-		COLOR = transparent;
+		COLOR = light_color;
 	}
 }"
 custom_defines = ""
