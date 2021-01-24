@@ -10,7 +10,7 @@ var size := [1, 1] setget set_size
 var colission_mask := [[true]] setget set_colission_mask
 var main_tile := [0, 0] setget set_main_tile
 var extra_tools := [] setget set_extra_tools
-var connection_type : int = TMM_TileMapEnum.ConnectionType.ISOLATED setget set_connection_type
+var connection_type : int = TMM_TileMapHelper.ConnectionType.ISOLATED setget set_connection_type
 var connected_group := 0
 var can_connect_to_borders := true
 
@@ -53,26 +53,73 @@ func get_tile(autotiling_state := 0, relative_coord := [0,  0]) -> TMM_Tile:
 	return tile
 
 
-func get_autotiling_state(connection_id: int) -> int:
+func get_autotiling_state(connected_at: Dictionary) -> int:
+	var connection_id = TMM_TileMapHelper.get_connection_id(connection_type,
+		connected_at)
+
 	if _connection_id_to_autotiling_state.has(connection_id):
 		return _connection_id_to_autotiling_state[connection_id]
 	else:
 		return 0
 
 
-func get_tiles(autotiling_state := 0, tile_coord_ref := [0, 0]) -> Array:
-	assert(tile_coord_ref.size() == 2)
-	for value in tile_coord_ref:
-		assert(value is int)
-
+func get_tiles(autotiling_state := 0) -> Array:
 	var tiles_matrix = _tiles[autotiling_state]
 	var tiles = []
 
 	for i in tiles_matrix.keys():
 		for j in tiles_matrix[i].keys():
-			tiles.append(_duplicate(tiles_matrix[i][j], tile_coord_ref))
+			tiles.append(tiles_matrix[i][j])
 
 	return tiles
+
+
+func coords_to_check_n(relative_coord: Array, i: int, j: int) -> Array:
+	return _coords_to_check(_colission_mask_n(),
+		_get_nw_i(relative_coord[0], i), _get_nw_j(relative_coord[1], j),
+		-1, 0, 0, 1)
+
+
+func coords_to_check_ne(relative_coord: Array, i: int, j: int) -> Array:
+	return _coords_to_check(_colission_mask_ne(),
+		_get_nw_i(relative_coord[0], i), _get_nw_j(relative_coord[1], j),
+		-1, 0, width(), 0)
+
+
+func coords_to_check_e(relative_coord: Array, i: int, j: int) -> Array:
+	return _coords_to_check(_colission_mask_e(),
+		_get_nw_i(relative_coord[0], i), _get_nw_j(relative_coord[1], j),
+		0, 1, width(), 0)
+
+
+func coords_to_check_se(relative_coord: Array, i: int, j: int) -> Array:
+	return _coords_to_check(_colission_mask_se(),
+		_get_nw_i(relative_coord[0], i), _get_nw_j(relative_coord[1], j),
+		height(), 0, width(), 0)
+
+
+func coords_to_check_s(relative_coord: Array, i: int, j: int) -> Array:
+	return _coords_to_check(_colission_mask_s(),
+		_get_nw_i(relative_coord[0], i), _get_nw_j(relative_coord[1], j),
+		height(), 0, 0, 1)
+
+
+func coords_to_check_sw(relative_coord: Array, i: int, j: int) -> Array:
+	return _coords_to_check(_colission_mask_sw(),
+		_get_nw_i(relative_coord[0], i), _get_nw_j(relative_coord[1], j),
+		height(), 0, -1, 0)
+
+
+func coords_to_check_w(relative_coord: Array, i: int, j: int) -> Array:
+	return _coords_to_check(_colission_mask_w(),
+		_get_nw_i(relative_coord[0], i), _get_nw_j(relative_coord[1], j),
+		0, 1, -1, 0)
+
+
+func coords_to_check_nw(relative_coord: Array, i: int, j: int) -> Array:
+	return _coords_to_check(_colission_mask_nw(),
+		_get_nw_i(relative_coord[0], i), _get_nw_j(relative_coord[1], j),
+		-1, 0, -1, 0)
 
 
 func set_tile_size(new_tile_size: int) -> void:
@@ -120,13 +167,13 @@ func set_main_tile(new_main_tile: Array) -> void:
 
 func set_extra_tools(new_extra_tools: Array) -> void:
 	for extra_tool in new_extra_tools:
-		assert(TMM_TileMapEnum.Tool.values().has(extra_tool))
+		assert(TMM_TileMapHelper.Tool.values().has(extra_tool))
 
 	extra_tools = new_extra_tools
 
 
 func set_connection_type(new_connection_type: int) -> void:
-	assert(TMM_TileMapEnum.ConnectionType.values().has(new_connection_type))
+	assert(TMM_TileMapHelper.ConnectionType.values().has(new_connection_type))
 
 	connection_type = new_connection_type
 
@@ -163,25 +210,6 @@ func add_autotiling_state(image: Image, connection_ids: Array = []) -> void:
 		_connection_id_to_autotiling_state[connection_id] = autotiling_state
 	
 	_tiles.append(tiles_matrix)
-
-
-func _duplicate(tile: TMM_Tile, coord_ref := [0, 0]) -> TMM_Tile:
-	assert(coord_ref.size() == 2)
-	for value in coord_ref:
-		assert(value is int)
-
-	var new_tile = TMM_Tile.new()
-
-	new_tile.tile_structure_id = tile.tile_structure_id
-	new_tile.autotiling_state = tile.autotiling_state
-	new_tile.sub_layer = tile.sub_layer
-	new_tile.relative_coord = [
-		tile.relative_coord[0] - coord_ref[0],
-		tile.relative_coord[1] - coord_ref[1]
-	]
-	new_tile.image = tile.image
-
-	return new_tile
 
 
 func _is_trimmed(new_colission_mask: Array) -> bool:
@@ -226,3 +254,76 @@ func _is_trimmed(new_colission_mask: Array) -> bool:
 		return false
 
 	return true
+
+
+func _coords_to_check(colission_mask: Array, nw_i: int, nw_j: int,
+		i_offset: int, i_index_factor: int,
+		j_offset: int, j_index_factor: int) -> Array:
+	var tiles_matrix = _tiles[0]
+	var coords_to_check = []
+
+	for index in colission_mask.size():
+		var coords = {}
+
+		if colission_mask[index]:
+			coords["i"] = nw_i + i_offset + index * i_index_factor
+			coords["j"] = nw_j + j_offset + index * j_index_factor
+			coords["sub_layer"] = 0
+			
+			coords_to_check.append(coords)
+
+	return coords_to_check
+
+
+func _get_nw_i(relative_coord_i: int, i: int) -> int:
+	var main_tile_i = i - relative_coord_i
+	var nw_i = main_tile_i + main_tile[1] - (height() - 1)
+	return nw_i
+
+
+func _get_nw_j(relative_coord_j: int, j: int) -> int:
+	var main_tile_j = j - relative_coord_j
+	var nw_j = main_tile_j - main_tile[0]
+	return nw_j 
+
+
+func _colission_mask_n() -> Array:
+	return colission_mask[0]
+
+
+func _colission_mask_ne() -> Array:
+	return [colission_mask[0][width() - 1]]
+
+
+func _colission_mask_e() -> Array:
+	var east_colission_mask = []
+
+	for row in colission_mask:
+		east_colission_mask.append(row[width() - 1])
+
+	return east_colission_mask
+
+
+func _colission_mask_se() -> Array:
+	return [colission_mask[height() - 1][width() - 1]]
+
+
+func _colission_mask_s() -> Array:
+	return colission_mask[height() - 1]
+
+
+func _colission_mask_sw() -> Array:
+	return [colission_mask[height() - 1][0]]
+
+
+func _colission_mask_w() -> Array:
+	var west_colission_mask = []
+
+	for row in colission_mask:
+		west_colission_mask.append(row[0])
+
+	return west_colission_mask
+
+
+func _colission_mask_nw() -> Array:
+	return [colission_mask[0][0]]

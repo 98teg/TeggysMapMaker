@@ -82,12 +82,12 @@ func _update_extra_tools(extra_tools):
 
 	for extra_tool in extra_tools:
 		match extra_tool:
-			TMM_TileMapEnum.Tool.WRENCH:
+			TMM_TileMapHelper.Tool.WRENCH:
 				wrench_flag = true
 				if _wrench_flag == false:
 					_wrench_flag = true
 					get_node("ToolsPanel/Tools/LeftTools").add_child(_wrench_item)
-			TMM_TileMapEnum.Tool.BUCKET_FILL:
+			TMM_TileMapHelper.Tool.BUCKET_FILL:
 				bucket_fill_flag = true
 				if _bucket_fill_flag == false:
 					_bucket_fill_flag = true
@@ -117,14 +117,14 @@ func _init_default_tools_items(tool_item_group : ButtonGroup):
 
 # Init pencil item
 func _init_pencil_item(tool_item_group : ButtonGroup):
-	var conf = {"id": TMM_TileMapEnum.Tool.PENCIL, "name": "Pencil", "icon": _get_image("pencil")}
+	var conf = {"id": TMM_TileMapHelper.Tool.PENCIL, "name": "Pencil", "icon": _get_image("pencil")}
 	get_node("ToolsPanel/Tools/LeftTools/Pencil").init(conf)
 	get_node("ToolsPanel/Tools/LeftTools/Pencil").add_to_button_group(tool_item_group)
 	get_node("ToolsPanel/Tools/LeftTools/Pencil").connect("tool_item_selected", self, "_select_tool")
 
 # Init eraser item
 func _init_eraser_item(tool_item_group : ButtonGroup):
-	var conf = {"id": TMM_TileMapEnum.Tool.ERASER, "name": "Eraser", "icon": _get_image("eraser")}
+	var conf = {"id": TMM_TileMapHelper.Tool.ERASER, "name": "Eraser", "icon": _get_image("eraser")}
 	get_node("ToolsPanel/Tools/RightTools/Eraser").init(conf)
 	get_node("ToolsPanel/Tools/RightTools/Eraser").add_to_button_group(tool_item_group)
 	get_node("ToolsPanel/Tools/RightTools/Eraser").connect("tool_item_selected", self, "_select_tool")
@@ -142,14 +142,14 @@ func _init_extra_tools_items(tool_item_group : ButtonGroup):
 
 # Init wrench item
 func _init_wrench_item(tool_item_group : ButtonGroup):
-	var conf = {"id": TMM_TileMapEnum.Tool.WRENCH, "name": "Wrench", "icon": _get_image("wrench")}
+	var conf = {"id": TMM_TileMapHelper.Tool.WRENCH, "name": "Wrench", "icon": _get_image("wrench")}
 	_wrench_item.init(conf)
 	_wrench_item.add_to_button_group(tool_item_group)
 	_wrench_item.connect("tool_item_selected", self, "_select_tool")
 
 # Init bucket fill item
 func _init_bucket_fill_item(tool_item_group : ButtonGroup):
-	var conf = {"id": TMM_TileMapEnum.Tool.BUCKET_FILL, "name": "Bucket fill", "icon": _get_image("bucket_fill")}
+	var conf = {"id": TMM_TileMapHelper.Tool.BUCKET_FILL, "name": "Bucket fill", "icon": _get_image("bucket_fill")}
 	_bucket_fill_item.init(conf)
 	_bucket_fill_item.add_to_button_group(tool_item_group)
 	_bucket_fill_item.connect("tool_item_selected", self, "_select_tool")

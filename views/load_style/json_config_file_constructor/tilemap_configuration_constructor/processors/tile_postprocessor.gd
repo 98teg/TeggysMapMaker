@@ -45,33 +45,33 @@ func _postprocess(tile: Dictionary) -> Dictionary:
 
 func _get_connection_type(variations: Array) -> int:
 	if variations.empty():
-		return TMM_TileMapEnum.ConnectionType.ISOLATED
+		return TMM_TileMapHelper.ConnectionType.ISOLATED
 
 	for variation in variations:
 		for connection in variation.Connections:
 			for cardinal_coordinate in connection:
 				match cardinal_coordinate:
 					"NorthEast":
-						return TMM_TileMapEnum.ConnectionType.CIRCLE
+						return TMM_TileMapHelper.ConnectionType.CIRCLE
 					"SouthEast":
-						return TMM_TileMapEnum.ConnectionType.CIRCLE
+						return TMM_TileMapHelper.ConnectionType.CIRCLE
 					"SouthWest":
-						return TMM_TileMapEnum.ConnectionType.CIRCLE
+						return TMM_TileMapHelper.ConnectionType.CIRCLE
 					"NorthWest":
-						return TMM_TileMapEnum.ConnectionType.CIRCLE
+						return TMM_TileMapHelper.ConnectionType.CIRCLE
 
-	return TMM_TileMapEnum.ConnectionType.CROSS
+	return TMM_TileMapHelper.ConnectionType.CROSS
 
 
 func _transform_variations(variations: Array, connection_type: int) -> void:
-	if connection_type == TMM_TileMapEnum.ConnectionType.ISOLATED:
+	if connection_type == TMM_TileMapHelper.ConnectionType.ISOLATED:
 		return
 
 	for variation in variations:
 		for i in range(variation.Connections.size()):
 			var acc = 0
 
-			if connection_type == TMM_TileMapEnum.ConnectionType.CROSS:
+			if connection_type == TMM_TileMapHelper.ConnectionType.CROSS:
 				for cardinal_coordinate in variation.Connections[i]:
 					match cardinal_coordinate:
 						"North":

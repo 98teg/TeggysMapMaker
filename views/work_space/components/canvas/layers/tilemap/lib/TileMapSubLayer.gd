@@ -1,7 +1,7 @@
 class_name TMM_TileMapSubLayer
 
 
-const AIR := {"id": TMM_TileMapEnum.SpecialTile.AIR}
+const AIR := {"id": TMM_TileMapHelper.SpecialTile.AIR}
 
 var size := [1, 1] setget set_size
 var tile_size := 1 setget set_tile_size
@@ -32,13 +32,21 @@ func is_in_bounds(i: int, j: int) -> bool:
 func has_air(i: int, j: int) -> bool:
 	assert(is_in_bounds(i, j))
 
-	return get_tile_description(i, j).hash() == AIR.hash()
+	return get_tile_description(i, j).id == AIR.id
 
 
 func has_tile(i: int, j: int, tile: TMM_Tile) -> bool:
 	assert(is_in_bounds(i, j))
 
-	return tile.get_description().hash() == get_tile_description(i, j).hash()
+	var tile_description = get_tile_description(i, j)
+
+	if tile_description.autotiling_state == 0:
+		tile_description.erase("autotiling_state")
+
+	if tile_description.relative_coord == [0, 0]:
+		tile_description.erase("relative_coord")
+
+	return tile.get_description().hash() == tile_description.hash()
 
 
 func has_been_modified() -> bool:

@@ -11,7 +11,7 @@ var _tilemap := TMM_TileMapController.new()
 var _tilemap_tex : ImageTexture = ImageTexture.new()
 var _overlay : Control
 var _tool_box : Control
-var _tool = TMM_TileMapEnum.Tool.PENCIL
+var _tool = TMM_TileMapHelper.Tool.PENCIL
 var _drawing = false
 var _placing_tiles : bool
 var _previous_pos
@@ -89,7 +89,7 @@ func _gui_input(event):
 
 func _mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 	match _tool:
-		TMM_TileMapEnum.Tool.PENCIL:
+		TMM_TileMapHelper.Tool.PENCIL:
 			if button_index == BUTTON_LEFT:
 				_placing_tiles = true
 				if is_pressed:
@@ -105,12 +105,12 @@ func _mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 				else:
 					_end_drawing()
 
-		TMM_TileMapEnum.Tool.WRENCH:
+		TMM_TileMapHelper.Tool.WRENCH:
 			if button_index == BUTTON_LEFT:
 				if is_pressed:
 					_change_tile_state(int(position.y), int(position.x))
 
-		TMM_TileMapEnum.Tool.ERASER:
+		TMM_TileMapHelper.Tool.ERASER:
 			if button_index == BUTTON_LEFT:
 				if is_pressed:
 					_start_drawing(position)
@@ -118,7 +118,7 @@ func _mouse_button(button_index : int, is_pressed : bool, position : Vector2):
 				else:
 					_end_drawing()
 
-		TMM_TileMapEnum.Tool.BUCKET_FILL:
+		TMM_TileMapHelper.Tool.BUCKET_FILL:
 			if button_index == BUTTON_LEFT:
 				if is_pressed:
 					_fill(int(position.y), int(position.x))
@@ -167,12 +167,12 @@ func _end_drawing():
 
 func _set_tile(i : int, j : int):
 	match _tool:
-		TMM_TileMapEnum.Tool.PENCIL:
+		TMM_TileMapHelper.Tool.PENCIL:
 			if _placing_tiles:
 				_tilemap.place_tile(i, j)
 			else:
 				_tilemap.erase_tile(i, j)
-		TMM_TileMapEnum.Tool.ERASER:
+		TMM_TileMapHelper.Tool.ERASER:
 			_tilemap.erase_tile_in_every_layer(i, j)
 
 func _change_tile_state(i : int, j : int):
@@ -197,22 +197,22 @@ func _update_layer():
 
 func _mouse_entered():
 	match _tool:
-		TMM_TileMapEnum.Tool.PENCIL:
+		TMM_TileMapHelper.Tool.PENCIL:
 			var image = load("res://resources/icons/pencil.png")
 			var hotspot = Vector2(0, image.get_size().y)
 			Input.set_custom_mouse_cursor(image, 0, hotspot)
 
-		TMM_TileMapEnum.Tool.WRENCH:
+		TMM_TileMapHelper.Tool.WRENCH:
 			var image = load("res://resources/icons/wrench.png")
 			var hotspot = Vector2(image.get_size().x, 0)
 			Input.set_custom_mouse_cursor(image, 0, hotspot)
 
-		TMM_TileMapEnum.Tool.ERASER:
+		TMM_TileMapHelper.Tool.ERASER:
 			var image = load("res://resources/icons/eraser.png")
 			var hotspot = Vector2(0, image.get_size().y)
 			Input.set_custom_mouse_cursor(image, 0, hotspot)
 
-		TMM_TileMapEnum.Tool.BUCKET_FILL:
+		TMM_TileMapHelper.Tool.BUCKET_FILL:
 			var image = load("res://resources/icons/bucket_fill.png")
 			var hotspot = Vector2(0, image.get_size().y)
 			Input.set_custom_mouse_cursor(image, 0, hotspot)

@@ -5,7 +5,8 @@ var _tile_map := TMM_TileMap.new()
 var _tile_set := TMM_TileSet.new()
 var _selected_tile_structure : TMM_TileStructure
 var _has_been_modified := false
-var _tiles_to_update := []
+var _tiles_to_update := {}
+var _tiles_updated := {}
 
 
 func init(canvas_conf: Dictionary, layer_conf: Dictionary) -> void:
@@ -37,29 +38,31 @@ func select_tile(tile_structure_id: int) -> void:
 
 
 func place_tile(i: int, j: int) -> void:
-	var current_layer = _selected_tile_structure.layer
-	_set_tile_structure(_tile_map.get_layer(current_layer), i, j)
+	_set_tile_structure(_selected_tile_structure, i, j)
+	var current_layer = _tile_map.get_layer(_selected_tile_structure.layer)
+	_update_tiles(current_layer)
 
 
 func erase_tile(i: int, j: int) -> void:
-	var current_layer = _selected_tile_structure.layer
-	_remove_tile_structure(_tile_map.get_layer(current_layer), i, j)
+	var current_layer = _tile_map.get_layer(_selected_tile_structure.layer)
+	_remove_tile_structure(current_layer, i, j)
+	_update_tiles(current_layer)
 
 
 func fill(i: int, j: int) -> void:
-	var current_layer = _selected_tile_structure.layer
-	_fill_with_tile_structure(_tile_map.get_layer(current_layer), i, j)
+	_fill_with_tile_structure(_selected_tile_structure, i, j)
+	var current_layer = _tile_map.get_layer(_selected_tile_structure.layer)
+	_update_tiles(current_layer)
 
 
 func change_tile_state(i: int, j: int) -> void:
-	var current_layer = _selected_tile_structure.layer
-	var layer = _tile_map.get_layer(current_layer)
-	_change_tile_structure_autotiling_state(layer, i, j)
+	_change_tile_structure_autotiling_state(_selected_tile_structure, i, j)
 
 
 func erase_tile_in_every_layer(i: int, j: int) -> void:
 	for layer in _tile_map.n_of_layers():
 		_remove_tile_structure(_tile_map.get_layer(layer), i, j)
+		_update_tiles(_tile_map.get_layer(layer))
 
 
 func retrieve_previous_tilemap() -> Dictionary:
@@ -70,77 +73,77 @@ func load_tilemap(tilemaplayers: Dictionary) -> void:
 	_tile_map.load_map(_tile_set, tilemaplayers)
 
 
-func _set_tile_structure(layer: TMM_TileMapLayer, i: int, j: int) -> void:
-	if _selected_tile_structure.has_multiple_tiles():
-		for tile in _selected_tile_structure.get_tiles():
-			var relative_i = i + tile.relative_coord[0]
-			var relative_j = j + tile.relative_coord[1]
+func _set_tile_structure(tile_structure: TMM_TileStructure, i: int, j: int,
+		autotiling_enabled := true, autotiling_state := 0,
+		coord_ref := [0, 0]) -> void:
+	var layer = _tile_map.get_layer(tile_structure.layer)
 
-			if _set_tile(layer, relative_i, relative_j, tile):
-				_tiles_to_update.append([i, j])
-	else:
-		var tile = _selected_tile_structure.get_tile()
-		if _set_tile(layer, i, j, tile):
-			_tiles_to_update.append([i, j])
+	for tile in tile_structure.get_tiles(autotiling_state):
+		var relative_i = i - coord_ref[0] + tile.relative_coord[0]
+		var relative_j = j - coord_ref[1] + tile.relative_coord[1]
 
-	_update_tiles()
+		_set_tile(layer, tile, relative_i, relative_j, autotiling_enabled)
 
 
-func _set_tile(layer: TMM_TileMapLayer, i: int, j: int, tile: TMM_Tile) -> bool:
+func _set_tile(layer: TMM_TileMapLayer, tile: TMM_Tile, i: int, j: int,
+		autotiling_enabled := true) -> void:
 	if layer.is_in_bounds(i, j):
 		var sub_layer = layer.get_sub_layer(tile.sub_layer)
 	
 		if not sub_layer.has_tile(i, j, tile):
-			_remove_tile_structure(layer, i, j)
+			_remove_tile_structure(layer, i, j, autotiling_enabled)
 			sub_layer.set_tile(i, j, tile)
 			_has_been_modified = true
 
-			return true
-	return false
+			if autotiling_enabled:
+				_add_tiles_to_update(i, j, tile.sub_layer)
+
+		if not autotiling_enabled:
+			_add_tile_updated(i, j, tile.sub_layer)
 
 
-func _remove_tile_structure(layer: TMM_TileMapLayer, i: int, j: int) -> void:
+func _remove_tile_structure(layer: TMM_TileMapLayer, i: int, j: int,
+		autotiling_enabled := true) -> void:
+	if not layer.is_in_bounds(i, j):
+		return
+
 	if layer.has_air(i, j):
 		return
 
-	var tile_description = layer.get_top_tile_description(i, j)
+	var tile_description = layer.get_sub_layer(0).get_tile_description(i, j)
 	var tile_structure = _tile_set.get_tile_structure(tile_description.id)
 
-	if tile_structure.has_multiple_tiles():
-		var coord_ref = tile_description.relative_coord
+	var coord_ref = tile_description.relative_coord
 
-		for tile in tile_structure.get_tiles(0, coord_ref):
-			var relative_i = i + tile.relative_coord[0]
-			var relative_j = j + tile.relative_coord[1]
+	for tile in tile_structure.get_tiles():
+		var relative_i = i - coord_ref[0] + tile.relative_coord[0]
+		var relative_j = j - coord_ref[1] + tile.relative_coord[1]
 
-			if _remove_tile(layer, relative_i, relative_j, tile):
-				_tiles_to_update.append([i, j])
-	else:
-		var tile = tile_structure.get_tile()
-		if _remove_tile(layer, i, j, tile):
-			_tiles_to_update.append([i, j])
-
-	_update_tiles()
+		_remove_tile(layer, tile, relative_i, relative_j, autotiling_enabled)
 
 
-func _remove_tile(layer: TMM_TileMapLayer, i: int, j: int,
-		tile: TMM_Tile) -> bool:
+func _remove_tile(layer: TMM_TileMapLayer, tile: TMM_Tile, i: int, j: int,
+		autotiling_enabled := true) -> void:
 	if layer.is_in_bounds(i, j):
-		layer.get_sub_layer(tile.sub_layer).remove_tile(i, j)
-		_has_been_modified = true
+		var sub_layer = layer.get_sub_layer(tile.sub_layer)
 
-		return true
-	return false
+		if not sub_layer.has_air(i, j):
+			sub_layer.remove_tile(i, j)
+			_has_been_modified = true
+			
+			if autotiling_enabled:
+				_add_tiles_to_update(i, j, tile.sub_layer)
 
 
-func _fill_with_tile_structure(layer: TMM_TileMapLayer, i: int, j: int) -> void:
+func _fill_with_tile_structure(tile_structure: TMM_TileStructure, i: int,
+		j: int) -> void:
 	if not _tile_map.is_in_bounds(i, j):
 		return
 
-	var sub_layer = layer.get_sub_layer(0)
-	var tile_structure_to_replace_id = sub_layer.get_tile_description(i, j).id
+	var layer = _tile_map.get_layer(tile_structure.layer)
+	var tile_structure_to_replace_id = layer.get_top_tile_description(i, j).id
 
-	if tile_structure_to_replace_id == _selected_tile_structure.id:
+	if tile_structure_to_replace_id == tile_structure.id:
 		return
 
 	var place_now = []
@@ -152,14 +155,14 @@ func _fill_with_tile_structure(layer: TMM_TileMapLayer, i: int, j: int) -> void:
 
 	var marked = _create_tile_map_bitmap()
 
-	var w = _selected_tile_structure.width()
-	var h = _selected_tile_structure.height()
+	var w = tile_structure.width()
+	var h = tile_structure.height()
 
 	while place_now.size() != 0:
 		var place_next = []
 
 		for coord in place_now:
-			_set_tile_structure(layer, coord[0], coord[1])
+			_set_tile_structure(tile_structure, coord[0], coord[1])
 
 			_add_to_place_next(layer, tile_structure_to_replace_id,
 				coord[0] + h, coord[1], place_next, marked)
@@ -212,148 +215,157 @@ func _create_tile_map_bitmap() -> Array:
 	return bitmap
 
 
-func _change_tile_structure_autotiling_state(layer: TMM_TileMapLayer, i: int,
-		j: int) -> void:
+func _change_tile_structure_autotiling_state(tile_structure: TMM_TileStructure, 
+		i: int, j: int) -> void:
+	var layer = _tile_map.get_layer(tile_structure.layer)
+
 	if layer.has_air(i, j):
 		return
 
 	var tile_description = layer.get_top_tile_description(i, j)
 
-	if tile_description.id != _selected_tile_structure.id:
+	if tile_description.id != tile_structure.id:
 		return
 
-	var tile_structure = _tile_set.get_tile_structure(tile_description.id)
-
-	if tile_structure.has_multiple_tiles():
-		var coord_ref = tile_description.relative_coord
-
-		for tile in tile_structure.get_tiles(0, coord_ref):
-			var relative_i = i + tile.relative_coord[0]
-			var relative_j = j + tile.relative_coord[1]
-
-			_change_tile_autotiling_state(layer, i, j, tile_structure,
-				tile_description.autotiling_state, tile.relative_coord)
-	else:
-		_change_tile_autotiling_state(layer, i, j, tile_structure,
-			tile_description.autotiling_state)
-
-
-func _change_tile_autotiling_state(layer: TMM_TileMapLayer, i: int, j: int,
-		tile_structure: TMM_TileStructure,
-		prev_autotiling_state: int, relative_coord := [0, 0]) -> void:
-	var new_autotiling_state = prev_autotiling_state + 1
+	var new_autotiling_state = tile_description.autotiling_state + 1
 	new_autotiling_state %= tile_structure.n_autotiling_states()
 
-	var tile = tile_structure.get_tile(new_autotiling_state, relative_coord)
+	_set_tile_structure(
+		tile_structure, i, j, false, new_autotiling_state,
+		tile_structure.relative_coord
+	)
 
-	_set_tile(layer, i, j, tile)
+
+func _add_tile_to_update(i: int, j: int, sub_layer: int) -> void:
+	var dic = {"i": i, "j": j, "sub_layer": sub_layer}
+	var dic_hash = dic.hash()
+
+	if not _tiles_to_update.has(dic_hash):
+		_tiles_to_update[dic_hash] = dic
 
 
-func _update_tiles() -> void:
-	for tile_to_update in _tiles_to_update:
-		_update_tiles_around(tile_to_update[0], tile_to_update[1])
+func _add_tile_updated(i: int, j: int, sub_layer: int) -> void:
+	var dic = {"i": i, "j": j, "sub_layer": sub_layer}
+	var dic_hash = dic.hash()
+
+	if not _tiles_updated.has(dic_hash):
+		_tiles_updated[dic_hash] = dic
+
+
+func _add_tiles_to_update(i: int, j: int, sub_layer: int) -> void:
+	_add_tile_to_update(i, j, sub_layer)
+	_add_tile_to_update(i - 1, j, sub_layer)
+	_add_tile_to_update(i - 1, j + 1, sub_layer)
+	_add_tile_to_update(i, j + 1, sub_layer)
+	_add_tile_to_update(i + 1, j + 1, sub_layer)
+	_add_tile_to_update(i + 1, j, sub_layer)
+	_add_tile_to_update(i + 1, j - 1, sub_layer)
+	_add_tile_to_update(i, j - 1, sub_layer)
+	_add_tile_to_update(i - 1, j - 1, sub_layer)
+
+
+func _update_tiles(layer: TMM_TileMapLayer) -> void:
+	_tiles_updated.clear()
+
+	var tile
+
+	for key in _tiles_to_update.keys():
+		if not _tiles_updated.has(key):
+			tile = _tiles_to_update[key]
+			_update_tile(layer, tile.sub_layer, tile.i, tile.j)
 
 	_tiles_to_update.clear()
 
 
-func _update_tiles_around(i: int, j: int) -> void:
-	_update_tile(i, j)
-	_update_tile(i - 1, j)
-	_update_tile(i - 1, j + 1)
-	_update_tile(i, j + 1)
-	_update_tile(i + 1, j + 1)
-	_update_tile(i + 1, j)
-	_update_tile(i + 1, j - 1)
-	_update_tile(i, j - 1)
-	_update_tile(i - 1, j - 1)
+func _update_tile(layer: TMM_TileMapLayer, sub_layer_id: int, i: int,
+		j: int) -> void:
+	var sub_layer = layer.get_sub_layer(sub_layer_id)
+
+	if not sub_layer.is_in_bounds(i, j):
+		return
+
+	if sub_layer.has_air(i, j):
+		return
+
+	var tile_description = sub_layer.get_tile_description(i, j)
+	var tile_structure = _tile_set.get_tile_structure(tile_description.id)
+
+	var relative_coord = tile_description.relative_coord
+	var autotiling_state = tile_structure.get_autotiling_state(
+		_get_connections(layer, tile_structure, relative_coord, i, j)
+	)
+
+	_set_tile_structure(
+		tile_structure, i, j, false, autotiling_state, relative_coord
+	)
 
 
-func _update_tile(i: int, j: int) -> void:
-	pass
-#	if _get_tile_id(i, j) == Tile.SpecialTile.OUT_OF_BOUNDS:
-#		pass
-#	elif get_tile(i, j).get_connection_type() == Tile.ConnectionType.ISOLATED:
-#		_place_tile_image(i, j)
-#	else:
-#		var connection = 0
-#		var tile = get_tile(i, j)
-#
-#		for subtile in tile.get_subtiles(_get_tile_subtile(i, j)):
-#			var pos_i = i - subtile[1]
-#			var pos_j = j + subtile[0]
-#
-#			if(pos_i >= 0 and pos_i < _height and pos_j >= 0
-#					and pos_j < _width):
-#				if tile.get_connection_type() == Tile.ConnectionType.CROSS:
-#					connection = _get_cross_connection(pos_i, pos_j)
-#				else:
-#					connection = _get_circle_connection(pos_i, pos_j)
-#
-#				var state = tile.get_state(connection)
-#				_map[pos_i][pos_j].State = state
-#
-#				_place_tile_image(pos_i, pos_j)
+func _get_connections(layer: TMM_TileMapLayer,
+		tile_structure: TMM_TileStructure, relative_coord: Array, i: int,
+		j: int) -> Dictionary:
+	var connected_at = {
+		"North": _is_connected(
+			layer, tile_structure,
+			tile_structure.coords_to_check_n(relative_coord, i, j)
+		),
+		"NorthEast": _is_connected(
+			layer, tile_structure,
+			tile_structure.coords_to_check_ne(relative_coord, i, j)
+		),
+		"East": _is_connected(
+			layer, tile_structure,
+			tile_structure.coords_to_check_e(relative_coord, i, j)
+		),
+		"SouthEast": _is_connected(
+			layer, tile_structure,
+			tile_structure.coords_to_check_se(relative_coord, i, j)
+		),
+		"South": _is_connected(
+			layer, tile_structure,
+			tile_structure.coords_to_check_s(relative_coord, i, j)
+		),
+		"SouthWest": _is_connected(
+			layer, tile_structure,
+			tile_structure.coords_to_check_sw(relative_coord, i, j)
+		),
+		"West": _is_connected(
+			layer, tile_structure,
+			tile_structure.coords_to_check_w(relative_coord, i, j)
+		),
+		"NorthWest": _is_connected(
+			layer, tile_structure,
+			tile_structure.coords_to_check_nw(relative_coord, i, j)
+		),
+	}
+
+	return connected_at
 
 
-### TileMapSubLayer
+func _is_connected(layer: TMM_TileMapLayer, tile_structure: TMM_TileStructure,
+		coords: Array) -> bool:
+	for coord in coords:
+		var sub_layer = layer.get_sub_layer(coord.sub_layer)
 
-func _get_cross_connection(i: int, j: int) -> int:
-	var connection = 0
+		if sub_layer.is_in_bounds(coord.i, coord.j):
+			if sub_layer.has_air(coord.i, coord.j):
+				return false
 
-#	var tile = get_tile(i, j)
-#	var subtile = _get_tile_subtile(i, j)
-#
-#	var size = tile.get_structure_size()
-#	var x = size[0]
-#	var y = size[1]
-#
-#	if subtile == _get_tile_subtile(i - x, j):
-#		connection += 1 if tile.can_connect_to(get_tile(i - x, j)) else 0
-#
-#	if subtile == _get_tile_subtile(i, j + y):
-#		connection += 2 if tile.can_connect_to(get_tile(i, j + y)) else 0
-#
-#	if subtile == _get_tile_subtile(i + x, j):
-#		connection += 4 if tile.can_connect_to(get_tile(i + x, j)) else 0
-#
-#	if subtile == _get_tile_subtile(i, j - y):
-#		connection += 8 if tile.can_connect_to(get_tile(i, j - y)) else 0
-	
-	return connection
+			var other_tile_structure = _tile_set.get_tile_structure(
+				sub_layer.get_tile_description(coord.i, coord.j).id
+			)
+
+			if not _can_connect(tile_structure, other_tile_structure):
+				return false
+		else:
+			if not tile_structure.can_connect_to_borders:
+				return false
+
+	return true
 
 
-func _get_circle_connection(i: int, j: int) -> int:
-	var connection = 0
-#
-#	var tile = get_tile(i, j)
-#	var subtile = _get_tile_subtile(i, j)
-#
-#	var size = tile.get_structure_size()
-#	var x = size[0]
-#	var y = size[1]
-#
-#	if subtile == _get_tile_subtile(i - x, j):
-#		connection += 1   if tile.can_connect_to(get_tile(i - x, j)) else 0
-#
-#	if subtile == _get_tile_subtile(i - x, j + y):
-#		connection += 2   if tile.can_connect_to(get_tile(i - x, j + y)) else 0
-#
-#	if subtile == _get_tile_subtile(i, j + y):
-#		connection += 4   if tile.can_connect_to(get_tile(i, j + y)) else 0
-#
-#	if subtile == _get_tile_subtile(i + x, j + y):
-#		connection += 8   if tile.can_connect_to(get_tile(i + x, j + y)) else 0
-#
-#	if subtile == _get_tile_subtile(i + x, j):
-#		connection += 16  if tile.can_connect_to(get_tile(i + x, j)) else 0
-#
-#	if subtile == _get_tile_subtile(i + x, j - y):
-#		connection += 32  if tile.can_connect_to(get_tile(i + x, j - y)) else 0
-#
-#	if subtile == _get_tile_subtile(i, j - y):
-#		connection += 64  if tile.can_connect_to(get_tile(i, j - y)) else 0
-#
-#	if subtile == _get_tile_subtile(i - x, j - y):
-#		connection += 128 if tile.can_connect_to(get_tile(i - x, j - y)) else 0
+func _can_connect(tile_struct: TMM_TileStructure,
+		other_tile_struct: TMM_TileStructure) -> bool:
+	if tile_struct.id == other_tile_struct.id:
+		return true
 
-	return connection
+	return tile_struct.connected_group == other_tile_struct.connected_group
