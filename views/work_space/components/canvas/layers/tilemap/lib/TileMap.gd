@@ -91,6 +91,7 @@ func set_background_tile_image(new_background_tile_image: Image) -> void:
 
 func add_layer() -> void:
 	var layer = TMM_TileMapLayer.new()
+	layer.id = _layers.size()
 	layer.size = size
 	layer.tile_size = tile_size
 

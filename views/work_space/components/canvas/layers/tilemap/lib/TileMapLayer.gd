@@ -1,6 +1,7 @@
 class_name TMM_TileMapLayer
 
 
+var id := 0 setget set_id
 var size := [1, 1] setget set_size
 var tile_size := 1 setget set_tile_size
 
@@ -72,6 +73,12 @@ func has_been_modified() -> bool:
 	return false
 
 
+func set_id(new_id) -> void:
+	assert(new_id >= 0)
+
+	id = new_id
+
+
 func set_size(new_size: Array) -> void:
 	assert(new_size.size() == 2)
 	for value in new_size:
@@ -95,6 +102,7 @@ func set_tile_size(new_tile_size: int) -> void:
 
 func add_sub_layer() -> void:
 	var sub_layer = TMM_TileMapSubLayer.new()
+	sub_layer.id = _sub_layers.size()
 	sub_layer.size = size
 	sub_layer.tile_size = tile_size
 

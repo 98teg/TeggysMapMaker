@@ -5,8 +5,7 @@ var _tile_map := TMM_TileMap.new()
 var _tile_set := TMM_TileSet.new()
 var _selected_tile_structure : TMM_TileStructure
 var _has_been_modified := false
-var _tiles_to_update := {}
-var _tiles_updated := {}
+var _update_buffer := TMM_TileUpdateBuffer.new()
 
 
 func init(canvas_conf: Dictionary, layer_conf: Dictionary) -> void:
@@ -39,20 +38,21 @@ func select_tile(tile_structure_id: int) -> void:
 
 func place_tile(i: int, j: int) -> void:
 	_set_tile_structure(_selected_tile_structure, i, j)
-	var current_layer = _tile_map.get_layer(_selected_tile_structure.layer)
-	_update_tiles(current_layer)
+
+	_update_tiles()
 
 
 func erase_tile(i: int, j: int) -> void:
-	var current_layer = _tile_map.get_layer(_selected_tile_structure.layer)
-	_remove_tile_structure(current_layer, i, j)
-	_update_tiles(current_layer)
+	var selected_layer = _tile_map.get_layer(_selected_tile_structure.layer)
+	_remove_tile_structure(selected_layer, i, j)
+
+	_update_tiles()
 
 
 func fill(i: int, j: int) -> void:
 	_fill_with_tile_structure(_selected_tile_structure, i, j)
-	var current_layer = _tile_map.get_layer(_selected_tile_structure.layer)
-	_update_tiles(current_layer)
+
+	_update_tiles()
 
 
 func change_tile_state(i: int, j: int) -> void:
@@ -62,7 +62,8 @@ func change_tile_state(i: int, j: int) -> void:
 func erase_tile_in_every_layer(i: int, j: int) -> void:
 	for layer in _tile_map.n_of_layers():
 		_remove_tile_structure(_tile_map.get_layer(layer), i, j)
-		_update_tiles(_tile_map.get_layer(layer))
+
+	_update_tiles()
 
 
 func retrieve_previous_tilemap() -> Dictionary:
@@ -96,10 +97,10 @@ func _set_tile(layer: TMM_TileMapLayer, tile: TMM_Tile, i: int, j: int,
 			_has_been_modified = true
 
 			if autotiling_enabled:
-				_add_tiles_to_update(i, j, tile.sub_layer)
+				_update_buffer.add_tiles_around(layer.id, tile.sub_layer, i, j)
 
 		if not autotiling_enabled:
-			_add_tile_updated(i, j, tile.sub_layer)
+			_update_buffer.remove_tile(layer.id, tile.sub_layer, i, j)
 
 
 func _remove_tile_structure(layer: TMM_TileMapLayer, i: int, j: int,
@@ -132,7 +133,7 @@ func _remove_tile(layer: TMM_TileMapLayer, tile: TMM_Tile, i: int, j: int,
 			_has_been_modified = true
 			
 			if autotiling_enabled:
-				_add_tiles_to_update(i, j, tile.sub_layer)
+				_update_buffer.add_tiles_around(layer.id, tile.sub_layer, i, j)
 
 
 func _fill_with_tile_structure(tile_structure: TMM_TileStructure, i: int,
@@ -232,54 +233,24 @@ func _change_tile_structure_autotiling_state(tile_structure: TMM_TileStructure,
 
 	_set_tile_structure(
 		tile_structure, i, j, false, new_autotiling_state,
-		tile_structure.relative_coord
+		tile_description.relative_coord
 	)
 
 
-func _add_tile_to_update(i: int, j: int, sub_layer: int) -> void:
-	var dic = {"i": i, "j": j, "sub_layer": sub_layer}
-	var dic_hash = dic.hash()
+func _update_tiles() -> void:
+	_update_buffer.start_updating()
 
-	if not _tiles_to_update.has(dic_hash):
-		_tiles_to_update[dic_hash] = dic
+	while _update_buffer.has_next():
+		_update_tile(_update_buffer.next())
 
-
-func _add_tile_updated(i: int, j: int, sub_layer: int) -> void:
-	var dic = {"i": i, "j": j, "sub_layer": sub_layer}
-	var dic_hash = dic.hash()
-
-	if not _tiles_updated.has(dic_hash):
-		_tiles_updated[dic_hash] = dic
+	_update_buffer.finish()
 
 
-func _add_tiles_to_update(i: int, j: int, sub_layer: int) -> void:
-	_add_tile_to_update(i, j, sub_layer)
-	_add_tile_to_update(i - 1, j, sub_layer)
-	_add_tile_to_update(i - 1, j + 1, sub_layer)
-	_add_tile_to_update(i, j + 1, sub_layer)
-	_add_tile_to_update(i + 1, j + 1, sub_layer)
-	_add_tile_to_update(i + 1, j, sub_layer)
-	_add_tile_to_update(i + 1, j - 1, sub_layer)
-	_add_tile_to_update(i, j - 1, sub_layer)
-	_add_tile_to_update(i - 1, j - 1, sub_layer)
-
-
-func _update_tiles(layer: TMM_TileMapLayer) -> void:
-	_tiles_updated.clear()
-
-	var tile
-
-	for key in _tiles_to_update.keys():
-		if not _tiles_updated.has(key):
-			tile = _tiles_to_update[key]
-			_update_tile(layer, tile.sub_layer, tile.i, tile.j)
-
-	_tiles_to_update.clear()
-
-
-func _update_tile(layer: TMM_TileMapLayer, sub_layer_id: int, i: int,
-		j: int) -> void:
-	var sub_layer = layer.get_sub_layer(sub_layer_id)
+func _update_tile(tile: Dictionary) -> void:
+	var layer = _tile_map.get_layer(tile.layer)
+	var sub_layer = layer.get_sub_layer(tile.sub_layer)
+	var i = tile.i
+	var j = tile.j
 
 	if not sub_layer.is_in_bounds(i, j):
 		return

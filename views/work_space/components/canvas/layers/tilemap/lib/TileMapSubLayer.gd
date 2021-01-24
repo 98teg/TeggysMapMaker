@@ -3,6 +3,7 @@ class_name TMM_TileMapSubLayer
 
 const AIR := {"id": TMM_TileMapHelper.SpecialTile.AIR}
 
+var id := 0 setget set_id
 var size := [1, 1] setget set_size
 var tile_size := 1 setget set_tile_size
 
@@ -65,6 +66,12 @@ func get_tile_description(i: int, j: int) -> Dictionary:
 		tile_description["relative_coord"] = [0, 0]
 
 	return tile_description
+
+
+func set_id(new_id) -> void:
+	assert(new_id >= 0)
+
+	id = new_id
 
 
 func set_size(new_size: Array) -> void:
