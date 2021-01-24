@@ -135,12 +135,7 @@ func load_map(tile_set: TMM_TileSet, map: Array) -> void:
 
 
 func _resize_map() -> void:
-	_map = []
-	for i in range(height()):
-		_map.append([])
-		for j in range(width()):
-			_map[i].append([])
-			_map[i][j] = AIR
+	_map = TMM_TileMapHelper.create_matrix(width(), height(), AIR)
 
 	if _prev_map == [[]]:
 		_prev_map = _map.duplicate(true)

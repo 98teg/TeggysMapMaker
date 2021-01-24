@@ -154,10 +154,12 @@ func _fill_with_tile_structure(tile_structure: TMM_TileStructure, i: int,
 	else:
 		return
 
-	var marked = _create_tile_map_bitmap()
-
 	var w = tile_structure.width()
 	var h = tile_structure.height()
+
+	var marked = TMM_TileMapHelper.create_matrix(
+		_tile_map.width(), _tile_map.height(), false
+	)
 
 	while place_now.size() != 0:
 		var place_next = []
@@ -202,18 +204,6 @@ func _can_tile_structure_be_placed(layer: TMM_TileMapLayer,
 			if top_tile_structure.id != tile_structure_to_replace_id:
 				return false
 	return true
-
-
-func _create_tile_map_bitmap() -> Array:
-	var bitmap = []
-
-	for i in _tile_map.height():
-		bitmap.append([])
-		for j in _tile_map.width():
-			bitmap[i].append([])
-			bitmap[i][j] = false
-
-	return bitmap
 
 
 func _change_tile_structure_autotiling_state(tile_structure: TMM_TileStructure, 

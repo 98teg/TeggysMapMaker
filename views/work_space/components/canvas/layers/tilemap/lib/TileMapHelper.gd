@@ -55,3 +55,15 @@ static func get_connection_id(connection_type: int,
 	connection_id += 128 if connected_at.NorthWest else 0
 
 	return connection_id
+
+
+static func create_matrix(w: int, h: int, value) -> Array:
+	var matrix = []
+
+	for i in h:
+		matrix.append([])
+		for j in w:
+			matrix[i].append([])
+			matrix[i][j] = value
+
+	return matrix
