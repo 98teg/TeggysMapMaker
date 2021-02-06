@@ -13,7 +13,7 @@ var _tile_size : int = 0
 
 var _selected_tile : int
 
-var _tile_set := []
+var _tile_set := TMM_TileSet.new()
 
 ####################
 # Public functions #
@@ -24,11 +24,11 @@ var _tile_set := []
 # + width: Width in number of tiles (int)
 # + height: Height in number of tiles (int)
 # + tile_size: Size of the tile in pixels (int)
-func init(canvas_conf : Dictionary, layer_conf : Dictionary) -> void:
+func init(canvas_conf : Dictionary, layer_conf : Dictionary, tile_set: TMM_TileSet) -> void:
 	_width = canvas_conf.Width
 	_height = canvas_conf.Height
 	_tile_size = layer_conf.TileSize
-	_tile_set = layer_conf.TileSet
+	_tile_set = tile_set
 
 	get_node("Grid").init(_width, _height, _tile_size)
 	get_node("Squares").init(_tile_size)
@@ -42,7 +42,12 @@ func set_grid_visibility(visibility: bool) -> void:
 
 # Sets the squares
 func set_squares(tile_id: int) -> void:
-	# get_node("Squares").set_squares(_tile_set[tile_id].get_subtiles())
+	var squares = []
+
+	for tile in _tile_set.get_tile_structure(tile_id).get_tiles():
+		squares.append(tile.relative_coord)
+
+	get_node("Squares").set_squares(squares)
 	_selected_tile = tile_id
 
 

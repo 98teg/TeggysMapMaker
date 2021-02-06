@@ -29,6 +29,10 @@ func get_image() -> Image:
 	return _tile_map.image()
 
 
+func get_tile_set() -> TMM_TileSet:
+	return _tile_set
+
+
 func select_tile(tile_structure_id: int) -> void:
 	assert(tile_structure_id >= 0)
 	assert(tile_structure_id < _tile_set.n_of_tiles())

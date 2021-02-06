@@ -50,7 +50,7 @@ func _create_tilemap(canvas_conf : Dictionary, layer_conf : Dictionary):
 func _create_overlay(canvas_conf : Dictionary, layer_conf : Dictionary):
 	_overlay = preload("./overlay/TilemapOverlay.tscn").instance()
 
-	_overlay.init(canvas_conf, layer_conf)
+	_overlay.init(canvas_conf, layer_conf, _tilemap.get_tile_set())
 	
 func _create_tool_box(layer_conf : Dictionary):
 	_tool_box = preload("./toolbox/TilemapToolBox.tscn").instance()

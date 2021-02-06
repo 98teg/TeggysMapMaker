@@ -36,8 +36,8 @@ func set_squares(squares: Array) -> void:
 	_lines.clear()
 
 	for square in squares:
-		var square_x = square[0] * _size
-		var square_y = - square[1] * _size
+		var square_x = square[1] * _size
+		var square_y = square[0] * _size
 
 		_squares.append(Vector2(square_x, square_y))
 
