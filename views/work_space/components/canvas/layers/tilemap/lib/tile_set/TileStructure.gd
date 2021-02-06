@@ -150,7 +150,7 @@ func set_colission_mask(new_colission_mask: Array) -> void:
 		assert(row.size() == width())
 		for value in row:
 			assert(value is bool)
-	assert(_is_trimmed(new_colission_mask))
+	assert(TMM_TileMapHelper.is_trimmed(new_colission_mask))
 
 	colission_mask = new_colission_mask
 
@@ -212,55 +212,15 @@ func add_autotiling_state(image: Image, connection_ids: Array = []) -> void:
 	_tiles.append(tiles_matrix)
 
 
-func _is_trimmed(new_colission_mask: Array) -> bool:
-	# Check north side
-	var at_least_one_true = false
-
-	for north_values in new_colission_mask[0]:
-		if north_values:
-			at_least_one_true = true
-
-	if not at_least_one_true:
-		return false
-
-	# Check east side
-	at_least_one_true = false
-
-	for row in new_colission_mask:
-		if row[width() - 1]:
-			at_least_one_true = true
-
-	if not at_least_one_true:
-		return false
-
-	# Check south side
-	at_least_one_true = false
-
-	for south_values in new_colission_mask[height() - 1]:
-		if south_values:
-			at_least_one_true = true
-
-	if not at_least_one_true:
-		return false
-
-	# Check west side
-	at_least_one_true = false
-
-	for row in new_colission_mask:
-		if row[0]:
-			at_least_one_true = true
-
-	if not at_least_one_true:
-		return false
-
-	return true
-
-
 func _coords_to_check(colission_mask: Array, nw_i: int, nw_j: int,
 		i_offset: int, i_index_factor: int,
 		j_offset: int, j_index_factor: int) -> Array:
-	var tiles_matrix = _tiles[0]
 	var coords_to_check = []
+
+	var i_0 = main_tile[1] - (height() - 1)
+	i_0 += height() - 1 if i_offset == height() else 0
+	var j_0 = - main_tile[0]
+	j_0 += width() - 1 if j_offset == width() else 0
 
 	for index in colission_mask.size():
 		var coords = {}
@@ -268,8 +228,11 @@ func _coords_to_check(colission_mask: Array, nw_i: int, nw_j: int,
 		if colission_mask[index]:
 			coords["i"] = nw_i + i_offset + index * i_index_factor
 			coords["j"] = nw_j + j_offset + index * j_index_factor
-			coords["sub_layer"] = 0
-			
+			coords["sub_layer"] = get_tile(0, [
+				i_0 + index * i_index_factor,
+				j_0 + index * j_index_factor
+			]).sub_layer
+
 			coords_to_check.append(coords)
 
 	return coords_to_check

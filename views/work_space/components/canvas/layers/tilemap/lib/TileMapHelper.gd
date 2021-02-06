@@ -67,3 +67,43 @@ static func create_matrix(w: int, h: int, value) -> Array:
 			matrix[i][j] = value
 
 	return matrix
+
+
+static func is_trimmed(mask: Array) -> bool:
+	var at_least_one_true = false
+
+	for north_values in mask[0]:
+		if north_values:
+			at_least_one_true = true
+
+	if not at_least_one_true:
+		return false
+
+	at_least_one_true = false
+
+	for row in mask:
+		if row.back():
+			at_least_one_true = true
+
+	if not at_least_one_true:
+		return false
+
+	at_least_one_true = false
+
+	for south_values in mask.back():
+		if south_values:
+			at_least_one_true = true
+
+	if not at_least_one_true:
+		return false
+
+	at_least_one_true = false
+
+	for row in mask:
+		if row[0]:
+			at_least_one_true = true
+
+	if not at_least_one_true:
+		return false
+
+	return true

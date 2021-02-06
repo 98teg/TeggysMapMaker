@@ -136,6 +136,8 @@ static func _get_structure_property() -> JSONPropertyObject:
 	colission_mask.set_element_property(colission_row)
 	colission_mask.set_preprocessor(
 			preload("./processors/colission_mask_preprocessor.gd").new())
+	colission_mask.set_postprocessor(
+			preload("./processors/colission_mask_postprocessor.gd").new())
 
 	var main_tile_element = JSONPropertyInteger.new()
 	main_tile_element.set_min_value(0)
