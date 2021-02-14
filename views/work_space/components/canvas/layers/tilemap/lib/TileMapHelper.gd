@@ -1,10 +1,6 @@
 class_name TMM_TileMapHelper
 
 
-enum SpecialTile {
-	AIR = -1
-}
-
 enum ConnectionType {
 	ISOLATED,
 	CROSS,
@@ -17,6 +13,9 @@ enum Tool{
 	ERASER,
 	BUCKET_FILL
 }
+
+
+const AIR = {"id": -1}
 
 
 static func get_connection_id(connection_type: int,

@@ -6,7 +6,6 @@ var _tile_set := TMM_TileSet.new()
 var _selected_tile_structure : TMM_TileStructure
 var _has_been_modified := false
 var _update_buffer := TMM_TileUpdateBuffer.new()
-var _record_placed_tiles := false
 var _placed_tiles := {}
 
 
@@ -240,7 +239,7 @@ func _change_tile_structure_autotiling_state(tile_structure: TMM_TileStructure,
 		i: int, j: int) -> void:
 	var layer = _tile_map.get_layer(tile_structure.layer)
 
-	if layer.has_air(i, j):
+	if not layer.is_in_bounds(i, j) or layer.has_air(i, j):
 		return
 
 	var tile_description = layer.get_top_tile_description(i, j)
@@ -272,10 +271,7 @@ func _update_tile(tile: Dictionary) -> void:
 	var i = tile.i
 	var j = tile.j
 
-	if not sub_layer.is_in_bounds(i, j):
-		return
-
-	if sub_layer.has_air(i, j):
+	if not sub_layer.is_in_bounds(i, j) or sub_layer.has_air(i, j):
 		return
 
 	var tile_description = sub_layer.get_tile_description(i, j)
@@ -291,72 +287,37 @@ func _update_tile(tile: Dictionary) -> void:
 	)
 
 
-func _get_connections(layer: TMM_TileMapLayer,
-		tile_structure: TMM_TileStructure, relative_coord: Array, i: int,
-		j: int) -> Dictionary:
-	var connected_at = {
-		"North": _is_connected(
-			layer, tile_structure,
-			tile_structure.coords_to_check_n(relative_coord, i, j)
-		),
-		"NorthEast": _is_connected(
-			layer, tile_structure,
-			tile_structure.coords_to_check_ne(relative_coord, i, j)
-		),
-		"East": _is_connected(
-			layer, tile_structure,
-			tile_structure.coords_to_check_e(relative_coord, i, j)
-		),
-		"SouthEast": _is_connected(
-			layer, tile_structure,
-			tile_structure.coords_to_check_se(relative_coord, i, j)
-		),
-		"South": _is_connected(
-			layer, tile_structure,
-			tile_structure.coords_to_check_s(relative_coord, i, j)
-		),
-		"SouthWest": _is_connected(
-			layer, tile_structure,
-			tile_structure.coords_to_check_sw(relative_coord, i, j)
-		),
-		"West": _is_connected(
-			layer, tile_structure,
-			tile_structure.coords_to_check_w(relative_coord, i, j)
-		),
-		"NorthWest": _is_connected(
-			layer, tile_structure,
-			tile_structure.coords_to_check_nw(relative_coord, i, j)
-		),
-	}
+func _get_connections(layer: TMM_TileMapLayer, tile_structure: TMM_TileStructure,
+		relative_coord: Array, i: int, j: int) -> Dictionary:
+	var connected_at = {}
+
+	var coords_to_check = tile_structure.coords_to_check(relative_coord, i, j)
+	for key in coords_to_check.keys():
+		var value = _connected_at(layer, coords_to_check[key], tile_structure)
+		connected_at[key] = value
 
 	return connected_at
 
 
-func _is_connected(layer: TMM_TileMapLayer, tile_structure: TMM_TileStructure,
-		coords: Array) -> bool:
-	for coord in coords:
-		var sub_layer = layer.get_sub_layer(coord.sub_layer)
-
-		if sub_layer.is_in_bounds(coord.i, coord.j):
-			if sub_layer.has_air(coord.i, coord.j):
-				return false
-
-			var other_tile_structure = _tile_set.get_tile_structure(
-				sub_layer.get_tile_description(coord.i, coord.j).id
-			)
-
-			if not _can_connect(tile_structure, other_tile_structure):
-				return false
-		else:
-			if not tile_structure.can_connect_to_borders:
-				return false
+func _connected_at(layer: TMM_TileMapLayer, coords_array: Array,
+		tile_structure: TMM_TileStructure) -> bool:
+	for coords in coords_array:
+		var sub_layer = layer.get_sub_layer(coords.sub_layer)
+		if not _can_connect_at(sub_layer, coords.i, coords.j, tile_structure):
+			return false
 
 	return true
 
 
-func _can_connect(tile_struct: TMM_TileStructure,
-		other_tile_struct: TMM_TileStructure) -> bool:
-	if tile_struct.id == other_tile_struct.id:
-		return true
+func _can_connect_at(sub_layer: TMM_TileMapSubLayer, i: int, j: int,
+		tile_structure: TMM_TileStructure) -> bool:	
+	if not sub_layer.is_in_bounds(i, j):
+		return tile_structure.can_connect_to_borders
 
-	return tile_struct.connected_group == other_tile_struct.connected_group
+	if sub_layer.has_air(i, j):
+		return false
+
+	var id = sub_layer.get_tile_description(i, j).id
+	var another = _tile_set.get_tile_structure(id)
+
+	return tile_structure.can_connect_to(another)

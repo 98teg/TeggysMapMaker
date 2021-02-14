@@ -1,8 +1,6 @@
 class_name TMM_TileMapSubLayer
 
 
-const AIR := {"id": TMM_TileMapHelper.SpecialTile.AIR}
-
 var id := 0 setget set_id
 var size := [1, 1] setget set_size
 var tile_size := 1 setget set_tile_size
@@ -33,7 +31,7 @@ func is_in_bounds(i: int, j: int) -> bool:
 func has_air(i: int, j: int) -> bool:
 	assert(is_in_bounds(i, j))
 
-	return get_tile_description(i, j).id == AIR.id
+	return get_tile_description(i, j).id == TMM_TileMapHelper.AIR.id
 
 
 func has_tile(i: int, j: int, tile: TMM_Tile) -> bool:
@@ -106,7 +104,7 @@ func set_tile(i: int, j: int, tile: TMM_Tile) -> void:
 func remove_tile(i: int, j: int) -> void:
 	assert(is_in_bounds(i, j))
 
-	_map[i][j] = AIR
+	_map[i][j] = TMM_TileMapHelper.AIR
 	_has_been_modified = true
 
 	_place_tile_image(i, j, _empty_tile)
@@ -135,7 +133,7 @@ func load_map(tile_set: TMM_TileSet, map: Array) -> void:
 
 
 func _resize_map() -> void:
-	_map = TMM_TileMapHelper.create_matrix(width(), height(), AIR)
+	_map = TMM_TileMapHelper.create_matrix(width(), height(), TMM_TileMapHelper.AIR)
 
 	if _prev_map == [[]]:
 		_prev_map = _map.duplicate(true)
