@@ -75,51 +75,59 @@ func get_tiles(autotiling_state := 0) -> Array:
 
 
 func coords_to_check_n(relative_coord: Array, i: int, j: int) -> Array:
-	return _coords_to_check(_colission_mask_n(),
-		_get_nw_i(relative_coord[0], i), _get_nw_j(relative_coord[1], j),
-		-1, 0, 0, 1)
+	return _coords_to_check(
+		TMM_TileMapHelper.get_top_row(colission_mask),
+		relative_coord, i, j, -1, 0, 0, 1
+	)
 
 
 func coords_to_check_ne(relative_coord: Array, i: int, j: int) -> Array:
-	return _coords_to_check(_colission_mask_ne(),
-		_get_nw_i(relative_coord[0], i), _get_nw_j(relative_coord[1], j),
-		-1, 0, width(), 0)
+	return _coords_to_check(
+		TMM_TileMapHelper.get_top_right_corner(colission_mask),
+		relative_coord, i, j, -1, 0, width(), 0
+	)
 
 
 func coords_to_check_e(relative_coord: Array, i: int, j: int) -> Array:
-	return _coords_to_check(_colission_mask_e(),
-		_get_nw_i(relative_coord[0], i), _get_nw_j(relative_coord[1], j),
-		0, 1, width(), 0)
+	return _coords_to_check(
+		TMM_TileMapHelper.get_right_column(colission_mask),
+		relative_coord, i, j, 0, 1, width(), 0
+	)
 
 
 func coords_to_check_se(relative_coord: Array, i: int, j: int) -> Array:
-	return _coords_to_check(_colission_mask_se(),
-		_get_nw_i(relative_coord[0], i), _get_nw_j(relative_coord[1], j),
-		height(), 0, width(), 0)
+	return _coords_to_check(
+		TMM_TileMapHelper.get_bottom_right_corner(colission_mask),
+		relative_coord, i, j, height(), 0, width(), 0
+	)
 
 
 func coords_to_check_s(relative_coord: Array, i: int, j: int) -> Array:
-	return _coords_to_check(_colission_mask_s(),
-		_get_nw_i(relative_coord[0], i), _get_nw_j(relative_coord[1], j),
-		height(), 0, 0, 1)
+	return _coords_to_check(
+		TMM_TileMapHelper.get_bottom_row(colission_mask),
+		relative_coord, i, j, height(), 0, 0, 1
+	)
 
 
 func coords_to_check_sw(relative_coord: Array, i: int, j: int) -> Array:
-	return _coords_to_check(_colission_mask_sw(),
-		_get_nw_i(relative_coord[0], i), _get_nw_j(relative_coord[1], j),
-		height(), 0, -1, 0)
+	return _coords_to_check(
+		TMM_TileMapHelper.get_bottom_left_corner(colission_mask),
+		relative_coord, i, j, height(), 0, -1, 0
+	)
 
 
 func coords_to_check_w(relative_coord: Array, i: int, j: int) -> Array:
-	return _coords_to_check(_colission_mask_w(),
-		_get_nw_i(relative_coord[0], i), _get_nw_j(relative_coord[1], j),
-		0, 1, -1, 0)
+	return _coords_to_check(
+		TMM_TileMapHelper.get_left_column(colission_mask),
+		relative_coord, i, j, 0, 1, -1, 0
+	)
 
 
 func coords_to_check_nw(relative_coord: Array, i: int, j: int) -> Array:
-	return _coords_to_check(_colission_mask_nw(),
-		_get_nw_i(relative_coord[0], i), _get_nw_j(relative_coord[1], j),
-		-1, 0, -1, 0)
+	return _coords_to_check(
+		TMM_TileMapHelper.get_top_left_corner(colission_mask),
+		relative_coord, i, j, -1, 0, -1, 0
+	)
 
 
 func set_tile_size(new_tile_size: int) -> void:
@@ -212,9 +220,12 @@ func add_autotiling_state(image: Image, connection_ids: Array = []) -> void:
 	_tiles.append(tiles_matrix)
 
 
-func _coords_to_check(colission_mask: Array, nw_i: int, nw_j: int,
-		i_offset: int, i_index_factor: int,
-		j_offset: int, j_index_factor: int) -> Array:
+func _coords_to_check(colission_mask: Array, relative_coord: Array, i: int,
+		j: int, i_offset: int, i_index_factor: int, j_offset: int,
+		j_index_factor: int) -> Array:
+	var nw_i = _get_nw_i(relative_coord[0], i)
+	var nw_j = _get_nw_j(relative_coord[1], j)
+
 	var coords_to_check = []
 
 	var i_0 = main_tile[1] - (height() - 1)
@@ -248,45 +259,3 @@ func _get_nw_j(relative_coord_j: int, j: int) -> int:
 	var main_tile_j = j - relative_coord_j
 	var nw_j = main_tile_j - main_tile[0]
 	return nw_j 
-
-
-func _colission_mask_n() -> Array:
-	return colission_mask[0]
-
-
-func _colission_mask_ne() -> Array:
-	return [colission_mask[0][width() - 1]]
-
-
-func _colission_mask_e() -> Array:
-	var east_colission_mask = []
-
-	for row in colission_mask:
-		east_colission_mask.append(row[width() - 1])
-
-	return east_colission_mask
-
-
-func _colission_mask_se() -> Array:
-	return [colission_mask[height() - 1][width() - 1]]
-
-
-func _colission_mask_s() -> Array:
-	return colission_mask[height() - 1]
-
-
-func _colission_mask_sw() -> Array:
-	return [colission_mask[height() - 1][0]]
-
-
-func _colission_mask_w() -> Array:
-	var west_colission_mask = []
-
-	for row in colission_mask:
-		west_colission_mask.append(row[0])
-
-	return west_colission_mask
-
-
-func _colission_mask_nw() -> Array:
-	return [colission_mask[0][0]]

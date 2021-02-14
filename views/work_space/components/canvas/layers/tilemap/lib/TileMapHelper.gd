@@ -63,47 +63,57 @@ static func create_matrix(w: int, h: int, value) -> Array:
 	for i in h:
 		matrix.append([])
 		for j in w:
-			matrix[i].append([])
-			matrix[i][j] = value
+			matrix[i].append(value)
 
 	return matrix
 
 
 static func is_trimmed(mask: Array) -> bool:
-	var at_least_one_true = false
+	return (
+		get_top_row(mask).has(true) and
+		get_right_column(mask).has(true) and
+		get_bottom_row(mask).has(true) and
+		get_left_column(mask).has(true)
+	)
 
-	for north_values in mask[0]:
-		if north_values:
-			at_least_one_true = true
 
-	if not at_least_one_true:
-		return false
+static func get_top_row(matrix: Array) -> Array:
+	return matrix.front()
 
-	at_least_one_true = false
 
-	for row in mask:
-		if row.back():
-			at_least_one_true = true
+static func get_top_right_corner(matrix: Array) -> Array:
+	return [matrix.front().back()]
 
-	if not at_least_one_true:
-		return false
 
-	at_least_one_true = false
+static func get_right_column(matrix: Array) -> Array:
+	var array = []
 
-	for south_values in mask.back():
-		if south_values:
-			at_least_one_true = true
+	for row in matrix:
+		array.append(row.back())
 
-	if not at_least_one_true:
-		return false
+	return array
 
-	at_least_one_true = false
 
-	for row in mask:
-		if row[0]:
-			at_least_one_true = true
+static func get_bottom_right_corner(matrix: Array) -> Array:
+	return [matrix.back().back()]
 
-	if not at_least_one_true:
-		return false
 
-	return true
+static func get_bottom_row(matrix: Array) -> Array:
+	return matrix.back()
+
+
+static func get_bottom_left_corner(matrix: Array) -> Array:
+	return [matrix.back().front()]
+
+
+static func get_left_column(matrix: Array) -> Array:
+	var array = []
+
+	for row in matrix:
+		array.append(row.front())
+
+	return array
+
+
+static func get_top_left_corner(matrix: Array) -> Array:
+	return [matrix.front().front()]
