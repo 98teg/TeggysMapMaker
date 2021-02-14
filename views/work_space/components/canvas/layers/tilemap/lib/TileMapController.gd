@@ -6,6 +6,8 @@ var _tile_set := TMM_TileSet.new()
 var _selected_tile_structure : TMM_TileStructure
 var _has_been_modified := false
 var _update_buffer := TMM_TileUpdateBuffer.new()
+var _record_placed_tiles := false
+var _placed_tiles := {}
 
 
 func init(canvas_conf: Dictionary, layer_conf: Dictionary) -> void:
@@ -44,6 +46,23 @@ func place_tile(i: int, j: int) -> void:
 	_set_tile_structure(_selected_tile_structure, i, j)
 
 	_update_tiles()
+
+
+func reset_placed_tiles() -> void:
+	_placed_tiles = {}
+
+
+func collide_with_last_paced_tile(i: int, j: int) -> bool:
+	for tile in _selected_tile_structure.get_tiles():
+		var tile_hash = {
+			"sub_layer": tile.sub_layer,
+			"i": i + tile.relative_coord[0],
+			"j": j + tile.relative_coord[1]
+		}.hash()
+		
+		if _placed_tiles.has(tile_hash):
+			return true
+	return false
 
 
 func erase_tile(i: int, j: int) -> void:
@@ -98,6 +117,7 @@ func _set_tile(layer: TMM_TileMapLayer, tile: TMM_Tile, i: int, j: int,
 		if not sub_layer.has_tile(i, j, tile):
 			_remove_tile_structure(layer, i, j, autotiling_enabled)
 			sub_layer.set_tile(i, j, tile)
+			_add_placed_tile(tile.sub_layer, i, j)
 			_has_been_modified = true
 
 			if autotiling_enabled:
@@ -105,6 +125,12 @@ func _set_tile(layer: TMM_TileMapLayer, tile: TMM_Tile, i: int, j: int,
 
 		if not autotiling_enabled:
 			_update_buffer.remove_tile(layer.id, tile.sub_layer, i, j)
+
+
+func _add_placed_tile(sub_layer: int, i: int, j: int) -> void:
+	var placed_tile = {"sub_layer": sub_layer, "i": i, "j": j}
+	if not _placed_tiles.has(placed_tile.hash()):
+		_placed_tiles[placed_tile.hash()] = true
 
 
 func _remove_tile_structure(layer: TMM_TileMapLayer, i: int, j: int,

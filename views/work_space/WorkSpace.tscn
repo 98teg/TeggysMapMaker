@@ -5,10 +5,6 @@
 [ext_resource path="res://views/work_space/components/magnifying_glass/MagnifyingGlass.tscn" type="PackedScene" id=3]
 [ext_resource path="res://views/work_space/components/canvas/Canvas.tscn" type="PackedScene" id=4]
 
-
-
-
-
 [sub_resource type="Theme" id=1]
 Dialogs/constants/button_margin = 32
 Dialogs/constants/margin = 10
@@ -123,8 +119,8 @@ theme = SubResource( 1 )
 window_title = "Export Image"
 access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
-current_dir = "/home/tomas/Escritorio/Teggy's Map Maker"
-current_path = "/home/tomas/Escritorio/Teggy's Map Maker/"
+current_dir = "/home/tomas/Escritorio/Godot/Teggy's Map Maker"
+current_path = "/home/tomas/Escritorio/Godot/Teggy's Map Maker/"
 
 [node name="AboutDialog" type="AcceptDialog" parent="."]
 margin_right = 700.0

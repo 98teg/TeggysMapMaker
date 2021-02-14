@@ -163,13 +163,15 @@ func _draw_line(position : Vector2):
 
 func _end_drawing():
 	_register_action()
+	_tilemap.reset_placed_tiles()
 	_drawing = false
 
 func _set_tile(i : int, j : int):
 	match _tool:
 		TMM_TileMapHelper.Tool.PENCIL:
 			if _placing_tiles:
-				_tilemap.place_tile(i, j)
+				if not _tilemap.collide_with_last_paced_tile(i, j):
+					_tilemap.place_tile(i, j)
 			else:
 				_tilemap.erase_tile(i, j)
 		TMM_TileMapHelper.Tool.ERASER:
